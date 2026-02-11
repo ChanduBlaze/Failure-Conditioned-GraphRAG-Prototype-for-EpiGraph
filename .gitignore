@@ -5,3 +5,10 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .env
+.env.*
+data/
+artifacts/
+outputs/
+checkpoints/
+models/
+.neo4j/
