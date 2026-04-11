@@ -1,0 +1,22 @@
+{
+  "timestamp": "20260405_230110",
+  "model": "gpt-5-mini",
+  "failure_case": {
+    "mechanism_id": "eq_us_flu_base",
+    "region": "US",
+    "disease": "Influenza",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_us_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "southern_hemisphere_influenza_signals"
+  },
+  "result": {
+    "chosen_candidate_id": "signal_chile_flu",
+    "chosen_candidate_name": "Chile Influenza Activity",
+    "why_top_candidate_wins": "Chile Influenza Activity has the highest score (7) and the richest direct support in the subgraph: it is a LEADING_INDICATOR_FOR the failed target (signal_us_hosp) and it has both an IMPORTATION_LINK and a POSSIBLE_DRIVER_OF connection to the failing mechanism (eq_us_flu_base). In contrast, Australia has only a LEADING_INDICATOR_FOR plus a POSSIBLE_DRIVER_OF (score 5), and Travel Importation Pressure has only IMPORTATION_LINK and POSSIBLE_DRIVER_OF (score 4). Thus Chile both temporally precedes the observed hospital signal and provides two distinct mechanistic links to the US mechanism, making it the most plausible hidden driver given the provided evidence and ranking.",
+    "proposed_minimal_edit": "Add an importation-forcing term from signal_chile_flu into eq_us_flu_base (e.g., include a lagged input term: + alpha * signal_chile_flu(t - L) to the mechanism's incidence/importation component) and fit alpha (and lag L) to allow Chile activity to increase US hospitalizations.",
+    "caveat": "This recommendation is based solely on the provided graph evidence and scores. Empirical testing is required to estimate the importation strength and lag; other confounders or correlated drivers (e.g., Australia or travel pressure) may also contribute and should be evaluated after initial testing."
+  },
+  "raw_text": "{\n  \"chosen_candidate_id\": \"signal_chile_flu\",\n  \"chosen_candidate_name\": \"Chile Influenza Activity\",\n  \"why_top_candidate_wins\": \"Chile Influenza Activity has the highest score (7) and the richest direct support in the subgraph: it is a LEADING_INDICATOR_FOR the failed target (signal_us_hosp) and it has both an IMPORTATION_LINK and a POSSIBLE_DRIVER_OF connection to the failing mechanism (eq_us_flu_base). In contrast, Australia has only a LEADING_INDICATOR_FOR plus a POSSIBLE_DRIVER_OF (score 5), and Travel Importation Pressure has only IMPORTATION_LINK and POSSIBLE_DRIVER_OF (score 4). Thus Chile both temporally precedes the observed hospital signal and provides two distinct mechanistic links to the US mechanism, making it the most plausible hidden driver given the provided evidence and ranking.\",\n  \"proposed_minimal_edit\": \"Add an importation-forcing term from signal_chile_flu into eq_us_flu_base (e.g., include a lagged input term: + alpha * signal_chile_flu(t - L) to the mechanism's incidence/importation component) and fit alpha (and lag L) to allow Chile activity to increase US hospitalizations.\",\n  \"caveat\": \"This recommendation is based solely on the provided graph evidence and scores. Empirical testing is required to estimate the importation strength and lag; other confounders or correlated drivers (e.g., Australia or travel pressure) may also contribute and should be evaluated after initial testing.\"\n}"
+}
