@@ -1,0 +1,97 @@
+How It Works
+1. Knowledge Graph Construction
+
+Entities, signals, mechanisms, and relationships are represented as nodes and edges in a graph.
+
+2. Graph Retrieval
+
+Given a query or target node, the system retrieves a relevant subgraph using graph traversal and relationship-aware filtering.
+
+3. Candidate Comparison
+
+Potential explanations or upstream drivers are compared based on their graph connections and evidence strength.
+
+4. LLM Reasoning
+
+The retrieved graph context is passed to an LLM, which generates a grounded explanation for why a candidate is the strongest match.
+
+5. Traceable Output
+
+The final output includes both:
+
+the selected candidate
+the graph-based reasoning behind the selection
+Example Use Case
+
+A target signal fails or changes unexpectedly.
+The system retrieves connected upstream indicators, importation links, or possible drivers from the graph, then asks the LLM to identify the most plausible explanation based on the available evidence.
+
+Example output may include:
+
+chosen candidate
+ranking logic
+supporting graph relationships
+explanation of why one candidate is stronger than alternatives
+Installation
+
+Clone the repository:
+
+git clone https://github.com/ChanduBlaze/kg-llm-graphrag.git
+cd kg-llm-graphrag
+
+Create a virtual environment and install dependencies:
+
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+Usage
+
+Run the reasoning script:
+
+python llm_reasoner.py
+
+Example output:
+
+LLM reasoning completed successfully.
+
+Chosen candidate:
+- ID: signal_chile_flu
+- Name: Chile Influenza Activity
+
+Why it wins:
+Chile Influenza Activity has the highest score and the richest direct support in the subgraph...
+Tech Stack
+Python
+Neo4j for graph storage / querying
+LLMs for reasoning and explanation
+Graph-based retrieval logic for evidence selection
+Current Status
+
+This project is currently a prototype / research-oriented implementation focused on:
+
+experimenting with graph-guided retrieval
+improving grounded reasoning
+making LLM outputs more interpretable
+testing candidate ranking over structured evidence
+Future Improvements
+Stronger graph scoring and ranking methods
+Better multi-hop retrieval strategies
+More robust provenance tracking
+Improved visualization of retrieved subgraphs
+Evaluation against baseline text-only RAG systems
+Support for larger and more complex graph schemas
+Why This Project Matters
+
+This project explores a practical direction for making LLM systems:
+
+more grounded
+more traceable
+better at multi-step relational reasoning
+more useful in domains where structure matters
+
+Rather than asking the model to reason from raw text alone, KG-LLM GraphRAG gives it a structured evidence space to reason over.
+
+Author
+
+ChanduBlaze
+M.S. Computer Science, University of Georgia
