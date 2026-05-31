@@ -1,8 +1,10 @@
 import json
+import sys
 from pathlib import Path
 
 
-EVAL_FILE = Path("evals/eval_cases.json")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+EVAL_FILE = PROJECT_ROOT / "evals" / "eval_cases.json"
 
 REQUIRED_FIELDS = {
     "id",
@@ -14,10 +16,18 @@ REQUIRED_FIELDS = {
 
 def load_cases():
     if not EVAL_FILE.exists():
-        raise FileNotFoundError(f"Could not find {EVAL_FILE}")
+        raise FileNotFoundError(
+            f"Could not find {EVAL_FILE.relative_to(PROJECT_ROOT)}"
+        )
 
-    with open(EVAL_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open(EVAL_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            f"{EVAL_FILE.relative_to(PROJECT_ROOT)} is not valid JSON: "
+            f"{exc.msg} at line {exc.lineno}, column {exc.colno}."
+        ) from exc
 
     if not isinstance(data, list):
         raise ValueError("eval_cases.json must contain a JSON list.")
@@ -54,10 +64,18 @@ def validate_case(case, index):
 
 
 def main():
-    cases = load_cases()
+    try:
+        cases = load_cases()
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"Validation failed: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
 
     for index, case in enumerate(cases):
-        validate_case(case, index)
+        try:
+            validate_case(case, index)
+        except ValueError as exc:
+            print(f"Validation failed: {exc}", file=sys.stderr)
+            raise SystemExit(1) from exc
 
     print("eval_cases.json validation passed.")
     print("-" * 40)

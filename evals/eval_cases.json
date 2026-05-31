@@ -1,0 +1,68 @@
+[
+  {
+    "id": "case_001",
+    "task_type": "hidden_driver_selection",
+    "question": "Which candidate best explains the US influenza missed hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "unsupported causal proof",
+      "invented dataset",
+      "invented relationship"
+    ]
+  },
+  {
+    "id": "case_002",
+    "task_type": "support_subgraph",
+    "question": "What support subgraph explains why Chile influenza activity is the top candidate?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_support_nodes": [
+      "signal_chile_flu",
+      "signal_us_hosp",
+      "eq_us_flu_base"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "invented mechanism"
+    ]
+  },
+  {
+    "id": "case_003",
+    "task_type": "mechanism_edit",
+    "question": "What minimal mechanism edit is best supported by the graph evidence for the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "acceptable_edit_keywords": [
+      "lagged Chile signal",
+      "importation forcing",
+      "external input",
+      "seeding term"
+    ],
+    "must_not_include": [
+      "permanent causal discovery",
+      "unvalidated mechanism"
+    ]
+  }
+]
