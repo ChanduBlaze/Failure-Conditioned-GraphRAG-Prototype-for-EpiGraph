@@ -1,0 +1,45 @@
+{
+  "timestamp": "20260421_193334",
+  "model": "gpt-5-mini",
+  "failure_case": {
+    "id": "failure_case_us_flu_missed_peak_001",
+    "mechanism_id": "eq_us_flu_base",
+    "region": "US",
+    "disease": "Influenza",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_us_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "southern_hemisphere_influenza_signals",
+    "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+  },
+  "result": {
+    "backend": "in_memory",
+    "failure_case": {
+      "id": "failure_case_us_flu_missed_peak_001",
+      "mechanism_id": "eq_us_flu_base",
+      "region": "US",
+      "disease": "Influenza",
+      "failure_type": "underprediction",
+      "failure_pattern": "missed_peak",
+      "target_signal": "signal_us_hosp",
+      "error_direction": "actual_above_prediction",
+      "candidate_driver_family": "southern_hemisphere_influenza_signals",
+      "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+    },
+    "top_candidate_validation": {
+      "candidate_id": "signal_chile_flu",
+      "candidate_name": "Chile Influenza Activity",
+      "is_valid": true,
+      "reasons": []
+    },
+    "llm_output": {
+      "chosen_candidate_id": "signal_chile_flu",
+      "chosen_candidate_name": "Chile Influenza Activity",
+      "why_top_candidate_wins": "Chile Influenza Activity has the highest composite score (7) and the strongest set of supporting relations in the subgraph: it is a LEADING_INDICATOR_FOR the failed target signal (signal_us_hosp) (+3), and it has both an IMPORTATION_LINK (+2) and a POSSIBLE_DRIVER_OF (+2) connection to the US mechanism (eq_us_flu_base). In contrast, Australia (score=5) lacks an explicit importation link to the mechanism in the provided evidence (it only supplies a leading\u2011indicator and possible driver relation), and Travel Importation Pressure (score=4) lacks the LEADING_INDICATOR_FOR edge to the target. The combination of temporal precedence (leading indicator) plus mechanistic importation links makes Chile the most plausible hidden driver for an underpredicted, missed peak where actual hospitalizations exceeded predictions.",
+      "proposed_minimal_edit": "Add a parameterized importation forcing term from signal_chile_flu into the transmission/hospitalization component of eq_us_flu_base (e.g., add edge: signal_chile_flu --IMPORTATION_FORCING[lag,weight]--> eq_us_flu_base) so the mechanism can amplify US incidence/hospitalizations in response to recent increases in Chile influenza activity.",
+      "caveat": "The graph evidence shows associations and temporal ordering but does not prove causality or quantify lag/strength. Introducing an importation forcing from Chile is a testable hypothesis, but it may confound with other correlated drivers (southern-hemisphere seasonality, travel patterns). Model testing should estimate lag and weight and check robustness against alternative drivers (Australia, travel pressure) and potential confounders."
+    }
+  },
+  "raw_text": "{\n  \"chosen_candidate_id\": \"signal_chile_flu\",\n  \"chosen_candidate_name\": \"Chile Influenza Activity\",\n  \"why_top_candidate_wins\": \"Chile Influenza Activity has the highest composite score (7) and the strongest set of supporting relations in the subgraph: it is a LEADING_INDICATOR_FOR the failed target signal (signal_us_hosp) (+3), and it has both an IMPORTATION_LINK (+2) and a POSSIBLE_DRIVER_OF (+2) connection to the US mechanism (eq_us_flu_base). In contrast, Australia (score=5) lacks an explicit importation link to the mechanism in the provided evidence (it only supplies a leading\u2011indicator and possible driver relation), and Travel Importation Pressure (score=4) lacks the LEADING_INDICATOR_FOR edge to the target. The combination of temporal precedence (leading indicator) plus mechanistic importation links makes Chile the most plausible hidden driver for an underpredicted, missed peak where actual hospitalizations exceeded predictions.\",\n  \"proposed_minimal_edit\": \"Add a parameterized importation forcing term from signal_chile_flu into the transmission/hospitalization component of eq_us_flu_base (e.g., add edge: signal_chile_flu --IMPORTATION_FORCING[lag,weight]--> eq_us_flu_base) so the mechanism can amplify US incidence/hospitalizations in response to recent increases in Chile influenza activity.\",\n  \"caveat\": \"The graph evidence shows associations and temporal ordering but does not prove causality or quantify lag/strength. Introducing an importation forcing from Chile is a testable hypothesis, but it may confound with other correlated drivers (southern-hemisphere seasonality, travel patterns). Model testing should estimate lag and weight and check robustness against alternative drivers (Australia, travel pressure) and potential confounders.\"\n}"
+}

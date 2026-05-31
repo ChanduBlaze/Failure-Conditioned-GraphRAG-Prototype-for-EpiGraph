@@ -1,0 +1,87 @@
+{
+  "timestamp": "20260423_234256",
+  "model": "gpt-5-mini",
+  "failure_case": {
+    "id": "failure_case_us_flu_missed_peak_001",
+    "mechanism_id": "eq_us_flu_base",
+    "region": "US",
+    "disease": "Influenza",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_us_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "southern_hemisphere_influenza_signals",
+    "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+  },
+  "result": {
+    "backend": "neo4j",
+    "failure_case": {
+      "id": "failure_case_us_flu_missed_peak_001",
+      "mechanism_id": "eq_us_flu_base",
+      "region": "US",
+      "disease": "Influenza",
+      "failure_type": "underprediction",
+      "failure_pattern": "missed_peak",
+      "target_signal": "signal_us_hosp",
+      "error_direction": "actual_above_prediction",
+      "candidate_driver_family": "southern_hemisphere_influenza_signals",
+      "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+    },
+    "top_candidate_validation": {
+      "passed": true,
+      "reasons": [],
+      "score": 7,
+      "support_edge_count": 3,
+      "dataset_count": 1,
+      "provenance_count": 1
+    },
+    "target_signal_summary": {
+      "total_weeks": 30,
+      "peak_row": {
+        "observation_id": "obs_us_hosp_2024_25_2025_06",
+        "season": "2024-25",
+        "cumulative_rate": 82.7,
+        "calendar_year": 2025,
+        "mmwr_week": 6,
+        "weekly_rate": 13.5
+      },
+      "latest_row": {
+        "observation_id": "obs_us_hosp_2024_25_2025_17",
+        "season": "2024-25",
+        "cumulative_rate": 126.2,
+        "calendar_year": 2025,
+        "mmwr_week": 17,
+        "weekly_rate": 1.0
+      }
+    },
+    "driver_signal_summary": {
+      "total_weeks": 104,
+      "peak_row": {
+        "iso_year": 2024,
+        "week_start_date": "2024-05-20",
+        "observation_id": "obs_chile_flu_2024_21",
+        "positivity": 0.3788343558282208,
+        "iso_week": 21,
+        "spec_processed_nb": 5868,
+        "inf_all": 2223
+      },
+      "latest_row": {
+        "iso_year": 2025,
+        "week_start_date": "2025-12-22",
+        "observation_id": "obs_chile_flu_2025_52",
+        "positivity": 0.076237976487353,
+        "iso_week": 52,
+        "spec_processed_nb": 2807,
+        "inf_all": 214
+      }
+    },
+    "llm_output": {
+      "chosen_candidate_id": "signal_chile_flu",
+      "chosen_candidate_name": "Chile Influenza Activity",
+      "why_top_candidate_wins": "signal_chile_flu has the strongest combined support (score=7) and the richest set of relationships to the failed prediction. In the support subgraph it is simultaneously a LEADING_INDICATOR_FOR the target (signal_us_hosp) and has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges into the mechanism (eq_us_flu_base). By contrast, the next-ranked candidate (signal_australia_flu, score=5) lacks an IMPORTATION_LINK to the mechanism (it is only a possible driver and a leading indicator), and the travel-pressure candidate (signal_travel_pressure, score=4) lacks an explicit LEADING_INDICATOR_FOR relationship to the target. The presence of both an importation linkage into the mechanism and an independent leading-indicator relationship to the hospitalization signal makes Chile influenza activity the most plausible hidden driver for an underpredicted/missed peak in US hospitalizations.",
+      "proposed_minimal_edit": "Add an explicit mechanistic input from signal_chile_flu into eq_us_flu_base: create or activate a driver term that feeds Chile influenza activity into the US mechanism (edge: signal_chile_flu -> eq_us_flu_base) with a short-to-moderate lag parameter (test a small set of lags) so that the mechanism can be seeded/adjusted by observed Chile activity. This is a minimal change that leverages the existing IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges and the LEADING_INDICATOR_FOR relationship to the target.",
+      "caveat": "The graph evidence supports association and plausible importation timing but does not prove causality or the correct lag/weight. Implementing the edit requires testing lag/weight values and checking for confounding seasonal patterns (e.g., concurrent drivers) to avoid overfitting or false attribution."
+    }
+  },
+  "raw_text": "{\n  \"chosen_candidate_id\": \"signal_chile_flu\",\n  \"chosen_candidate_name\": \"Chile Influenza Activity\",\n  \"why_top_candidate_wins\": \"signal_chile_flu has the strongest combined support (score=7) and the richest set of relationships to the failed prediction. In the support subgraph it is simultaneously a LEADING_INDICATOR_FOR the target (signal_us_hosp) and has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges into the mechanism (eq_us_flu_base). By contrast, the next-ranked candidate (signal_australia_flu, score=5) lacks an IMPORTATION_LINK to the mechanism (it is only a possible driver and a leading indicator), and the travel-pressure candidate (signal_travel_pressure, score=4) lacks an explicit LEADING_INDICATOR_FOR relationship to the target. The presence of both an importation linkage into the mechanism and an independent leading-indicator relationship to the hospitalization signal makes Chile influenza activity the most plausible hidden driver for an underpredicted/missed peak in US hospitalizations.\",\n  \"proposed_minimal_edit\": \"Add an explicit mechanistic input from signal_chile_flu into eq_us_flu_base: create or activate a driver term that feeds Chile influenza activity into the US mechanism (edge: signal_chile_flu -> eq_us_flu_base) with a short-to-moderate lag parameter (test a small set of lags) so that the mechanism can be seeded/adjusted by observed Chile activity. This is a minimal change that leverages the existing IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges and the LEADING_INDICATOR_FOR relationship to the target.\",\n  \"caveat\": \"The graph evidence supports association and plausible importation timing but does not prove causality or the correct lag/weight. Implementing the edit requires testing lag/weight values and checking for confounding seasonal patterns (e.g., concurrent drivers) to avoid overfitting or false attribution.\" \n}"
+}

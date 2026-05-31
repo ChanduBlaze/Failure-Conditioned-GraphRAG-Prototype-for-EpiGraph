@@ -5,7 +5,7 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from failure_case import FAILURE_CASE
+from failure_case import get_failure_case
 from failure_retrieval import retrieve_failure_candidates
 from prompt_builder import build_failure_analysis_prompt
 from seed_graph import GRAPH
@@ -105,7 +105,7 @@ def save_demo_output(result_dict, raw_text):
     payload = {
         "timestamp": timestamp,
         "model": MODEL_NAME,
-        "failure_case": FAILURE_CASE,
+        "failure_case": result_dict["failure_case"],
         "result": result_dict,
         "raw_text": raw_text,
     }
@@ -139,7 +139,8 @@ def pretty_print_result(result):
 
 
 def generate_llm_analysis():
-    candidates = retrieve_failure_candidates(GRAPH, FAILURE_CASE)
+    failure_case = get_failure_case()
+    candidates = retrieve_failure_candidates(GRAPH, failure_case)
 
     if not candidates:
         raise ValueError("No candidates found. Cannot run LLM reasoning.")
@@ -153,7 +154,7 @@ def generate_llm_analysis():
             + "; ".join(validation_result["reasons"])
         )
 
-    prompt = build_failure_analysis_prompt(FAILURE_CASE, candidates)
+    prompt = build_failure_analysis_prompt(failure_case, candidates)
     prompt = prompt + "\n\n" + build_json_instruction_suffix()
 
     client = get_client()
@@ -176,17 +177,31 @@ def generate_llm_analysis():
     parsed = parse_llm_json(raw_text)
     validate_llm_output(parsed)
 
-    timestamped_file, latest_file = save_demo_output(parsed, raw_text)
+    result_dict = {
+        "backend": "in_memory",
+        "failure_case": failure_case,
+        "top_candidate_validation": validation_result,
+        "llm_output": parsed,
+    }
 
-    return parsed, timestamped_file, latest_file
+    timestamped_file, latest_file = save_demo_output(result_dict, raw_text)
+
+    pretty_print_result(parsed)
+
+    return {
+        "result_dict": result_dict,
+        "raw_text": raw_text,
+        "parsed": parsed,
+        "timestamped_file": timestamped_file,
+        "latest_file": latest_file,
+    }
 
 
 if __name__ == "__main__":
     try:
-        result, timestamped_file, latest_file = generate_llm_analysis()
-        pretty_print_result(result)
-        print(f"Saved result to: {timestamped_file}")
-        print(f"Updated latest result: {latest_file}")
+        output = generate_llm_analysis()
+        print(f"Saved result to: {output['timestamped_file']}")
+        print(f"Updated latest result: {output['latest_file']}")
     except Exception as e:
         print("LLM reasoning failed.")
         print(f"Error: {e}")

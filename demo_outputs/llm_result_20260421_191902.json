@@ -1,0 +1,47 @@
+{
+  "timestamp": "20260421_191902",
+  "model": "gpt-5-mini",
+  "failure_case": {
+    "id": "failure_case_us_flu_missed_peak_001",
+    "mechanism_id": "eq_us_flu_base",
+    "region": "US",
+    "disease": "Influenza",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_us_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "southern_hemisphere_influenza_signals",
+    "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+  },
+  "result": {
+    "backend": "neo4j",
+    "failure_case": {
+      "id": "failure_case_us_flu_missed_peak_001",
+      "mechanism_id": "eq_us_flu_base",
+      "region": "US",
+      "disease": "Influenza",
+      "failure_type": "underprediction",
+      "failure_pattern": "missed_peak",
+      "target_signal": "signal_us_hosp",
+      "error_direction": "actual_above_prediction",
+      "candidate_driver_family": "southern_hemisphere_influenza_signals",
+      "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+    },
+    "top_candidate_validation": {
+      "passed": true,
+      "reasons": [],
+      "score": 7,
+      "support_edge_count": 3,
+      "dataset_count": 1,
+      "provenance_count": 1
+    },
+    "llm_output": {
+      "chosen_candidate_id": "signal_chile_flu",
+      "chosen_candidate_name": "Chile Influenza Activity",
+      "why_top_candidate_wins": "Chile Influenza Activity has the highest score (7) and is the only candidate with all three supporting relationship types present in the subgraph: it is a LEADING_INDICATOR_FOR the failing target signal (signal_us_hosp) and it has both an IMPORTATION_LINK and POSSIBLE_DRIVER_OF connection to the failing mechanism (eq_us_flu_base). Those three edges directly connect the candidate to both the mechanism and the target, providing a coherent causal path by which Chile activity could precede and import infections that raise US hospitalizations. The other candidates lack one of these links (Australia has no IMPORTATION_LINK; Travel Importation Pressure lacks the LEADING_INDICATOR_FOR link to the target) and have lower scores, making them less plausible given the provided evidence.",
+      "proposed_minimal_edit": "Add a minimal mechanism edit to eq_us_flu_base that incorporates Chile Influenza Activity as an external importation forcing term: introduce a single parameterized importation input term proportional to signal_chile_flu (e.g., I_import(t) = alpha * signal_chile_flu(t - lag)) that increases incident infections in the mechanism. Test fit with alpha estimated and a short lag.",
+      "caveat": "This recommendation is based solely on the provided subgraph and ranking. Empirical validation is required (fit improvement, parameter identifiability, alternative sources) and other unlisted drivers or local processes may also explain the underprediction."
+    }
+  },
+  "raw_text": "{\n  \"chosen_candidate_id\": \"signal_chile_flu\",\n  \"chosen_candidate_name\": \"Chile Influenza Activity\",\n  \"why_top_candidate_wins\": \"Chile Influenza Activity has the highest score (7) and is the only candidate with all three supporting relationship types present in the subgraph: it is a LEADING_INDICATOR_FOR the failing target signal (signal_us_hosp) and it has both an IMPORTATION_LINK and POSSIBLE_DRIVER_OF connection to the failing mechanism (eq_us_flu_base). Those three edges directly connect the candidate to both the mechanism and the target, providing a coherent causal path by which Chile activity could precede and import infections that raise US hospitalizations. The other candidates lack one of these links (Australia has no IMPORTATION_LINK; Travel Importation Pressure lacks the LEADING_INDICATOR_FOR link to the target) and have lower scores, making them less plausible given the provided evidence.\",\n  \"proposed_minimal_edit\": \"Add a minimal mechanism edit to eq_us_flu_base that incorporates Chile Influenza Activity as an external importation forcing term: introduce a single parameterized importation input term proportional to signal_chile_flu (e.g., I_import(t) = alpha * signal_chile_flu(t - lag)) that increases incident infections in the mechanism. Test fit with alpha estimated and a short lag.\",\n  \"caveat\": \"This recommendation is based solely on the provided subgraph and ranking. Empirical validation is required (fit improvement, parameter identifiability, alternative sources) and other unlisted drivers or local processes may also explain the underprediction.\"\n}"
+}

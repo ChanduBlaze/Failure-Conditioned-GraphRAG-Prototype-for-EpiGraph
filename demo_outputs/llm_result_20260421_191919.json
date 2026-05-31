@@ -1,0 +1,24 @@
+{
+  "timestamp": "20260421_191919",
+  "model": "gpt-5-mini",
+  "failure_case": {
+    "id": "failure_case_us_flu_missed_peak_001",
+    "mechanism_id": "eq_us_flu_base",
+    "region": "US",
+    "disease": "Influenza",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_us_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "southern_hemisphere_influenza_signals",
+    "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+  },
+  "result": {
+    "chosen_candidate_id": "signal_chile_flu",
+    "chosen_candidate_name": "Chile Influenza Activity",
+    "why_top_candidate_wins": "Chile Influenza Activity has the highest composite score (7) and direct graph connections that link it both to the failed target signal and to the mechanism itself. Specifically, the support subgraph shows: (1) a LEADING_INDICATOR_FOR edge to signal_us_hosp, which directly addresses the missed_peak (actual_above_prediction) by providing an upstream signal that precedes US hospitalizations; and (2) IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges into eq_us_flu_base, which give a plausible mechanistic pathway for Chile activity to increase importation/seeding in the US model. The combination of a temporal lead on the target plus explicit importation/driver links to the mechanism explains why this candidate more directly and strongly accounts for an underpredicted peak than Australia (score 5, lacks explicit IMPORTATION_LINK in the provided graph) or Travel Importation Pressure (score 4, has importation links but no LEADING_INDICATOR_FOR edge to the target).",
+    "proposed_minimal_edit": "Add an importation/seeding term in eq_us_flu_base that is driven by recent values of signal_chile_flu (e.g., include Chile activity as a lagged covariate that increases the mechanism's seeding rate), and route that influence through the existing IMPORTATION_LINK edge so the model increases predicted hospitalizations when Chile activity is high.",
+    "caveat": "This suggestion is based solely on the provided graph edges and ranking; the LEADING_INDICATOR and IMPORTATION_LINK imply association and a plausible pathway but do not prove causal importation. Empirical testing and temporal validation (lag selection, effect size estimation) are required before permanently modifying the forecasting mechanism."
+  },
+  "raw_text": "{\n  \"chosen_candidate_id\": \"signal_chile_flu\",\n  \"chosen_candidate_name\": \"Chile Influenza Activity\",\n  \"why_top_candidate_wins\": \"Chile Influenza Activity has the highest composite score (7) and direct graph connections that link it both to the failed target signal and to the mechanism itself. Specifically, the support subgraph shows: (1) a LEADING_INDICATOR_FOR edge to signal_us_hosp, which directly addresses the missed_peak (actual_above_prediction) by providing an upstream signal that precedes US hospitalizations; and (2) IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges into eq_us_flu_base, which give a plausible mechanistic pathway for Chile activity to increase importation/seeding in the US model. The combination of a temporal lead on the target plus explicit importation/driver links to the mechanism explains why this candidate more directly and strongly accounts for an underpredicted peak than Australia (score 5, lacks explicit IMPORTATION_LINK in the provided graph) or Travel Importation Pressure (score 4, has importation links but no LEADING_INDICATOR_FOR edge to the target).\",\n  \"proposed_minimal_edit\": \"Add an importation/seeding term in eq_us_flu_base that is driven by recent values of signal_chile_flu (e.g., include Chile activity as a lagged covariate that increases the mechanism's seeding rate), and route that influence through the existing IMPORTATION_LINK edge so the model increases predicted hospitalizations when Chile activity is high.\",\n  \"caveat\": \"This suggestion is based solely on the provided graph edges and ranking; the LEADING_INDICATOR and IMPORTATION_LINK imply association and a plausible pathway but do not prove causal importation. Empirical testing and temporal validation (lag selection, effect size estimation) are required before permanently modifying the forecasting mechanism.\"\n}"
+}

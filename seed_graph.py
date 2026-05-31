@@ -1,5 +1,4 @@
-from schema import NODE_TYPES, EDGE_TYPES
-
+from schema import validate_graph_schema
 
 GRAPH = {
     "nodes": [
@@ -79,7 +78,23 @@ GRAPH = {
         {"source": "signal_humidity_drop", "type": "POSSIBLE_DRIVER_OF", "target": "eq_us_flu_base"},
     ]
 }
+def build_graph_summary(graph):
+    return {
+        "node_count": len(graph.get("nodes", [])),
+        "edge_count": len(graph.get("edges", [])),
+        "node_types": sorted({node["type"] for node in graph.get("nodes", [])}),
+        "edge_types": sorted({edge["type"] for edge in graph.get("edges", [])}),
+    }
 
+
+def print_graph_summary(graph):
+    summary = build_graph_summary(graph)
+    print("Graph Summary")
+    print("-" * 40)
+    print("Nodes:", summary["node_count"])
+    print("Edges:", summary["edge_count"])
+    print("Node types:", ", ".join(summary["node_types"]))
+    print("Edge types:", ", ".join(summary["edge_types"]))
 
 def validate_graph(graph):
     for node in graph["nodes"]:
@@ -96,7 +111,6 @@ def validate_graph(graph):
 
 
 if __name__ == "__main__":
-    validate_graph(GRAPH)
-    print("Seed graph loaded successfully.")
-    print(f"Number of nodes: {len(GRAPH['nodes'])}")
-    print(f"Number of edges: {len(GRAPH['edges'])}")
+    validate_graph_schema(GRAPH)
+    print("Graph schema is valid.\n")
+    print_graph_summary(GRAPH)

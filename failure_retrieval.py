@@ -1,12 +1,15 @@
 from seed_graph import GRAPH
-from failure_case import FAILURE_CASE
-
+from failure_case import get_failure_case
 
 DRIVER_EDGE_TYPES = {
     "POSSIBLE_DRIVER_OF",
     "IMPORTATION_LINK",
-    "LEADING_INDICATOR_FOR"
+    "LEADING_INDICATOR_FOR",
 }
+
+POSSIBLE_DRIVER_SCORE = 2
+IMPORTATION_LINK_SCORE = 2
+LEADING_INDICATOR_SCORE = 3
 
 
 def get_node_by_id(graph, node_id):
@@ -28,21 +31,31 @@ def score_candidate(graph, candidate_node_id, failure_case):
     target_signal = failure_case["target_signal"]
 
     for edge in graph["edges"]:
-        if edge["source"] == candidate_node_id and edge["target"] == mechanism_id:
+        if edge["source"] != candidate_node_id:
+            continue
+
+        if edge["target"] == mechanism_id:
             if edge["type"] == "POSSIBLE_DRIVER_OF":
-                score += 2
-                evidence.append("POSSIBLE_DRIVER_OF -> mechanism (+2)")
+                score += POSSIBLE_DRIVER_SCORE
+                evidence.append(
+                    f"POSSIBLE_DRIVER_OF -> mechanism (+{POSSIBLE_DRIVER_SCORE})"
+                )
 
             elif edge["type"] == "IMPORTATION_LINK":
-                score += 2
-                evidence.append("IMPORTATION_LINK -> mechanism (+2)")
+                score += IMPORTATION_LINK_SCORE
+                evidence.append(
+                    f"IMPORTATION_LINK -> mechanism (+{IMPORTATION_LINK_SCORE})"
+                )
 
-        if edge["source"] == candidate_node_id and edge["target"] == target_signal:
+        if edge["target"] == target_signal:
             if edge["type"] == "LEADING_INDICATOR_FOR":
-                score += 3
-                evidence.append("LEADING_INDICATOR_FOR -> target signal (+3)")
+                score += LEADING_INDICATOR_SCORE
+                evidence.append(
+                    f"LEADING_INDICATOR_FOR -> target signal (+{LEADING_INDICATOR_SCORE})"
+                )
 
     return score, evidence
+
 
 def build_candidate_support_subgraph(graph, candidate_node_id, failure_case):
     mechanism_id = failure_case["mechanism_id"]
@@ -52,25 +65,28 @@ def build_candidate_support_subgraph(graph, candidate_node_id, failure_case):
     supporting_node_ids = {candidate_node_id, mechanism_id, target_signal}
 
     for edge in graph["edges"]:
-        if edge["source"] == candidate_node_id and edge["target"] in {mechanism_id, target_signal}:
+        if edge["source"] == candidate_node_id and edge["target"] in {
+            mechanism_id,
+            target_signal,
+        }:
             if edge["type"] in DRIVER_EDGE_TYPES:
                 supporting_edges.append(edge)
                 supporting_node_ids.add(edge["target"])
 
     supporting_nodes = [
-        node for node in graph["nodes"]
-        if node["id"] in supporting_node_ids
+        node for node in graph["nodes"] if node["id"] in supporting_node_ids
     ]
 
     return {
         "nodes": supporting_nodes,
-        "edges": supporting_edges
+        "edges": supporting_edges,
     }
+
 
 def print_support_subgraph(candidate):
     print("\nTop candidate support subgraph:")
     print(f"Candidate: {candidate['candidate_name']}")
-    
+
     print("\n  Nodes:")
     for node in candidate["support_subgraph"]["nodes"]:
         print(f"  - {node['id']} ({node['type']})")
@@ -78,6 +94,7 @@ def print_support_subgraph(candidate):
     print("\n  Edges:")
     for edge in candidate["support_subgraph"]["edges"]:
         print(f"  - {edge['source']} --{edge['type']}--> {edge['target']}")
+
 
 def retrieve_failure_candidates(graph, failure_case):
     candidates = []
@@ -93,20 +110,23 @@ def retrieve_failure_candidates(graph, failure_case):
                 graph, node["id"], failure_case
             )
 
-            candidates.append({
-                "candidate_id": node["id"],
-                "candidate_name": node["name"],
-                "score": score,
-                "evidence": evidence,
-                "support_subgraph": support_subgraph
-            })
+            candidates.append(
+                {
+                    "candidate_id": node["id"],
+                    "candidate_name": node["name"],
+                    "score": score,
+                    "evidence": evidence,
+                    "support_subgraph": support_subgraph,
+                }
+            )
 
     candidates.sort(key=lambda x: x["score"], reverse=True)
     return candidates
 
 
 if __name__ == "__main__":
-    candidates = retrieve_failure_candidates(GRAPH, FAILURE_CASE)
+    failure_case = get_failure_case()
+    candidates = retrieve_failure_candidates(GRAPH, failure_case)
 
     print("Failure-conditioned retrieval complete.")
     print(f"Number of candidates found: {len(candidates)}")
@@ -125,5 +145,6 @@ if __name__ == "__main__":
             f"{len(candidate['support_subgraph']['nodes'])} nodes, "
             f"{len(candidate['support_subgraph']['edges'])} edges"
         )
+
     if candidates:
         print_support_subgraph(candidates[0])

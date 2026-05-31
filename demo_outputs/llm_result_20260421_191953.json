@@ -1,0 +1,24 @@
+{
+  "timestamp": "20260421_191953",
+  "model": "gpt-5-mini",
+  "failure_case": {
+    "id": "failure_case_us_flu_missed_peak_001",
+    "mechanism_id": "eq_us_flu_base",
+    "region": "US",
+    "disease": "Influenza",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_us_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "southern_hemisphere_influenza_signals",
+    "summary": "US influenza mechanism underpredicted a missed hospitalization peak."
+  },
+  "result": {
+    "chosen_candidate_id": "signal_chile_flu",
+    "chosen_candidate_name": "Chile Influenza Activity",
+    "why_top_candidate_wins": "Chile Influenza Activity has the highest score (7) and the richest direct support in the subgraph: it is a leading indicator for the failed target (signal_us_hosp) and it is directly linked to the US mechanism (eq_us_flu_base) by both IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges. Those two mechanism-level links (+2 and +2) together with the leading-indicator relationship (+3) give it stronger and more mechanism-relevant pathways to explain an underpredicted, missed peak in US hospitalizations than the alternatives. Australia has only the leading-indicator and a possible-driver edge (total score 5) but lacks the explicit IMPORTATION_LINK into the US mechanism present for Chile. Travel Importation Pressure has importation/driver links (score 4) but lacks the explicit temporal leading-indicator connection to the US hospitalization signal that Chile provides. In short: Chile both precedes the target and is explicitly tied to the US mechanism, making it the most plausible single hidden driver given the graph evidence and ranking.",
+    "proposed_minimal_edit": "Add an importation forcing term from signal_chile_flu into eq_us_flu_base: create or activate an edge eq_us_flu_base <--IMPORTATION_FORCING-- signal_chile_flu (with a single new scalar parameter representing importation-driven incidence multiplier or additive importation inflow to the transmission/process equations). Test model fit with this single parameter (and a short lag consistent with the LEADING_INDICATOR edge) to see if it explains the missed peak.",
+    "caveat": "This recommendation is based solely on the provided subgraph and scores; the LEADING_INDICATOR and IMPORTATION_LINK edges imply correlation and a plausible pathway but do not prove causation. Empirical testing (parameter estimation, lag sensitivity, and out-of-sample validation) is required to confirm whether adding the Chile importation term actually resolves the underprediction."
+  },
+  "raw_text": "{\n  \"chosen_candidate_id\": \"signal_chile_flu\",\n  \"chosen_candidate_name\": \"Chile Influenza Activity\",\n  \"why_top_candidate_wins\": \"Chile Influenza Activity has the highest score (7) and the richest direct support in the subgraph: it is a leading indicator for the failed target (signal_us_hosp) and it is directly linked to the US mechanism (eq_us_flu_base) by both IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges. Those two mechanism-level links (+2 and +2) together with the leading-indicator relationship (+3) give it stronger and more mechanism-relevant pathways to explain an underpredicted, missed peak in US hospitalizations than the alternatives. Australia has only the leading-indicator and a possible-driver edge (total score 5) but lacks the explicit IMPORTATION_LINK into the US mechanism present for Chile. Travel Importation Pressure has importation/driver links (score 4) but lacks the explicit temporal leading-indicator connection to the US hospitalization signal that Chile provides. In short: Chile both precedes the target and is explicitly tied to the US mechanism, making it the most plausible single hidden driver given the graph evidence and ranking.\",\n  \"proposed_minimal_edit\": \"Add an importation forcing term from signal_chile_flu into eq_us_flu_base: create or activate an edge eq_us_flu_base <--IMPORTATION_FORCING-- signal_chile_flu (with a single new scalar parameter representing importation-driven incidence multiplier or additive importation inflow to the transmission/process equations). Test model fit with this single parameter (and a short lag consistent with the LEADING_INDICATOR edge) to see if it explains the missed peak.\",\n  \"caveat\": \"This recommendation is based solely on the provided subgraph and scores; the LEADING_INDICATOR and IMPORTATION_LINK edges imply correlation and a plausible pathway but do not prove causation. Empirical testing (parameter estimation, lag sensitivity, and out-of-sample validation) is required to confirm whether adding the Chile importation term actually resolves the underprediction.\"\n}"
+}
