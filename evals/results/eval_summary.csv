@@ -1,0 +1,4 @@
+method_name,case_count,top1_accuracy,avg_evidence_precision,avg_evidence_recall,total_hallucinated_evidence_count
+KG-only,3,1.000,1.000,1.000,0
+LLM-only,3,0.333,0.000,0.000,6
+GraphRAG,3,1.000,1.000,1.000,0
