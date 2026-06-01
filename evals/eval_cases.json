@@ -64,5 +64,143 @@
       "permanent causal discovery",
       "unvalidated mechanism"
     ]
+  },
+  {
+    "id": "case_004",
+    "task_type": "candidate_ranking",
+    "question": "Which candidate should rank highest when a hidden driver needs all three evidence types: leading indicator, importation link, and possible driver of the US influenza mechanism?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "unsupported causal proof",
+      "invented dataset"
+    ]
+  },
+  {
+    "id": "case_006",
+    "task_type": "candidate_contrast",
+    "question": "Between Chile influenza activity and Australia influenza activity, which candidate is better supported as the hidden driver for the missed US hospitalization peak, and why?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "unsupported causal proof",
+      "claim Australia has IMPORTATION_LINK"
+    ]
+  },
+  {
+    "id": "case_007",
+    "task_type": "candidate_contrast",
+    "question": "Between Chile influenza activity and Travel Importation Pressure, which candidate has stronger graph support for explaining the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "unsupported causal proof",
+      "claim Travel Importation Pressure has LEADING_INDICATOR_FOR"
+    ]
+  },
+  {
+    "id": "case_010",
+    "task_type": "evidence_edge_retrieval",
+    "question": "What evidence edges support Chile influenza activity as a candidate hidden driver for the US influenza base mechanism?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "invented relationship",
+      "invented dataset"
+    ]
+  },
+  {
+    "id": "case_011",
+    "task_type": "support_subgraph_reasoning",
+    "question": "Which candidate connects both to the US hospitalization target signal and to the US influenza base mechanism in the support subgraph?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_support_nodes": [
+      "signal_chile_flu",
+      "signal_us_hosp",
+      "eq_us_flu_base"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "invented mechanism",
+      "unsupported causal proof"
+    ]
+  },
+  {
+    "id": "case_012",
+    "task_type": "provenance_dataset_support",
+    "question": "Which candidate is best supported when the answer must consider graph evidence plus dataset and provenance support?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented dataset",
+      "invented provenance",
+      "unsupported causal proof"
+    ]
+  },
+  {
+    "id": "case_014",
+    "task_type": "text_rag_distractor",
+    "question": "Which candidate should be selected if the explanation must include importation evidence but also requires a leading indicator for US hospitalizations?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_candidate_name": "Chile Influenza Activity",
+    "expected_evidence_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_edit_type": "lagged_importation_signal",
+    "must_not_include": [
+      "invented edge",
+      "unsupported causal proof",
+      "claim Travel Importation Pressure has LEADING_INDICATOR_FOR"
+    ]
   }
 ]
