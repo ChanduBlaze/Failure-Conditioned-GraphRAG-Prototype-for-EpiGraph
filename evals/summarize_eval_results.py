@@ -9,6 +9,7 @@ SUMMARY_FILE = RESULTS_DIR / "eval_summary.csv"
 RESULT_FILES = [
     ("KG-only", RESULTS_DIR / "kg_only_results.csv"),
     ("LLM-only", RESULTS_DIR / "llm_only_results.csv"),
+    ("Text-RAG", RESULTS_DIR / "text_rag_results.csv"),
     ("GraphRAG", RESULTS_DIR / "graphrag_results.csv"),
 ]
 
