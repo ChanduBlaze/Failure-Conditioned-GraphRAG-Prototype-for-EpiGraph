@@ -1,0 +1,34 @@
+case_id,task_type,expected_candidate_id,retrieved_top_candidate_id,predicted_candidate_id,predicted_candidate_name,top1_correct,top3_candidate_ids,expected_evidence_edges,support_subgraph_edges,mentioned_evidence_edges,evidence_precision,evidence_recall,hallucinated_evidence_count,kg_validation_passed,kg_validation_reasons,proposed_edit_type,explanation,raw_response
+case_001,hidden_driver_selection,signal_chile_flu,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,0,True,,add_driver_with_importation_link,"The top-ranked candidate is Chile Influenza Activity because the support subgraph directly links it to the missed US hospitalization peak via a LEADING_INDICATOR_FOR relationship to signal_us_hosp and it is connected to the US mechanism (eq_us_flu_base) by both IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships. The candidate also has the highest ranking score (7) and the validation result passed with three supporting edges, one dataset, and one provenance. The retrieved graph evidence is limited to these links and does not include temporal lag details or quantitative importation rates, so while Chile Influenza Activity is the best-supported explanation in the provided evidence, additional data would be needed to confirm timing and magnitude.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""The top-ranked candidate is Chile Influenza Activity because the support subgraph directly links it to the missed US hospitalization peak via a LEADING_INDICATOR_FOR relationship to signal_us_hosp and it is connected to the US mechanism (eq_us_flu_base) by both IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships. The candidate also has the highest ranking score (7) and the validation result passed with three supporting edges, one dataset, and one provenance. The retrieved graph evidence is limited to these links and does not include temporal lag details or quantitative importation rates, so while Chile Influenza Activity is the best-supported explanation in the provided evidence, additional data would be needed to confirm timing and magnitude."",
+  ""proposed_edit_type"": ""add_driver_with_importation_link"",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ]
+}"
+case_002,support_subgraph,signal_chile_flu,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,0,True,,add_leading_indicator_and_importation_link_to_mechanism,"Chile Influenza Activity is the top candidate because the support subgraph directly links it to both the failing mechanism (US Influenza Base Mechanism) and the target signal (US Influenza Hospitalizations). Specifically, the subgraph shows Chile as a LEADING_INDICATOR_FOR the US hospitalization signal, and it has both an IMPORTATION_LINK to the US mechanism and is a POSSIBLE_DRIVER_OF that mechanism. The candidate’s ranking score (7) and the top_candidate_validation results (passed=true, support_edge_count=3, dataset_count=1, provenance_count=1) further support this choice.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity is the top candidate because the support subgraph directly links it to both the failing mechanism (US Influenza Base Mechanism) and the target signal (US Influenza Hospitalizations). Specifically, the subgraph shows Chile as a LEADING_INDICATOR_FOR the US hospitalization signal, and it has both an IMPORTATION_LINK to the US mechanism and is a POSSIBLE_DRIVER_OF that mechanism. The candidate’s ranking score (7) and the top_candidate_validation results (passed=true, support_edge_count=3, dataset_count=1, provenance_count=1) further support this choice."",
+  ""proposed_edit_type"": ""add_leading_indicator_and_importation_link_to_mechanism"",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ]
+}"
+case_003,mechanism_edit,signal_chile_flu,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,0,True,,add_imported_driver_input,"The graph supports Chile influenza as the best minimal edit: the signal node has a LEADING_INDICATOR_FOR relationship to the target signal_us_hosp, and it is connected to the failing mechanism eq_us_flu_base via IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges. Top candidate validation passed (score 7, 3 supporting edges), so the minimal supported change is to incorporate Chile influenza activity as an external driver/importation input to the US mechanism to capture the missed hospitalization peak.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""The graph supports Chile influenza as the best minimal edit: the signal node has a LEADING_INDICATOR_FOR relationship to the target signal_us_hosp, and it is connected to the failing mechanism eq_us_flu_base via IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges. Top candidate validation passed (score 7, 3 supporting edges), so the minimal supported change is to incorporate Chile influenza activity as an external driver/importation input to the US mechanism to capture the missed hospitalization peak."",
+  ""proposed_edit_type"": ""add_imported_driver_input"",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ]
+}"
