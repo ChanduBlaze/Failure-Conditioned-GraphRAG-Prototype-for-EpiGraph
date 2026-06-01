@@ -28,32 +28,34 @@ The GraphRAG + LLM method uses Neo4j retrieval to rank candidates, retrieves the
 
 | Method | Cases | Top-1 Accuracy | Avg. Evidence Precision | Avg. Evidence Recall | Hallucinated Evidence Count |
 |---|---:|---:|---:|---:|---:|
-| KG-only | 3 | 1.000 | 1.000 | 1.000 | 0 |
-| LLM-only | 3 | 0.333 | 0.000 | 0.000 | 6 |
-| Text-RAG | 3 | 1.000 | 1.000 | 1.000 | 0 |
-| GraphRAG + LLM | 3 | 1.000 | 1.000 | 1.000 | 0 |
+| KG-only | 10 | 1.000 | 1.000 | 1.000 | 0 |
+| LLM-only | 10 | 0.200 | 0.000 | 0.000 | 20 |
+| Text-RAG | 10 | 0.900 | 1.000 | 1.000 | 0 |
+| GraphRAG + LLM | 10 | 1.000 | 1.000 | 1.000 | 0 |
 
 ## Interpretation
 
-These starter results suggest that the LLM-only baseline can produce plausible epidemiological reasoning, but that reasoning is not reliably grounded in the expected graph evidence. In the current three-case benchmark, the LLM-only baseline selected the correct candidate in only one case and hallucinated evidence relationships that did not match the expected graph edge types.
+These starter results suggest that the LLM-only baseline can produce plausible epidemiological reasoning, but that reasoning is much weaker than the retrieval-based methods and is not reliably grounded in the expected graph evidence. In the current 10-case benchmark, the LLM-only baseline selected the correct candidate in only two cases and hallucinated evidence relationships that did not match the expected graph edge types.
 
-The KG-only, Text-RAG, and GraphRAG + LLM methods all perform perfectly on this current starter benchmark. KG-only retrieved the correct graph evidence for the current Chile hidden-driver scenario, identifying `signal_chile_flu` as the top candidate and recovering the expected support edge types: `LEADING_INDICATOR_FOR`, `IMPORTATION_LINK`, and `POSSIBLE_DRIVER_OF`.
+The KG-only and GraphRAG + LLM methods remain perfect on this 10-case benchmark. KG-only retrieved the correct graph evidence for the current Chile hidden-driver scenario, identifying `signal_chile_flu` as the top candidate and recovering the expected support edge types: `LEADING_INDICATOR_FOR`, `IMPORTATION_LINK`, and `POSSIBLE_DRIVER_OF`.
 
-Text-RAG also performs well because the current text corpus is small and directly contains the answer. The relevant candidate chunks explicitly state the key relationships, so simple lexical retrieval can surface the correct evidence without needing structured graph traversal.
+Text-RAG improves substantially over LLM-only and also stays grounded in the expected evidence edges, but it misses one candidate-selection case. This is useful because it begins to show a separation between flattened text retrieval and the structured GraphRAG method. Text-RAG still performs well overall because the current text corpus is small and directly contains much of the answer.
 
-The GraphRAG + LLM method kept the LLM grounded in the retrieved support subgraph. Its explanations used the expected graph relationships and avoided hallucinated evidence in this starter benchmark, while still producing a natural-language rationale and model-edit proposal.
+The GraphRAG + LLM method keeps the LLM grounded in the retrieved support subgraph while still producing natural-language explanations and model-edit proposals. Its explanations use the expected graph relationships and avoid hallucinated evidence in this benchmark.
 
 More diverse and harder cases are needed to separate Text-RAG from GraphRAG. The expected advantage of GraphRAG should become clearer when the task requires multi-hop structure, relationship constraints, provenance checks, or distinguishing candidates whose textual descriptions are superficially similar.
 
 ## Important Limitation
 
-This is only a 3-case starter benchmark based on the current Chile hidden-driver scenario. These numbers are not final thesis results yet.
+This is now a 10-case starter benchmark based on the current Chile hidden-driver scenario. These numbers are not final thesis-level evidence yet.
 
-The current benchmark is useful as an early sanity check that the evaluation scripts and prototype reasoning layer are working, but it is too small and too scenario-specific to support strong empirical claims. It is also currently too easy for Text-RAG because the text corpus is small and directly encodes the expected answer. Final thesis claims need 15-30 diverse eval cases before drawing stronger conclusions.
+The current benchmark is useful as an early sanity check that the evaluation scripts and prototype reasoning layer are working, but it is still too small and too scenario-specific to support strong empirical claims. It remains somewhat easy for Text-RAG because the text corpus is small and directly encodes much of the expected answer. Final thesis claims should target 25-50 diverse eval cases before drawing stronger conclusions.
+
+Future cases should include missing-edge detection and weak-candidate rejection, but those will need updated scoring fields and evaluation logic. In particular, the benchmark should eventually score whether a method correctly identifies absent edges, rejects weak candidates, and avoids treating partial evidence as full support.
 
 ## Next Steps
 
-- Expand `evals/eval_cases.json` to 15-30 cases.
+- Expand `evals/eval_cases.json` to 25-50 diverse cases.
 - Expand and harden the text-based RAG baseline with more challenging retrieval cases.
 - Add an ablation study to separate the effects of ranking, support-subgraph retrieval, validation, and LLM prompting.
 - Later connect this reasoning-layer evaluation to a forecasting failure or surprisal signal.
