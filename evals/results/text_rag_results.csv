@@ -1,0 +1,34 @@
+case_id,task_type,expected_candidate_id,predicted_candidate_id,predicted_candidate_name,top1_correct,retrieved_chunk_ids,retrieved_chunk_scores,expected_evidence_edges,mentioned_evidence_edges,evidence_precision,evidence_recall,hallucinated_evidence_count,proposed_edit_type,explanation,raw_response
+case_001,hidden_driver_selection,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,chunk_us_influenza_base_mechanism;chunk_us_hospitalizations_target_signal;chunk_chile_influenza_activity,38;31;25,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,0,add_external_lagged_importation_signal,"Chile Influenza Activity is indicated in the retrieved evidence as a leading southern-hemisphere influenza signal that is a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. These relationships make it the strongest candidate to explain why the U.S. mechanism underpredicted a hospitalization peak: a lagged importation of increased influenza activity from Chile could have driven a later-than-expected rise in U.S. hospitalizations that the base model missed.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity is indicated in the retrieved evidence as a leading southern-hemisphere influenza signal that is a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. These relationships make it the strongest candidate to explain why the U.S. mechanism underpredicted a hospitalization peak: a lagged importation of increased influenza activity from Chile could have driven a later-than-expected rise in U.S. hospitalizations that the base model missed."",
+  ""proposed_edit_type"": ""add_external_lagged_importation_signal"",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ]
+}"
+case_002,support_subgraph,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,chunk_us_influenza_base_mechanism;chunk_us_hospitalizations_target_signal;chunk_chile_influenza_activity,34;27;26,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,0,add_lagged_importation_signal,"Chile Influenza Activity is the top candidate because the retrieved summary identifies it as a southern-hemisphere influenza signal that is a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. These relationships directly explain how a lagged increase in Chile influenza could lead to an unmodeled rise in U.S. hospitalizations, accounting for the base mechanism's missed peak.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity is the top candidate because the retrieved summary identifies it as a southern-hemisphere influenza signal that is a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. These relationships directly explain how a lagged increase in Chile influenza could lead to an unmodeled rise in U.S. hospitalizations, accounting for the base mechanism's missed peak."",
+  ""proposed_edit_type"": ""add_lagged_importation_signal"",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ]
+}"
+case_003,mechanism_edit,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,chunk_us_influenza_base_mechanism;chunk_us_hospitalizations_target_signal;chunk_chile_influenza_activity,38;30;24,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,0,add_external_lagged_importation_signal,"Chile Influenza Activity is identified in the graph as a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. These relationships directly support that a lagged importation from Chile could explain the missed U.S. hospitalization peak (actual above prediction).","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity is identified in the graph as a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. These relationships directly support that a lagged importation from Chile could explain the missed U.S. hospitalization peak (actual above prediction)."",
+  ""proposed_edit_type"": ""add_external_lagged_importation_signal"",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ]
+}"
