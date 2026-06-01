@@ -1,0 +1,74 @@
+[
+  {
+    "chunk_id": "chunk_chile_influenza_activity",
+    "title": "Chile Influenza Activity",
+    "text": "Chile Influenza Activity is a southern hemisphere influenza signal. In the current U.S. influenza missed-peak failure case, this signal is treated as a candidate hidden driver for the U.S. base influenza mechanism. The graph knowledge says that Chile influenza activity is a LEADING_INDICATOR_FOR U.S. influenza hospitalizations, has an IMPORTATION_LINK to the U.S. influenza base mechanism, and is a POSSIBLE_DRIVER_OF that mechanism. This makes it the strongest current candidate for explaining a missed U.S. hospitalization peak through a lagged importation signal.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_chile_flu",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_australia_influenza_activity",
+    "title": "Australia Influenza Activity",
+    "text": "Australia Influenza Activity is a southern hemisphere influenza signal. In the current U.S. influenza missed-peak failure case, this signal is a candidate hidden driver because it can act as a leading indicator for U.S. influenza hospitalizations and may be a possible driver of the U.S. influenza base mechanism. The graph knowledge includes LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF relationships for this candidate, but it does not include an IMPORTATION_LINK relationship to the U.S. influenza base mechanism.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_australia_flu",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_travel_importation_pressure",
+    "title": "Travel Importation Pressure",
+    "text": "Travel Importation Pressure is a U.S.-related candidate signal for the missed influenza hospitalization peak. It represents the possibility that travel-driven introductions can increase pressure on the U.S. influenza mechanism. The graph knowledge says this candidate has an IMPORTATION_LINK to the U.S. influenza base mechanism and is a POSSIBLE_DRIVER_OF that mechanism. It is not represented as a LEADING_INDICATOR_FOR the U.S. hospitalization target signal in the current graph.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_travel_pressure",
+    "edge_types": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_humidity_drop_anomaly",
+    "title": "Humidity Drop Anomaly",
+    "text": "Humidity Drop Anomaly is a climate-related candidate signal for the U.S. influenza missed-peak failure case. It represents a possible environmental forcing that could affect influenza transmission or hospitalization patterns. In the current graph knowledge, Humidity Drop Anomaly is connected to the U.S. influenza base mechanism only through a POSSIBLE_DRIVER_OF relationship. It does not have a LEADING_INDICATOR_FOR relationship to the U.S. hospitalization target signal and does not have an IMPORTATION_LINK relationship to the U.S. influenza base mechanism.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_humidity_drop",
+    "edge_types": [
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_us_influenza_base_mechanism",
+    "title": "US Influenza Base Mechanism",
+    "text": "The U.S. Influenza Base Mechanism is the mechanism equation being evaluated in the current forecast-failure case. The failure case describes a U.S. influenza model that underpredicted a hospitalization peak. Candidate hidden drivers are evaluated based on whether they can help explain why this base mechanism missed the peak and whether they suggest a testable model edit, such as adding an external lagged importation signal.",
+    "source_type": "mechanism_summary",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_us_hospitalizations_target_signal",
+    "title": "US Hospitalizations Target Signal",
+    "text": "U.S. Influenza Hospitalizations is the target signal in the current missed-peak failure case. The model failure is defined by actual U.S. hospitalizations rising above the forecast. Candidate hidden drivers are more relevant when they help explain this target signal, especially when they are represented as leading indicators or possible drivers of the U.S. influenza mechanism.",
+    "source_type": "target_signal_summary",
+    "related_candidate_id": "signal_us_hosp",
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_candidate_scoring_rule",
+    "title": "Candidate Scoring Rule",
+    "text": "The current candidate scoring rule favors graph evidence that connects a candidate signal to the failed U.S. influenza mechanism and the U.S. hospitalization target signal. A LEADING_INDICATOR_FOR relationship to the target signal contributes the strongest evidence. IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships to the U.S. influenza base mechanism also increase support. A candidate with all three relationships is expected to rank above candidates with only one or two of these relationships.",
+    "source_type": "scoring_rule",
+    "related_candidate_id": null,
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  }
+]
