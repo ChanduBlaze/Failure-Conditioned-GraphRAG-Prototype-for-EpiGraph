@@ -44,6 +44,38 @@ The benchmark has been expanded from 3 starter cases to 10 cases. The newer case
 | Text-RAG | 0.900 | 1.000 | 1.000 | 0 |
 | GraphRAG + LLM | 1.000 | 1.000 | 1.000 | 0 |
 
+## Hard Pilot Evaluation
+
+I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and a graph-side evaluator in `evals/run_hard_pilot_eval.py`.
+
+The hard pilot tests:
+
+- Missing-edge detection.
+- Partial-evidence detection.
+- Weak-candidate rejection.
+
+The three pilot cases are:
+
+| Case | Purpose |
+|---|---|
+| Australia missing `IMPORTATION_LINK` | Tests whether the evaluator can identify that Australia has partial evidence but lacks importation support. |
+| Travel Pressure missing `LEADING_INDICATOR_FOR` | Tests whether the evaluator can identify that Travel Pressure has importation evidence but lacks leading-indicator evidence. |
+| Humidity Drop weak-candidate case | Tests whether the evaluator treats Humidity Drop as weak because it has only `POSSIBLE_DRIVER_OF` evidence. |
+
+Current hard pilot results:
+
+| Metric | Result |
+|---|---:|
+| Cases | 3 |
+| Average present-edge precision | 1.000 |
+| Average present-edge recall | 1.000 |
+| Average missing-edge recall | 1.000 |
+| Missing-edge false claim count | 0 |
+| Stronger-candidate ranking accuracy | 1.000 |
+| Weak-candidate rejection accuracy | 1.000 |
+
+This is currently a KG-only/graph-side evaluation. It does not yet compare LLM-only, Text-RAG, or GraphRAG + LLM on the hard pilot cases.
+
 ## Interpretation
 
 The current results suggest that LLM-only reasoning is not reliable for this task. It produced plausible-sounding explanations, but it selected the correct candidate in only 20 percent of the cases and hallucinated evidence relationships that were not part of the expected graph evidence.
@@ -58,11 +90,12 @@ GraphRAG + LLM also performed perfectly on the 10-case benchmark. It kept the LL
 
 These results are promising, but they are not final thesis-level evidence. The benchmark is still small and focused on one Chile hidden-driver scenario. It does not yet include enough variation across diseases, regions, mechanisms, candidate types, or failure modes.
 
-The current benchmark also does not yet fully test missing-edge detection or weak-candidate rejection. Those cases need additional schema fields and scoring logic so the evaluation can measure whether a method correctly identifies absent evidence and avoids treating partial support as full support.
+The hard pilot is an important first step toward testing missing-edge detection and weak-candidate rejection, but it is currently graph-side only. The LLM-facing runners still need expanded output schemas and scoring logic before these harder cases can be used for the full four-method comparison.
 
 ## Next Steps
 
-- Expand the benchmark to 25-50 diverse evaluation cases.
-- Add scoring for missing-edge detection and weak-candidate rejection.
+- Extend LLM output schemas with fields such as `identified_missing_edges` and `rejected_candidate_ids`.
+- Run LLM-only, Text-RAG, and GraphRAG + LLM on the hard pilot cases.
+- Expand the benchmark toward 25-50 diverse evaluation cases.
 - Add an ablation study to separate the effects of graph ranking, support-subgraph retrieval, validation, and LLM prompting.
 - Later connect the reasoning layer to a forecasting or surprisal signal so that the system can start from detected forecast failures rather than a manually specified failure case.
