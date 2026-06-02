@@ -12,6 +12,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 try:
+    from eval_metrics import (
+        compute_evidence_metrics,
+        mean,
+        normalize_list_of_strings,
+    )
     from failure_case import get_failure_case
     from llm_reasoner import (
         MAX_OUTPUT_TOKENS,
@@ -50,39 +55,6 @@ def load_eval_cases():
         raise ValueError("eval_cases.json must contain a JSON list.")
 
     return cases
-
-
-def normalize_edge_types(edge_types):
-    normalized = []
-
-    for edge_type in edge_types or []:
-        if isinstance(edge_type, str) and edge_type.strip():
-            normalized.append(edge_type.strip())
-
-    return normalized
-
-
-def compute_evidence_metrics(mentioned_edge_types, expected_edge_types):
-    mentioned = set(normalize_edge_types(mentioned_edge_types))
-    expected = set(normalize_edge_types(expected_edge_types))
-
-    if mentioned:
-        precision = len(mentioned & expected) / len(mentioned)
-    else:
-        precision = 1.0 if not expected else 0.0
-
-    if expected:
-        recall = len(mentioned & expected) / len(expected)
-    else:
-        recall = 1.0
-
-    hallucinated_count = len(mentioned - expected)
-
-    return precision, recall, hallucinated_count
-
-
-def mean(values):
-    return sum(values) / len(values) if values else 0.0
 
 
 def build_prompt(eval_case, failure_case, candidates, top_candidate, validation_result):
@@ -246,12 +218,13 @@ def run_eval():
             expected_candidate_id = eval_case.get("expected_candidate_id", "")
             predicted_candidate_id = llm_output["predicted_candidate_id"]
             expected_edge_types = eval_case.get("expected_evidence_edges", [])
-            mentioned_edge_types = normalize_edge_types(
+            mentioned_edge_types = normalize_list_of_strings(
                 llm_output["mentioned_evidence_edges"]
             )
 
-            evidence_precision, evidence_recall, hallucinated_evidence_count = (
-                compute_evidence_metrics(mentioned_edge_types, expected_edge_types)
+            evidence_metrics = compute_evidence_metrics(
+                mentioned_edge_types,
+                expected_edge_types,
             )
 
             rows.append(
@@ -267,13 +240,15 @@ def run_eval():
                         candidate["candidate_id"] for candidate in candidates[:3]
                     ),
                     "expected_evidence_edges": ";".join(
-                        normalize_edge_types(expected_edge_types)
+                        normalize_list_of_strings(expected_edge_types)
                     ),
                     "support_subgraph_edges": ";".join(support_edges),
                     "mentioned_evidence_edges": ";".join(mentioned_edge_types),
-                    "evidence_precision": evidence_precision,
-                    "evidence_recall": evidence_recall,
-                    "hallucinated_evidence_count": hallucinated_evidence_count,
+                    "evidence_precision": evidence_metrics["evidence_precision"],
+                    "evidence_recall": evidence_metrics["evidence_recall"],
+                    "hallucinated_evidence_count": evidence_metrics[
+                        "hallucinated_evidence_count"
+                    ],
                     "kg_validation_passed": validation_result["passed"],
                     "kg_validation_reasons": "; ".join(validation_result["reasons"]),
                     "proposed_edit_type": llm_output["proposed_edit_type"],
