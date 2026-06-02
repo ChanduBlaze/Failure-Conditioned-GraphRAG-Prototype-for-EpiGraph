@@ -13,6 +13,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 try:
+    from eval_metrics import (
+        compute_evidence_metrics,
+        mean,
+        normalize_list_of_strings,
+    )
     from failure_case import get_failure_case
     from neo4j_retrieval import get_driver, retrieve_failure_candidates_from_neo4j
     from neo4j_validator import validate_candidate_neo4j
@@ -58,27 +63,6 @@ def make_support_subgraph_from_evidence(edge_types):
     }
 
 
-def compute_evidence_metrics(predicted_edge_types, expected_edge_types):
-    predicted = set(predicted_edge_types)
-    expected = set(expected_edge_types)
-
-    if predicted:
-        precision = len(predicted & expected) / len(predicted)
-    else:
-        precision = 1.0 if not expected else 0.0
-
-    if expected:
-        recall = len(predicted & expected) / len(expected)
-    else:
-        recall = 1.0
-
-    return precision, recall
-
-
-def mean(values):
-    return sum(values) / len(values) if values else 0.0
-
-
 def run_eval():
     eval_cases = load_eval_cases()
     failure_case = get_failure_case()
@@ -109,7 +93,7 @@ def run_eval():
             expected_candidate_id = case.get("expected_candidate_id", "")
             expected_edge_types = case.get("expected_evidence_edges", [])
 
-            evidence_precision, evidence_recall = compute_evidence_metrics(
+            evidence_metrics = compute_evidence_metrics(
                 top_predicted_edge_types,
                 expected_edge_types,
             )
@@ -123,10 +107,12 @@ def run_eval():
                     "top3_candidate_ids": ";".join(top3_candidate_ids),
                     "top1_correct": top_candidate_id == expected_candidate_id,
                     "top3_contains_expected": expected_candidate_id in top3_candidate_ids,
-                    "expected_evidence_edges": ";".join(expected_edge_types),
+                    "expected_evidence_edges": ";".join(
+                        normalize_list_of_strings(expected_edge_types)
+                    ),
                     "predicted_evidence_edges": ";".join(top_predicted_edge_types),
-                    "evidence_precision": evidence_precision,
-                    "evidence_recall": evidence_recall,
+                    "evidence_precision": evidence_metrics["evidence_precision"],
+                    "evidence_recall": evidence_metrics["evidence_recall"],
                     "kg_validation_passed": (
                         top_candidate_validation["passed"]
                         if top_candidate_validation
