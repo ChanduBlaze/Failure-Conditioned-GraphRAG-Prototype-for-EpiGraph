@@ -1,0 +1,67 @@
+[
+  {
+    "id": "hard_case_001",
+    "task_type": "missing_edge_detection",
+    "expected_answer_type": "missing_edge_detection",
+    "question": "Australia influenza activity has some southern hemisphere signal support. Which evidence edge is missing that makes it weaker than Chile influenza activity for explaining the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_australia_flu",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "IMPORTATION_LINK"
+    ],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Australia has IMPORTATION_LINK",
+      "unsupported causal proof",
+      "invented dataset"
+    ]
+  },
+  {
+    "id": "hard_case_002",
+    "task_type": "partial_evidence_detection",
+    "expected_answer_type": "partial_evidence_detection",
+    "question": "Travel Importation Pressure has importation evidence for the US mechanism. Which evidence edge is missing that prevents it from having the same full support as Chile influenza activity?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_travel_pressure",
+    "expected_present_edges": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR"
+    ],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Travel Importation Pressure has LEADING_INDICATOR_FOR",
+      "unsupported causal proof",
+      "invented relationship"
+    ]
+  },
+  {
+    "id": "hard_case_003",
+    "task_type": "weak_candidate_rejection",
+    "expected_answer_type": "weak_candidate_rejection",
+    "question": "Humidity Drop Anomaly is connected to the US influenza mechanism by limited evidence. Why should it be treated as a weak candidate rather than a fully supported hidden driver?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_humidity_drop",
+    "expected_present_edges": [
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK"
+    ],
+    "expected_weak_candidate_id": "signal_humidity_drop",
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Humidity Drop Anomaly has LEADING_INDICATOR_FOR",
+      "claim Humidity Drop Anomaly has IMPORTATION_LINK",
+      "unsupported causal proof",
+      "invented dataset"
+    ]
+  }
+]
