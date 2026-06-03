@@ -122,16 +122,8 @@ def build_query_text(hard_case, failure_case):
         if isinstance(value, (str, int, float))
     ]
 
-    case_values = [
-        hard_case.get("question", ""),
-        hard_case.get("expected_candidate_id", ""),
-        hard_case.get("expected_stronger_candidate_id", ""),
-        hard_case.get("expected_weak_candidate_id", ""),
-        " ".join(hard_case.get("expected_present_edges", [])),
-        " ".join(hard_case.get("expected_missing_edges", [])),
-    ]
-
-    return " ".join([*case_values, *map(str, failure_values)])
+    # Expected labels are intentionally excluded to avoid answer-key leakage.
+    return " ".join([hard_case.get("question", ""), *map(str, failure_values)])
 
 
 def score_chunk(query_tokens, chunk):
