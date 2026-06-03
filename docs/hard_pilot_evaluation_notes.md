@@ -35,19 +35,19 @@ These results compare the hard pilot versions of KG-only, LLM-only, Text-RAG, an
 | Method | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | KG-only | 3 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| LLM-only | 3 | 1.000 | 0.500 | 0.333 | 0.667 | 1 | 0.667 | 1.000 |
-| Text-RAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.000 | 1.000 |
-| GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.000 | 1.000 |
+| LLM-only | 3 | 1.000 | 0.667 | 0.333 | 0.667 | 0 | 1.000 | 1.000 |
+| Text-RAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.667 | 1.000 |
+| GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
 
 ## Interpretation
 
 The KG-only hard pilot shows that the graph evidence itself supports the hard-case distinctions. The current Neo4j ranking and evidence representation recover the present edges, identify the missing edges, rank Chile above the weaker or partial candidates, and reject the weak Humidity Drop candidate.
 
-LLM-only gets the candidate IDs right, but its edge grounding is weak. It has low present-edge recall, lower missing-edge recall, and one false missing-edge claim. This suggests that the LLM can produce plausible answers to the hard-case questions, but without retrieval it is less reliable about which evidence relationships are present or absent.
+The stronger-candidate metric is now cleaner because the LLM-based hard-pilot runners explicitly ask for a `stronger_candidate_id` field instead of inferring the answer from raw response text.
 
-Text-RAG and GraphRAG both do well on the present-edge and missing-edge metrics in this 3-case pilot. Both methods identify the expected candidate, recover the expected present evidence, identify the expected missing evidence, and avoid false edge claims.
+LLM-only gets the candidate and stronger-candidate fields right, but its edge grounding is still weak. It has low present-edge recall and lower missing-edge recall than the retrieval-based methods. This suggests that the LLM can produce plausible answers to the hard-case questions, but without retrieval it is less reliable about which evidence relationships are present or absent.
 
-The stronger-candidate identification metric is currently not reliable. The current LLM hard-pilot schemas do not directly ask for a `stronger_candidate_id` field, so the evaluator infers this metric from the predicted candidate or raw response text. That makes the metric too brittle to interpret as a clean comparison between Text-RAG and GraphRAG yet.
+Text-RAG and GraphRAG both recover the expected present and missing edges in this 3-case pilot. Text-RAG misses stronger-candidate identification in one case, while GraphRAG is currently perfect across the hard-pilot metrics.
 
 This is a useful next step because it begins testing the kinds of reasoning needed for a stronger thesis evaluation: not only finding the best-supported candidate, but also recognizing why other plausible candidates are incomplete or weak.
 
@@ -55,13 +55,12 @@ This is a useful next step because it begins testing the kinds of reasoning need
 
 The pilot is very small: only 3 cases, all within the same U.S. influenza hidden-driver scenario. It should be treated as a schema and scoring sanity check, not final thesis evidence.
 
-The stronger-candidate metric needs a cleaner schema. Future LLM hard-pilot outputs should include an explicit `stronger_candidate_id` field rather than relying on text matching or indirect inference.
-
 Text-RAG retrieval may still be helped by the small corpus. Because the current text corpus is compact and directly states the relevant edge patterns, Text-RAG can retrieve highly targeted chunks. Harder cases should reduce this advantage by adding more distractor chunks, more candidates, and more scenarios.
+
+The hard-pilot comparison should be expanded before making strong claims about method differences.
 
 ## Next Steps
 
-- Add a stricter `stronger_candidate_id` output field to the LLM-only, Text-RAG, and GraphRAG hard-pilot schemas.
 - Remove answer-key leakage from the Text-RAG hard-pilot retrieval query if present, especially direct use of expected candidate IDs or expected edge fields.
 - Expand hard cases to more candidates and scenarios.
 - Eventually merge hard-case scoring into the main benchmark once the schema and metrics are stable.
