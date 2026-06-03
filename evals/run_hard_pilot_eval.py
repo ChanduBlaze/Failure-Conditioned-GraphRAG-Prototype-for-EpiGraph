@@ -107,11 +107,14 @@ def score_case(case, candidate_lookup):
     expected_stronger_candidate_id = case.get("expected_stronger_candidate_id", "")
     stronger_info = candidate_lookup.get(expected_stronger_candidate_id)
     stronger_rank = stronger_info["rank"] if stronger_info else None
-    stronger_candidate_ranks_above = (
-        stronger_rank is not None
-        and candidate_rank is not None
-        and stronger_rank < candidate_rank
-    )
+    if expected_stronger_candidate_id == expected_candidate_id:
+        stronger_candidate_ranks_above = candidate_rank == 1
+    else:
+        stronger_candidate_ranks_above = (
+            stronger_rank is not None
+            and candidate_rank is not None
+            and stronger_rank < candidate_rank
+        )
 
     expected_weak_candidate_id = case.get("expected_weak_candidate_id", "")
     weak_info = candidate_lookup.get(expected_weak_candidate_id)

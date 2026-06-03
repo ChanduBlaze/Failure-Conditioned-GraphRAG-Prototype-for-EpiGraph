@@ -63,5 +63,72 @@
       "unsupported causal proof",
       "invented dataset"
     ]
+  },
+  {
+    "id": "hard_case_004",
+    "task_type": "candidate_contrast",
+    "expected_answer_type": "strongest_supported_candidate",
+    "question": "Why is Chile influenza activity the strongest supported candidate compared with Australia influenza activity for explaining the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Australia has IMPORTATION_LINK",
+      "claim Chile lacks IMPORTATION_LINK",
+      "unsupported causal proof",
+      "invented dataset"
+    ]
+  },
+  {
+    "id": "hard_case_005",
+    "task_type": "partial_evidence_detection",
+    "expected_answer_type": "partial_support_not_best_driver",
+    "question": "Why should Travel Importation Pressure be treated as partial support rather than the best hidden driver for the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_travel_pressure",
+    "expected_present_edges": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR"
+    ],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Travel Importation Pressure has LEADING_INDICATOR_FOR",
+      "claim Travel Importation Pressure is stronger than Chile",
+      "unsupported causal proof",
+      "invented relationship"
+    ]
+  },
+  {
+    "id": "hard_case_006",
+    "task_type": "weak_candidate_rejection",
+    "expected_answer_type": "weak_candidate_not_promoted",
+    "question": "Why should Humidity Drop Anomaly not be promoted above importation-related candidates when explaining the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_humidity_drop",
+    "expected_present_edges": [
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK"
+    ],
+    "expected_weak_candidate_id": "signal_humidity_drop",
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Humidity Drop Anomaly has LEADING_INDICATOR_FOR",
+      "claim Humidity Drop Anomaly has IMPORTATION_LINK",
+      "claim Humidity Drop Anomaly is stronger than importation-related candidates",
+      "unsupported causal proof",
+      "invented dataset"
+    ]
   }
 ]
