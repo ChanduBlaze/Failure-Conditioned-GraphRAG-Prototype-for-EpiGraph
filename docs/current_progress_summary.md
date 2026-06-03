@@ -46,7 +46,7 @@ The benchmark has been expanded from 3 starter cases to 10 cases. The newer case
 
 ## Hard Pilot Evaluation
 
-I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and separate hard-pilot runners for KG-only, LLM-only, Text-RAG, and GraphRAG.
+I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot now has 6 cases and uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and separate hard-pilot runners for KG-only, LLM-only, Text-RAG, and GraphRAG.
 
 The hard pilot tests:
 
@@ -54,22 +54,25 @@ The hard pilot tests:
 - Partial-evidence detection.
 - Weak-candidate rejection.
 
-The three pilot cases are:
+The six pilot cases are:
 
 | Case | Purpose |
 |---|---|
 | Australia missing `IMPORTATION_LINK` | Tests whether the evaluator can identify that Australia has partial evidence but lacks importation support. |
 | Travel Pressure missing `LEADING_INDICATOR_FOR` | Tests whether the evaluator can identify that Travel Pressure has importation evidence but lacks leading-indicator evidence. |
 | Humidity Drop weak-candidate case | Tests whether the evaluator treats Humidity Drop as weak because it has only `POSSIBLE_DRIVER_OF` evidence. |
+| Chile strongest compared with Australia | Tests whether the evaluator identifies Chile as the strongest supported candidate because it has all three expected support edges. |
+| Travel Pressure as partial support | Tests whether the evaluator explains why Travel Pressure is partial support rather than the best hidden driver. |
+| Humidity Drop should not outrank importation candidates | Tests whether the evaluator avoids promoting Humidity Drop above candidates with importation-related support. |
 
 Current hard pilot results:
 
 | Method | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| KG-only | 3 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| LLM-only | 3 | 1.000 | 0.667 | 0.333 | 0.667 | 0 | 1.000 | 1.000 |
-| Text-RAG | 3 | 1.000 | 0.667 | 0.500 | 0.667 | 1 | 0.667 | 1.000 |
-| GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| KG-only | 6 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| LLM-only | 6 | 0.833 | 0.306 | 0.250 | 0.500 | 1 | 0.500 | 1.000 |
+| Text-RAG | 6 | 1.000 | 0.667 | 0.583 | 0.750 | 0 | 0.667 | 0.500 |
+| GraphRAG | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
 
 ## Interpretation
 
@@ -81,23 +84,24 @@ Text-RAG performed strongly, but missed one candidate-selection case. This is us
 
 GraphRAG + LLM also performed perfectly on the 10-case benchmark. It kept the LLM grounded in the support subgraph while still producing natural-language explanations and model-edit proposals. This is the main behavior the thesis is trying to study: using graph-structured retrieval to support evidence-grounded scientific reasoning.
 
-The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on missing-edge and partial-evidence tasks. Stronger-candidate scoring now uses an explicit `stronger_candidate_id` field, making that metric cleaner than the earlier inferred version.
+The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on 6 missing-edge, partial-evidence, weak-candidate, and candidate-contrast tasks. Stronger-candidate scoring now uses an explicit `stronger_candidate_id` field, making that metric cleaner than the earlier inferred version.
 
-LLM-only gets the candidate and stronger-candidate fields right, but its edge grounding remains weaker than the retrieval-based methods. Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query; it uses only the hard-pilot question and failure-case values.
+The expanded hard pilot gives a clearer separation across methods. LLM-only becomes weaker on candidate selection, edge grounding, missing-edge recall, false claims, and stronger-candidate identification. This suggests that plausible natural-language reasoning alone is not enough to reliably track the graph evidence distinctions.
 
-The Text-RAG corpus now has 15 chunks, expanded from 7 by adding realistic distractors. Text-RAG still gets candidate accuracy right, but its edge grounding weakens: missing-edge recall is lower, it makes one false edge claim, and it misses one stronger-candidate judgment. GraphRAG remains perfect across the current hard-pilot metrics. This gives a clearer separation between flattened text retrieval and graph-structured retrieval.
+Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query; it uses only the hard-pilot question and failure-case values. The Text-RAG corpus now has 15 chunks, expanded from 7 by adding realistic distractors. Text-RAG keeps candidate accuracy at 1.000, but it has imperfect edge grounding, missing-edge recall, stronger-candidate identification, and weak-candidate rejection.
+
+GraphRAG remains perfect across the current 6-case hard-pilot metrics. This gives a clearer separation between LLM-only reasoning, flattened Text-RAG retrieval, and graph-structured retrieval.
 
 ## Limitations
 
 These results are promising, but they are not final thesis-level evidence. The benchmark is still small and focused on one Chile hidden-driver scenario. It does not yet include enough variation across diseases, regions, mechanisms, candidate types, or failure modes.
 
-The hard pilot is also still small: only 3 hard cases, all within the same influenza scenario. The added Text-RAG distractors make the setting more realistic, but more distractors and more scenarios are needed before making strong claims about method differences.
+The hard pilot is also still small and remains within one influenza scenario. The added Text-RAG distractors make the setting more realistic, but more diseases, regions, candidate types, and failure modes are needed before making strong claims about method differences.
 
 ## Next Steps
 
-- Expand hard cases to more candidates and scenarios.
-- Add more challenging distractor chunks later.
-- Eventually merge hard-case scoring into the main benchmark.
+- Expand the hard pilot toward 15-30 hard cases.
+- Add an ablation study next.
+- Later merge hard-case scoring into the main benchmark.
 - Expand the benchmark toward 25-50 diverse evaluation cases.
-- Add an ablation study to separate the effects of graph ranking, support-subgraph retrieval, validation, and LLM prompting.
 - Later connect the reasoning layer to a forecasting or surprisal signal so that the system can start from detected forecast failures rather than a manually specified failure case.
