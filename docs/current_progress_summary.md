@@ -68,7 +68,7 @@ Current hard pilot results:
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | KG-only | 3 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
 | LLM-only | 3 | 1.000 | 0.667 | 0.333 | 0.667 | 0 | 1.000 | 1.000 |
-| Text-RAG | 3 | 1.000 | 0.667 | 0.500 | 1.000 | 0 | 1.000 | 1.000 |
+| Text-RAG | 3 | 1.000 | 0.667 | 0.500 | 0.667 | 1 | 0.667 | 1.000 |
 | GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
 
 ## Interpretation
@@ -83,18 +83,20 @@ GraphRAG + LLM also performed perfectly on the 10-case benchmark. It kept the LL
 
 The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on missing-edge and partial-evidence tasks. Stronger-candidate scoring now uses an explicit `stronger_candidate_id` field, making that metric cleaner than the earlier inferred version.
 
-LLM-only gets the candidate and stronger-candidate fields right, but its edge grounding remains weaker than the retrieval-based methods. Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query; it uses only the hard-pilot question and failure-case values. Text-RAG still identifies missing edges, the stronger candidate, and the weak candidate, but its present-edge grounding drops. GraphRAG remains perfect across the current hard-pilot metrics.
+LLM-only gets the candidate and stronger-candidate fields right, but its edge grounding remains weaker than the retrieval-based methods. Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query; it uses only the hard-pilot question and failure-case values.
+
+The Text-RAG corpus now has 15 chunks, expanded from 7 by adding realistic distractors. Text-RAG still gets candidate accuracy right, but its edge grounding weakens: missing-edge recall is lower, it makes one false edge claim, and it misses one stronger-candidate judgment. GraphRAG remains perfect across the current hard-pilot metrics. This gives a clearer separation between flattened text retrieval and graph-structured retrieval.
 
 ## Limitations
 
 These results are promising, but they are not final thesis-level evidence. The benchmark is still small and focused on one Chile hidden-driver scenario. It does not yet include enough variation across diseases, regions, mechanisms, candidate types, or failure modes.
 
-The hard pilot is also still small: only 3 hard cases, all within the same influenza scenario. Text-RAG may still benefit from the small corpus because the relevant evidence is stated directly in a compact set of chunks, although it no longer uses expected labels directly. The hard-pilot comparison should be expanded before making strong claims about method differences.
+The hard pilot is also still small: only 3 hard cases, all within the same influenza scenario. The added Text-RAG distractors make the setting more realistic, but more distractors and more scenarios are needed before making strong claims about method differences.
 
 ## Next Steps
 
 - Expand hard cases to more candidates and scenarios.
-- Add more distractor chunks to the text corpus.
+- Add more challenging distractor chunks later.
 - Eventually merge hard-case scoring into the main benchmark.
 - Expand the benchmark toward 25-50 diverse evaluation cases.
 - Add an ablation study to separate the effects of graph ranking, support-subgraph retrieval, validation, and LLM prompting.
