@@ -70,5 +70,69 @@
       "IMPORTATION_LINK",
       "POSSIBLE_DRIVER_OF"
     ]
+  },
+  {
+    "chunk_id": "chunk_southern_hemisphere_surveillance_background",
+    "title": "Southern Hemisphere Surveillance Background",
+    "text": "Southern hemisphere influenza surveillance can provide useful context for northern hemisphere preparedness because influenza seasons occur at different times across regions. These surveillance signals may suggest broad seasonal pressure, but surveillance context alone is not enough to establish a specific driver relationship for a U.S. model failure. Additional evidence is needed before treating any regional signal as a concrete explanation for a missed hospitalization peak.",
+    "source_type": "background",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_travel_volume_seasonality",
+    "title": "Travel Volume Seasonality",
+    "text": "Travel volume can vary by season, holidays, and school calendars. Higher travel volume may increase opportunities for respiratory virus introductions, but travel volume alone does not identify which pathogen signal is leading the U.S. hospitalization target. Travel-related context should be combined with candidate-specific evidence before proposing a model edit.",
+    "source_type": "background",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_humidity_respiratory_transmission_background",
+    "title": "Humidity and Respiratory Transmission Background",
+    "text": "Humidity can affect respiratory virus transmission conditions, including viral stability and host susceptibility. A humidity anomaly may be relevant as environmental context, but environmental plausibility is not the same as complete support for a hidden driver. A climate-related signal should not be treated as fully explanatory unless it has direct evidence linking it to the target failure and mechanism.",
+    "source_type": "background",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_us_hospitalization_reporting_lag",
+    "title": "US Hospitalization Reporting Lag",
+    "text": "Hospitalization data can be affected by reporting delays, revisions, and week-to-week noise. A missed hospitalization peak may sometimes reflect delayed reporting or data revision rather than a missing epidemiological driver. Reporting lag should be considered as a data-quality explanation, but it is not itself evidence for a specific candidate hidden driver.",
+    "source_type": "data_quality_background",
+    "related_candidate_id": "signal_us_hosp",
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_generic_model_underprediction_explanation",
+    "title": "Generic Model Underprediction Explanation",
+    "text": "An epidemiological model can underpredict a peak for several reasons, including missing external inputs, incorrect parameter values, reporting artifacts, behavioral changes, or changes in population susceptibility. A useful revision should identify which mechanism is under-supported and propose a testable edit rather than simply naming a plausible factor.",
+    "source_type": "model_revision_background",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_noisy_candidate_signal_warning",
+    "title": "Noisy Candidate Signal Warning",
+    "text": "Candidate signals can be noisy, correlated, or temporally misaligned with the target failure. A signal that appears plausible in narrative form may still be weak if it lacks specific support for timing, mechanism connection, or target relevance. Ranking should avoid over-weighting a candidate merely because its description resembles the failure pattern.",
+    "source_type": "evaluation_warning",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_incomplete_evidence_warning",
+    "title": "Incomplete Evidence Warning",
+    "text": "Incomplete evidence occurs when a candidate has one or two relevant support relationships but lacks another relationship needed for full support. In these cases, the candidate may still be relevant, but it should be described as partially supported rather than as the best complete explanation. Missing relationships should be stated explicitly when evaluating a candidate.",
+    "source_type": "evaluation_warning",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_external_driver_model_edit_background",
+    "title": "External Driver Model Edit Background",
+    "text": "A model edit that adds an external driver should be based on evidence that the driver is relevant to the failed target signal and connected to the mechanism being revised. External inputs can be represented as lagged covariates, forcing terms, or seeding terms, but the edit should remain testable and should not imply confirmed causality without validation.",
+    "source_type": "model_revision_background",
+    "related_candidate_id": null,
+    "edge_types": []
   }
 ]
