@@ -67,9 +67,9 @@ Current hard pilot results:
 | Method | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | KG-only | 3 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| LLM-only | 3 | 1.000 | 0.500 | 0.333 | 0.667 | 1 | 0.667 | 1.000 |
-| Text-RAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.000 | 1.000 |
-| GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.000 | 1.000 |
+| LLM-only | 3 | 1.000 | 0.667 | 0.333 | 0.667 | 0 | 1.000 | 1.000 |
+| Text-RAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.667 | 1.000 |
+| GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
 
 ## Interpretation
 
@@ -81,19 +81,18 @@ Text-RAG performed strongly, but missed one candidate-selection case. This is us
 
 GraphRAG + LLM also performed perfectly on the 10-case benchmark. It kept the LLM grounded in the support subgraph while still producing natural-language explanations and model-edit proposals. This is the main behavior the thesis is trying to study: using graph-structured retrieval to support evidence-grounded scientific reasoning.
 
-The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on missing-edge and partial-evidence tasks. LLM-only gets the candidate IDs right, but its edge grounding is weaker: it has lower present-edge recall, lower missing-edge recall, and one false edge claim. Text-RAG and GraphRAG both perform well on present-edge and missing-edge metrics in this small pilot.
+The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on missing-edge and partial-evidence tasks. Stronger-candidate scoring now uses an explicit `stronger_candidate_id` field, making that metric cleaner than the earlier inferred version.
 
-The stronger-candidate metric is currently not reliable because the hard-pilot LLM schema does not directly ask for a `stronger_candidate_id` field. That metric is currently inferred indirectly, so it should not yet be treated as a clean comparison.
+LLM-only gets the candidate and stronger-candidate fields right, but its edge grounding is weaker: it has lower present-edge recall and lower missing-edge recall than the retrieval-based methods. Text-RAG and GraphRAG both recover the expected present and missing edges, but Text-RAG misses stronger-candidate identification in one case. GraphRAG is currently perfect across the hard-pilot metrics.
 
 ## Limitations
 
 These results are promising, but they are not final thesis-level evidence. The benchmark is still small and focused on one Chile hidden-driver scenario. It does not yet include enough variation across diseases, regions, mechanisms, candidate types, or failure modes.
 
-The hard pilot is also still small: only 3 hard cases, all within the same influenza scenario. Text-RAG may benefit from the small corpus because the relevant evidence is stated directly in a compact set of chunks. Stronger-candidate scoring also needs a cleaner output field before it can be interpreted confidently.
+The hard pilot is also still small: only 3 hard cases, all within the same influenza scenario. Text-RAG may benefit from the small corpus because the relevant evidence is stated directly in a compact set of chunks. The hard-pilot comparison should be expanded before making strong claims about method differences.
 
 ## Next Steps
 
-- Add a stricter `stronger_candidate_id` output field to the hard-pilot LLM schemas.
 - Remove answer-key leakage from Text-RAG hard-pilot retrieval if present.
 - Expand hard cases to more candidates and scenarios.
 - Eventually merge hard-case scoring into the main benchmark.
