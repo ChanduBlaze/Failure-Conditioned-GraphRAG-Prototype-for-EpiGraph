@@ -63,6 +63,7 @@ REQUIRED_LLM_KEYS = {
     "identified_missing_edges",
     "rejected_candidate_ids",
     "weak_candidate_ids",
+    "stronger_candidate_id",
 }
 
 STOPWORDS = {
@@ -196,11 +197,15 @@ Use exactly this schema:
   "mentioned_evidence_edges": [],
   "identified_missing_edges": [],
   "rejected_candidate_ids": [],
-  "weak_candidate_ids": []
+  "weak_candidate_ids": [],
+  "stronger_candidate_id": "..."
 }}
 
 For mentioned_evidence_edges and identified_missing_edges, use relationship type
 names such as "LEADING_INDICATOR_FOR" or "IMPORTATION_LINK".
+Use stronger_candidate_id for the candidate that is better supported overall. If
+the question is only about the expected candidate and no stronger candidate can be
+determined, return an empty string.
 """.strip()
 
 
@@ -215,6 +220,9 @@ def validate_llm_output(data):
     for key in ["predicted_candidate_id", "predicted_candidate_name", "explanation"]:
         if not isinstance(data.get(key), str):
             raise ValueError(f"LLM JSON key '{key}' must be a string.")
+
+    if not isinstance(data.get("stronger_candidate_id"), str):
+        raise ValueError("LLM JSON key 'stronger_candidate_id' must be a string.")
 
     for key in [
         "mentioned_evidence_edges",
@@ -284,8 +292,7 @@ def score_case(hard_case, llm_output, raw_text, retrieved_chunks):
 
     expected_stronger_candidate_id = hard_case.get("expected_stronger_candidate_id", "")
     stronger_candidate_identified = (
-        expected_stronger_candidate_id == llm_output["predicted_candidate_id"]
-        or expected_stronger_candidate_id in raw_text
+        llm_output["stronger_candidate_id"] == expected_stronger_candidate_id
     )
 
     expected_weak_candidate_id = hard_case.get("expected_weak_candidate_id", "")
@@ -322,6 +329,7 @@ def score_case(hard_case, llm_output, raw_text, retrieved_chunks):
             "missing_edge_false_claim_count"
         ],
         "expected_stronger_candidate_id": expected_stronger_candidate_id,
+        "stronger_candidate_id": llm_output["stronger_candidate_id"],
         "stronger_candidate_identified": stronger_candidate_identified,
         "expected_weak_candidate_id": expected_weak_candidate_id,
         "rejected_candidate_ids": ";".join(rejected_candidate_ids),
@@ -374,6 +382,7 @@ def save_results(rows):
         "missing_edge_recall",
         "missing_edge_false_claim_count",
         "expected_stronger_candidate_id",
+        "stronger_candidate_id",
         "stronger_candidate_identified",
         "expected_weak_candidate_id",
         "rejected_candidate_ids",
