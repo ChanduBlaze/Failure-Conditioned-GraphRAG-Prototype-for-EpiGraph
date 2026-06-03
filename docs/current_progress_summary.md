@@ -46,7 +46,7 @@ The benchmark has been expanded from 3 starter cases to 10 cases. The newer case
 
 ## Hard Pilot Evaluation
 
-I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and a graph-side evaluator in `evals/run_hard_pilot_eval.py`.
+I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and separate hard-pilot runners for KG-only, LLM-only, Text-RAG, and GraphRAG.
 
 The hard pilot tests:
 
@@ -64,17 +64,12 @@ The three pilot cases are:
 
 Current hard pilot results:
 
-| Metric | Result |
-|---|---:|
-| Cases | 3 |
-| Average present-edge precision | 1.000 |
-| Average present-edge recall | 1.000 |
-| Average missing-edge recall | 1.000 |
-| Missing-edge false claim count | 0 |
-| Stronger-candidate ranking accuracy | 1.000 |
-| Weak-candidate rejection accuracy | 1.000 |
-
-This is currently a KG-only/graph-side evaluation. It does not yet compare LLM-only, Text-RAG, or GraphRAG + LLM on the hard pilot cases.
+| Method | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| KG-only | 3 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| LLM-only | 3 | 1.000 | 0.500 | 0.333 | 0.667 | 1 | 0.667 | 1.000 |
+| Text-RAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.000 | 1.000 |
+| GraphRAG | 3 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.000 | 1.000 |
 
 ## Interpretation
 
@@ -86,16 +81,22 @@ Text-RAG performed strongly, but missed one candidate-selection case. This is us
 
 GraphRAG + LLM also performed perfectly on the 10-case benchmark. It kept the LLM grounded in the support subgraph while still producing natural-language explanations and model-edit proposals. This is the main behavior the thesis is trying to study: using graph-structured retrieval to support evidence-grounded scientific reasoning.
 
+The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on missing-edge and partial-evidence tasks. LLM-only gets the candidate IDs right, but its edge grounding is weaker: it has lower present-edge recall, lower missing-edge recall, and one false edge claim. Text-RAG and GraphRAG both perform well on present-edge and missing-edge metrics in this small pilot.
+
+The stronger-candidate metric is currently not reliable because the hard-pilot LLM schema does not directly ask for a `stronger_candidate_id` field. That metric is currently inferred indirectly, so it should not yet be treated as a clean comparison.
+
 ## Limitations
 
 These results are promising, but they are not final thesis-level evidence. The benchmark is still small and focused on one Chile hidden-driver scenario. It does not yet include enough variation across diseases, regions, mechanisms, candidate types, or failure modes.
 
-The hard pilot is an important first step toward testing missing-edge detection and weak-candidate rejection, but it is currently graph-side only. The LLM-facing runners still need expanded output schemas and scoring logic before these harder cases can be used for the full four-method comparison.
+The hard pilot is also still small: only 3 hard cases, all within the same influenza scenario. Text-RAG may benefit from the small corpus because the relevant evidence is stated directly in a compact set of chunks. Stronger-candidate scoring also needs a cleaner output field before it can be interpreted confidently.
 
 ## Next Steps
 
-- Extend LLM output schemas with fields such as `identified_missing_edges` and `rejected_candidate_ids`.
-- Run LLM-only, Text-RAG, and GraphRAG + LLM on the hard pilot cases.
+- Add a stricter `stronger_candidate_id` output field to the hard-pilot LLM schemas.
+- Remove answer-key leakage from Text-RAG hard-pilot retrieval if present.
+- Expand hard cases to more candidates and scenarios.
+- Eventually merge hard-case scoring into the main benchmark.
 - Expand the benchmark toward 25-50 diverse evaluation cases.
 - Add an ablation study to separate the effects of graph ranking, support-subgraph retrieval, validation, and LLM prompting.
 - Later connect the reasoning layer to a forecasting or surprisal signal so that the system can start from detected forecast failures rather than a manually specified failure case.
