@@ -22,6 +22,17 @@ The goal is to begin separating which parts of the GraphRAG pipeline contribute 
 | No validation | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.833 | 1.000 |
 | Ranking only, no support subgraph | 6 | 1.000 | 0.167 | 0.083 | 0.750 | 0 | 1.000 | 1.000 |
 
+## Reproducible Summary Script
+
+The ablation results can now be regenerated and summarized with:
+
+```powershell
+python evals\run_hard_pilot_ablation_eval.py
+python evals\summarize_hard_pilot_ablation_results.py
+```
+
+The summary script loads `evals/results/hard_pilot_ablation_results.csv`, groups rows by `variant_name`, computes the main ablation metrics, writes `evals/results/hard_pilot_ablation_summary.csv`, and prints a compact terminal table.
+
 ## Interpretation
 
 Ranking alone can still preserve candidate selection in the current 6-case hard pilot. The ranking-only variant achieves 1.000 candidate accuracy, stronger-candidate accuracy, and weak-candidate rejection accuracy.
@@ -43,5 +54,4 @@ The validation effect is promising but still preliminary. It needs more cases an
 ## Next Steps
 
 - Add repeated-run or fixed-seed-style evaluation if feasible.
-- Add a small ablation summary script.
 - Expand hard cases before making strong claims.
