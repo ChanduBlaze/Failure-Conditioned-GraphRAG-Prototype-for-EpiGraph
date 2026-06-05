@@ -50,6 +50,12 @@ REQUIRED_LLM_KEYS = {
     "stronger_candidate_id",
 }
 
+EDGE_TYPES = [
+    "LEADING_INDICATOR_FOR",
+    "IMPORTATION_LINK",
+    "POSSIBLE_DRIVER_OF",
+]
+
 VARIANTS = [
     {
         "variant_name": "Full GraphRAG",
@@ -131,6 +137,58 @@ def build_variant_context(full_candidate_context, variant):
     ]
 
 
+def extract_present_edge_types(candidate):
+    present_edge_types = set()
+
+    for item in candidate.get("ranking_evidence", []):
+        if not isinstance(item, str):
+            continue
+
+        for edge_type in EDGE_TYPES:
+            if edge_type in item:
+                present_edge_types.add(edge_type)
+
+    for edge in candidate.get("support_subgraph_edges", []):
+        if isinstance(edge, dict) and edge.get("type"):
+            present_edge_types.add(edge["type"])
+
+    return sorted(present_edge_types)
+
+
+def determine_support_level(present_edge_types):
+    present_edges = set(present_edge_types)
+
+    if all(edge_type in present_edges for edge_type in EDGE_TYPES):
+        return "full"
+
+    if len(present_edges) <= 1:
+        return "weak"
+
+    return "partial"
+
+
+def build_validation_summary(full_candidate_context):
+    validation_summary = []
+
+    for candidate in full_candidate_context:
+        present_edge_types = extract_present_edge_types(candidate)
+        present_edges = set(present_edge_types)
+
+        validation_summary.append(
+            {
+                "candidate_id": candidate["candidate_id"],
+                "present_edge_types": present_edge_types,
+                "evidence_edge_count": len(present_edge_types),
+                "has_leading_indicator": "LEADING_INDICATOR_FOR" in present_edges,
+                "has_importation_link": "IMPORTATION_LINK" in present_edges,
+                "has_possible_driver": "POSSIBLE_DRIVER_OF" in present_edges,
+                "support_level": determine_support_level(present_edge_types),
+            }
+        )
+
+    return validation_summary
+
+
 def build_prompt(failure_case, hard_case, candidate_context, variant):
     if variant["ranking_only"]:
         evidence_instructions = """
@@ -166,6 +224,8 @@ Do not invent datasets, nodes, edges, mechanisms, or candidate IDs.
         "question": hard_case["question"],
         "retrieved_candidate_rankings": candidate_context,
     }
+    if variant["validation_enabled"]:
+        payload["validation_summary"] = build_validation_summary(candidate_context)
 
     return f"""
 You are evaluating an ablation variant of a Neo4j-backed GraphRAG method for
@@ -180,6 +240,10 @@ supports that distinction.
 
 Keep candidate-specific evidence separate from comparison evidence, especially
 for weak-candidate or contrast questions.
+
+If validation_summary is present, use it to keep present and missing edge claims
+consistent with the retrieved graph evidence. If validation_summary is absent,
+rely only on the retrieved evidence provided in the prompt.
 
 Input:
 {json.dumps(payload, indent=2)}
