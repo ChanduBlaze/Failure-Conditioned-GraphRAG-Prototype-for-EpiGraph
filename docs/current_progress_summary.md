@@ -78,6 +78,13 @@ Current hard pilot results:
 
 I have started a first hard-pilot ablation study using `evals/run_hard_pilot_ablation_eval.py`. This runner compares Full GraphRAG, No validation, and Ranking only without support-subgraph evidence on the same 6 hard cases. Full GraphRAG now receives an explicit `validation_summary` derived from retrieved graph evidence; No validation receives graph evidence/support context without that summary.
 
+The ablation workflow is now reproducible. The runner writes `evals/results/hard_pilot_ablation_results.csv`, and `evals/summarize_hard_pilot_ablation_results.py` writes `evals/results/hard_pilot_ablation_summary.csv`.
+
+```powershell
+python evals\run_hard_pilot_ablation_eval.py
+python evals\summarize_hard_pilot_ablation_results.py
+```
+
 Current ablation results:
 
 | Variant | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Edge Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
@@ -117,8 +124,5 @@ The ablation study is also small and one-scenario. LLM randomness may affect the
 ## Next Steps
 
 - Add repeated-run or fixed-seed-style evaluation if feasible.
-- Add a small ablation summary script.
 - Expand the hard pilot toward 15-30 hard cases.
 - Later merge hard-case scoring into the main benchmark.
-- Expand the benchmark toward 25-50 diverse evaluation cases.
-- Later connect the reasoning layer to a forecasting or surprisal signal so that the system can start from detected forecast failures rather than a manually specified failure case.
