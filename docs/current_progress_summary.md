@@ -76,15 +76,15 @@ Current hard pilot results:
 
 ## Ablation Study
 
-I have started a first hard-pilot ablation study using `evals/run_hard_pilot_ablation_eval.py`. This runner compares Full GraphRAG, No validation, and Ranking only without support-subgraph evidence on the same 6 hard cases.
+I have started a first hard-pilot ablation study using `evals/run_hard_pilot_ablation_eval.py`. This runner compares Full GraphRAG, No validation, and Ranking only without support-subgraph evidence on the same 6 hard cases. Full GraphRAG now receives an explicit `validation_summary` derived from retrieved graph evidence; No validation receives graph evidence/support context without that summary.
 
 Current ablation results:
 
 | Variant | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Edge Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Full GraphRAG | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| No validation | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| Ranking only, no support subgraph | 6 | 1.000 | 0.333 | 0.167 | 0.667 | 0 | 1.000 | 1.000 |
+| No validation | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.833 | 1.000 |
+| Ranking only, no support subgraph | 6 | 1.000 | 0.167 | 0.083 | 0.750 | 0 | 1.000 | 1.000 |
 
 ## Interpretation
 
@@ -104,7 +104,7 @@ Text-RAG retrieval is now fairer because expected labels are excluded from the r
 
 GraphRAG remains perfect across the current 6-case hard-pilot metrics. This gives a clearer separation between LLM-only reasoning, flattened Text-RAG retrieval, and graph-structured retrieval.
 
-The first ablation result suggests that ranking alone can preserve candidate selection in this 6-case pilot, but ranking alone is not enough for edge-grounded reasoning. Providing graph evidence and support context improves present-edge and missing-edge grounding. Full GraphRAG and No Validation currently perform the same, so this first ablation does not yet isolate validation effects.
+The refined ablation result suggests that ranking alone preserves candidate selection in this 6-case pilot, but performs poorly on edge grounding. Providing graph evidence and support context restores present-edge and missing-edge grounding. The validation summary may help stronger-candidate consistency because Full GraphRAG reaches 1.000 stronger-candidate accuracy while No validation is 0.833. This should not be overclaimed because it is still a small, stochastic 6-case pilot.
 
 ## Limitations
 
@@ -112,12 +112,12 @@ These results are promising, but they are not final thesis-level evidence. The b
 
 The hard pilot is also still small and remains within one influenza scenario. The added Text-RAG distractors make the setting more realistic, but more diseases, regions, candidate types, and failure modes are needed before making strong claims about method differences.
 
-The ablation study is also small and one-scenario. LLM randomness may affect the results, and the No Validation variant currently receives the same graph evidence context as Full GraphRAG, so the validation ablation needs refinement.
+The ablation study is also small and one-scenario. LLM randomness may affect the results, and the validation effect needs repeated runs and more cases before it can support a strong claim.
 
 ## Next Steps
 
-- Refine the validation ablation.
-- Add a clearer support-subgraph-without-validation variant if needed.
+- Add repeated-run or fixed-seed-style evaluation if feasible.
+- Add a small ablation summary script.
 - Expand the hard pilot toward 15-30 hard cases.
 - Later merge hard-case scoring into the main benchmark.
 - Expand the benchmark toward 25-50 diverse evaluation cases.
