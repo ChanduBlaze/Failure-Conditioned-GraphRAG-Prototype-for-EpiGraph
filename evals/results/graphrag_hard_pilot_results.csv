@@ -1,8 +1,8 @@
 case_id,task_type,expected_answer_type,expected_candidate_id,predicted_candidate_id,predicted_candidate_name,candidate_correct,retrieved_candidate_ids,expected_present_edges,mentioned_evidence_edges,present_edge_precision,present_edge_recall,expected_missing_edges,identified_missing_edges,missing_edge_recall,missing_edge_false_claim_count,expected_stronger_candidate_id,stronger_candidate_id,stronger_candidate_identified,expected_weak_candidate_id,rejected_candidate_ids,weak_candidate_ids,weak_candidate_rejected,explanation,raw_response
-hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_travel_pressure;signal_humidity_drop,signal_travel_pressure;signal_humidity_drop,,"Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but lacks an IMPORTATION_LINK edge that Chile has. The missing IMPORTATION_LINK weakens Australia relative to Chile for explaining the missed US hospitalization peak.","{
+hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop;signal_travel_pressure,signal_australia_flu,,"Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but lacks an IMPORTATION_LINK to the mechanism; Chile has all three, so the missing IMPORTATION_LINK makes Australia weaker.","{
   ""predicted_candidate_id"": ""signal_australia_flu"",
   ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but lacks an IMPORTATION_LINK edge that Chile has. The missing IMPORTATION_LINK weakens Australia relative to Chile for explaining the missed US hospitalization peak."",
+  ""explanation"": ""Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but lacks an IMPORTATION_LINK to the mechanism; Chile has all three, so the missing IMPORTATION_LINK makes Australia weaker."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF"",
     ""LEADING_INDICATOR_FOR""
@@ -11,157 +11,18 @@ hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu
     ""IMPORTATION_LINK""
   ],
   ""rejected_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_australia_flu,,"Travel Importation Pressure has support edges showing it is a possible driver of the US mechanism and has an importation link to the mechanism, but it lacks the leading-indicator relationship to the US hospitalization signal that Chile Influenza Activity has. This missing LEADING_INDICATOR_FOR edge prevents it from having the same full support as Chile.","{
-  ""predicted_candidate_id"": ""signal_travel_pressure"",
-  ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure has support edges showing it is a possible driver of the US mechanism and has an importation link to the mechanism, but it lacks the leading-indicator relationship to the US hospitalization signal that Chile Influenza Activity has. This missing LEADING_INDICATOR_FOR edge prevents it from having the same full support as Chile."",
-  ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_australia_flu""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"The Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF edge linking it to the US influenza mechanism in the retrieved graph, so support is limited to a hypothetical mechanistic role. It lacks an IMPORTATION_LINK to indicate a pathway connecting the candidate to mechanism inputs and it lacks a LEADING_INDICATOR_FOR link to the target signal (US hospitalizations) that would establish temporal/forecasting utility. Because two key relationship types are missing, it should be treated as a weak candidate rather than a fully supported hidden driver.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""The Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF edge linking it to the US influenza mechanism in the retrieved graph, so support is limited to a hypothetical mechanistic role. It lacks an IMPORTATION_LINK to indicate a pathway connecting the candidate to mechanism inputs and it lacks a LEADING_INDICATOR_FOR link to the target signal (US hospitalizations) that would establish temporal/forecasting utility. Because two key relationship types are missing, it should be treated as a weak candidate rather than a fully supported hidden driver."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu,signal_travel_pressure;signal_humidity_drop,,"Chile is strongest because its support subgraph includes all three relationship types: it is a LEADING_INDICATOR_FOR the US hospitalization signal, a POSSIBLE_DRIVER_OF the US mechanism, and uniquely has an IMPORTATION_LINK to the mechanism. Australia lacks the IMPORTATION_LINK edge, so it scores lower (7 vs 5).","{
-  ""predicted_candidate_id"": ""signal_chile_flu"",
-  ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile is strongest because its support subgraph includes all three relationship types: it is a LEADING_INDICATOR_FOR the US hospitalization signal, a POSSIBLE_DRIVER_OF the US mechanism, and uniquely has an IMPORTATION_LINK to the mechanism. Australia lacks the IMPORTATION_LINK edge, so it scores lower (7 vs 5)."",
-  ""mentioned_evidence_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [
-    ""signal_australia_flu""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_005,partial_evidence_detection,partial_support_not_best_driver,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure;signal_australia_flu,,"Travel Importation Pressure has partial support: it is linked to the US mechanism as a POSSIBLE_DRIVER_OF and via an IMPORTATION_LINK, but the graph lacks a LEADING_INDICATOR_FOR relationship from Travel Importation Pressure to the US hospitalization signal. Because it does not provide a leading-indicator link to the target signal, it cannot explain the missed peak as completely as Chile Influenza Activity, which in the retrieved graph has POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR edges.","{
-  ""predicted_candidate_id"": ""signal_travel_pressure"",
-  ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure has partial support: it is linked to the US mechanism as a POSSIBLE_DRIVER_OF and via an IMPORTATION_LINK, but the graph lacks a LEADING_INDICATOR_FOR relationship from Travel Importation Pressure to the US hospitalization signal. Because it does not provide a leading-indicator link to the target signal, it cannot explain the missed peak as completely as Chile Influenza Activity, which in the retrieved graph has POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR edges."",
-  ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_australia_flu""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_006,weak_candidate_rejection,weak_candidate_not_promoted,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_chile_flu;signal_australia_flu;signal_travel_pressure,signal_humidity_drop,True,"Humidity Drop Anomaly only has evidence as a POSSIBLE_DRIVER_OF the US influenza mechanism. It lacks an IMPORTATION_LINK and lacks being a LEADING_INDICATOR_FOR the US hospitalization signal, whereas top-ranked candidates (Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure) have either IMPORTATION_LINK and/or LEADING_INDICATOR_FOR relationships that directly connect importation signals to the target hospitalization signal or to the mechanism. Because Humidity Drop Anomaly is missing those additional link types, it is less well supported for explaining a missed hospitalization peak compared with importation-related candidates.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Humidity Drop Anomaly only has evidence as a POSSIBLE_DRIVER_OF the US influenza mechanism. It lacks an IMPORTATION_LINK and lacks being a LEADING_INDICATOR_FOR the US hospitalization signal, whereas top-ranked candidates (Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure) have either IMPORTATION_LINK and/or LEADING_INDICATOR_FOR relationships that directly connect importation signals to the target hospitalization signal or to the mechanism. Because Humidity Drop Anomaly is missing those additional link types, it is less well supported for explaining a missed hospitalization peak compared with importation-related candidates."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_chile_flu"",
-    ""signal_australia_flu"",
-    ""signal_travel_pressure""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_humidity_drop,signal_humidity_drop;signal_travel_pressure,True,"Humidity Drop Anomaly is only supported in the graph as a POSSIBLE_DRIVER_OF the US mechanism. It lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR relationship to the US hospitalization signal. By contrast, Chile Influenza Activity has IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and LEADING_INDICATOR_FOR edges connecting it to the mechanism and the target signal. Therefore environmental plausibility alone (the single POSSIBLE_DRIVER_OF edge) should not override the stronger and more complete graph evidence for Chile.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Humidity Drop Anomaly is only supported in the graph as a POSSIBLE_DRIVER_OF the US mechanism. It lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR relationship to the US hospitalization signal. By contrast, Chile Influenza Activity has IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and LEADING_INDICATOR_FOR edges connecting it to the mechanism and the target signal. Therefore environmental plausibility alone (the single POSSIBLE_DRIVER_OF edge) should not override the stronger and more complete graph evidence for Chile."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
     ""signal_humidity_drop"",
     ""signal_travel_pressure""
   ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_chile_flu;signal_travel_pressure;signal_humidity_drop,signal_travel_pressure;signal_humidity_drop,,"Australia is supported as a POSSIBLE_DRIVER_OF the US mechanism and as a LEADING_INDICATOR_FOR US hospitalizations (these edges are present in the subgraph). It is weaker than Chile because Australia lacks an IMPORTATION_LINK edge to the US mechanism in the retrieved graph; Chile has IMPORTATION_LINK in addition to the same two edges, which explains Chile's higher ranking and score.","{
-  ""predicted_candidate_id"": ""signal_australia_flu"",
-  ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Australia is supported as a POSSIBLE_DRIVER_OF the US mechanism and as a LEADING_INDICATOR_FOR US hospitalizations (these edges are present in the subgraph). It is weaker than Chile because Australia lacks an IMPORTATION_LINK edge to the US mechanism in the retrieved graph; Chile has IMPORTATION_LINK in addition to the same two edges, which explains Chile's higher ranking and score."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_chile_flu"",
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
   ""weak_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
+    ""signal_australia_flu""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_humidity_drop,,"Travel Importation Pressure links to the US mechanism via IMPORTATION_LINK and POSSIBLE_DRIVER_OF, so it plausibly contributes to importation-driven case increases. However, it lacks a LEADING_INDICATOR_FOR link to the target signal (US hospitalizations). Without evidence that the travel/importation signal leads the target, mechanism-level importation support does not provide full support for explaining the missed hospitalization peak because there is no graph-provided relationship showing the candidate precedes or predicts rises in the target.","{
+hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"Travel Importation Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US mechanism, but it lacks a LEADING_INDICATOR_FOR edge to the US hospitalization target signal. Chile Influenza Activity has that LEADING_INDICATOR_FOR relationship, which gives it fuller support as a driver/early signal for the missed hospitalization peak.","{
   ""predicted_candidate_id"": ""signal_travel_pressure"",
   ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure links to the US mechanism via IMPORTATION_LINK and POSSIBLE_DRIVER_OF, so it plausibly contributes to importation-driven case increases. However, it lacks a LEADING_INDICATOR_FOR link to the target signal (US hospitalizations). Without evidence that the travel/importation signal leads the target, mechanism-level importation support does not provide full support for explaining the missed hospitalization peak because there is no graph-provided relationship showing the candidate precedes or predicts rises in the target."",
+  ""explanation"": ""Travel Importation Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US mechanism, but it lacks a LEADING_INDICATOR_FOR edge to the US hospitalization target signal. Chile Influenza Activity has that LEADING_INDICATOR_FOR relationship, which gives it fuller support as a driver/early signal for the missed hospitalization peak."",
   ""mentioned_evidence_edges"": [
     ""IMPORTATION_LINK"",
     ""POSSIBLE_DRIVER_OF""
@@ -171,25 +32,150 @@ hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pr
   ],
   ""rejected_candidate_ids"": [],
   ""weak_candidate_ids"": [
+    ""signal_travel_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved graph. It lacks an IMPORTATION_LINK and a LEADING_INDICATOR_FOR relationship that would connect it to the mechanism as an importation pathway or to the target hospitalizations as a leading signal. By contrast, higher-ranked candidates (e.g., Chile Influenza Activity) have both IMPORTATION_LINK and LEADING_INDICATOR_FOR edges, giving them stronger, multi-edge support. Because the humidity candidate only provides a single POSSIBLE_DRIVER_OF edge and no supporting importation or leading-indicator evidence, it should be treated as a weak/partial candidate rather than a fully supported hidden driver.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved graph. It lacks an IMPORTATION_LINK and a LEADING_INDICATOR_FOR relationship that would connect it to the mechanism as an importation pathway or to the target hospitalizations as a leading signal. By contrast, higher-ranked candidates (e.g., Chile Influenza Activity) have both IMPORTATION_LINK and LEADING_INDICATOR_FOR edges, giving them stronger, multi-edge support. Because the humidity candidate only provides a single POSSIBLE_DRIVER_OF edge and no supporting importation or leading-indicator evidence, it should be treated as a weak/partial candidate rather than a fully supported hidden driver."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
     ""signal_humidity_drop""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_010,strongest_candidate_completeness,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph includes all three relationship types relevant to this failure: it is a LEADING_INDICATOR_FOR the US hospitalization target, and it has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US influenza mechanism. These three edges are explicitly listed in the candidate's ranking evidence and support subgraph, giving it the highest combined score.","{
+hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity is best supported because its subgraph contains three relationship types linking it to the failure scenario: it is a POSSIBLE_DRIVER_OF the US mechanism, has an IMPORTATION_LINK to the mechanism, and is a LEADING_INDICATOR_FOR the US hospitalization signal. Australia lacks the IMPORTATION_LINK relationship in its support subgraph (it only has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR), so Chile has an additional importation pathway connecting southern-hemisphere activity to the US mechanism that strengthens its explanatory power.","{
   ""predicted_candidate_id"": ""signal_chile_flu"",
   ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph includes all three relationship types relevant to this failure: it is a LEADING_INDICATOR_FOR the US hospitalization target, and it has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US influenza mechanism. These three edges are explicitly listed in the candidate's ranking evidence and support subgraph, giving it the highest combined score."",
+  ""explanation"": ""Chile Influenza Activity is best supported because its subgraph contains three relationship types linking it to the failure scenario: it is a POSSIBLE_DRIVER_OF the US mechanism, has an IMPORTATION_LINK to the mechanism, and is a LEADING_INDICATOR_FOR the US hospitalization signal. Australia lacks the IMPORTATION_LINK relationship in its support subgraph (it only has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR), so Chile has an additional importation pathway connecting southern-hemisphere activity to the US mechanism that strengthens its explanatory power."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_australia_flu""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_australia_flu"",
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_005,partial_evidence_detection,partial_support_not_best_driver,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure;signal_humidity_drop,,"Travel Importation Pressure provides partial support because its subgraph only links it to the US mechanism (IMPORTATION_LINK and POSSIBLE_DRIVER_OF) but it lacks a direct LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Without LEADING_INDICATOR_FOR, it does not provide direct leading evidence that the observed missed peak in hospitalizations was driven by prior signal behavior. By contrast, Chile Influenza Activity has IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and a LEADING_INDICATOR_FOR edge to the target, making it a more complete and stronger explanation.","{
+  ""predicted_candidate_id"": ""signal_travel_pressure"",
+  ""predicted_candidate_name"": ""Travel Importation Pressure"",
+  ""explanation"": ""Travel Importation Pressure provides partial support because its subgraph only links it to the US mechanism (IMPORTATION_LINK and POSSIBLE_DRIVER_OF) but it lacks a direct LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Without LEADING_INDICATOR_FOR, it does not provide direct leading evidence that the observed missed peak in hospitalizations was driven by prior signal behavior. By contrast, Chile Influenza Activity has IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and a LEADING_INDICATOR_FOR edge to the target, making it a more complete and stronger explanation."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_006,weak_candidate_rejection,weak_candidate_not_promoted,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the graph. It lacks an IMPORTATION_LINK and a LEADING_INDICATOR_FOR relationship that importation-related candidates (e.g., Chile Influenza Activity) have, so it provides weaker and less direct evidence for explaining the missed US hospitalization peak. Without an IMPORTATION_LINK tying it to cross-border seeding dynamics or a LEADING_INDICATOR_FOR tie to the target signal, it should not be promoted above candidates with those additional supporting edges.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the graph. It lacks an IMPORTATION_LINK and a LEADING_INDICATOR_FOR relationship that importation-related candidates (e.g., Chile Influenza Activity) have, so it provides weaker and less direct evidence for explaining the missed US hospitalization peak. Without an IMPORTATION_LINK tying it to cross-border seeding dynamics or a LEADING_INDICATOR_FOR tie to the target signal, it should not be promoted above candidates with those additional supporting edges."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_humidity_drop,signal_humidity_drop,True,"Humidity Drop Anomaly is environmentally plausible but the graph evidence for Chile Influenza Activity is stronger: Chile has direct IMPORTATION_LINK and LEADING_INDICATOR_FOR edges to the US hospitalization signal and also POSSIBLE_DRIVER_OF the US mechanism. Humidity Drop only has a POSSIBLE_DRIVER_OF edge to the mechanism and lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR relationship to the target signal, so environmental plausibility alone should not override the multi-edge importation and leading-indicator support that points to Chile.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""Humidity Drop Anomaly is environmentally plausible but the graph evidence for Chile Influenza Activity is stronger: Chile has direct IMPORTATION_LINK and LEADING_INDICATOR_FOR edges to the US hospitalization signal and also POSSIBLE_DRIVER_OF the US mechanism. Humidity Drop only has a POSSIBLE_DRIVER_OF edge to the mechanism and lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR relationship to the target signal, so environmental plausibility alone should not override the multi-edge importation and leading-indicator support that points to Chile."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu,,"Australia is supported as a possible driver and as a leading indicator for US hospitalizations, but it lacks an importation link to the US mechanism in the retrieved graph. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), which explains why Chile is ranked stronger for this missed US hospitalization peak.","{
+  ""predicted_candidate_id"": ""signal_australia_flu"",
+  ""predicted_candidate_name"": ""Australia Influenza Activity"",
+  ""explanation"": ""Australia is supported as a possible driver and as a leading indicator for US hospitalizations, but it lacks an importation link to the US mechanism in the retrieved graph. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), which explains why Chile is ranked stronger for this missed US hospitalization peak."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_australia_flu""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure,,"Travel Importation Pressure links to the US mechanism as an IMPORTATION_LINK and POSSIBLE_DRIVER_OF, so it provides importation-related mechanistic support. However, it lacks a LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Without evidence that travel pressure leads observed changes in the target signal, mechanism/importation support is incomplete for explaining a missed hospitalization peak — the chain showing that importation pressure precedes and predicts the target is missing.","{
+  ""predicted_candidate_id"": ""signal_travel_pressure"",
+  ""predicted_candidate_name"": ""Travel Importation Pressure"",
+  ""explanation"": ""Travel Importation Pressure links to the US mechanism as an IMPORTATION_LINK and POSSIBLE_DRIVER_OF, so it provides importation-related mechanistic support. However, it lacks a LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Without evidence that travel pressure leads observed changes in the target signal, mechanism/importation support is incomplete for explaining a missed hospitalization peak — the chain showing that importation pressure precedes and predicts the target is missing."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_010,strongest_candidate_completeness,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph contains all three key relationships linking the candidate to the US hospitalization failure and mechanism: it is a LEADING_INDICATOR_FOR the US hospitalization signal, and it has both an IMPORTATION_LINK and a POSSIBLE_DRIVER_OF relationship to the US influenza mechanism. Other candidates lack one or more of these relationship types, making Chile the most fully connected explanation in the retrieved graph evidence.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph contains all three key relationships linking the candidate to the US hospitalization failure and mechanism: it is a LEADING_INDICATOR_FOR the US hospitalization signal, and it has both an IMPORTATION_LINK and a POSSIBLE_DRIVER_OF relationship to the US influenza mechanism. Other candidates lack one or more of these relationship types, making Chile the most fully connected explanation in the retrieved graph evidence."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR"",
     ""IMPORTATION_LINK"",
     ""POSSIBLE_DRIVER_OF""
   ],
   ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
+  ""rejected_candidate_ids"": [],
   ""weak_candidate_ids"": [
     ""signal_australia_flu"",
     ""signal_travel_pressure"",
