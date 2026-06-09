@@ -11,6 +11,10 @@ FAILURE_CASE = {
     "summary": "US influenza mechanism underpredicted a missed hospitalization peak.",
 }
 
+FAILURE_CASES_BY_ID = {
+    FAILURE_CASE["id"]: FAILURE_CASE,
+}
+
 
 REQUIRED_FAILURE_FIELDS = {
     "id",
@@ -37,6 +41,19 @@ def validate_failure_case(failure_case: dict) -> None:
 def get_failure_case() -> dict:
     validate_failure_case(FAILURE_CASE)
     return FAILURE_CASE
+
+
+def get_failure_case_by_id(failure_case_id: str) -> dict:
+    if not failure_case_id:
+        return get_failure_case()
+
+    failure_case = FAILURE_CASES_BY_ID.get(failure_case_id)
+
+    if failure_case is None:
+        raise ValueError(f"Unknown failure_case_id: {failure_case_id}")
+
+    validate_failure_case(failure_case)
+    return failure_case
 
 
 def print_failure_case(failure_case: dict) -> None:

@@ -1,4 +1,4 @@
 variant_name,case_count,candidate_accuracy,avg_present_edge_precision,avg_present_edge_recall,avg_missing_edge_recall,total_false_edge_claims,stronger_candidate_accuracy,weak_candidate_rejection_accuracy
 Full GraphRAG,10,1.000,1.000,1.000,1.000,0,1.000,1.000
 No validation,10,1.000,1.000,1.000,1.000,0,1.000,1.000
-"Ranking only, no support subgraph",10,0.900,0.000,0.000,0.300,0,1.000,1.000
+"Ranking only, no support subgraph",10,0.900,0.100,0.050,0.300,0,1.000,1.000

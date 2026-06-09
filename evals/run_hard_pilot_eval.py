@@ -19,7 +19,7 @@ try:
         mean,
         normalize_list_of_strings,
     )
-    from failure_case import get_failure_case
+    from failure_case import get_failure_case, get_failure_case_by_id
     from neo4j_retrieval import get_driver, retrieve_failure_candidates_from_neo4j
 except ModuleNotFoundError as exc:
     print(f"Hard pilot evaluation failed: missing Python dependency: {exc}", file=sys.stderr)
@@ -67,6 +67,15 @@ def build_candidate_lookup(candidates):
         }
 
     return lookup
+
+
+def get_hard_case_failure_case(hard_case):
+    failure_case_id = hard_case.get("failure_case_id", "")
+
+    if failure_case_id:
+        return get_failure_case_by_id(failure_case_id)
+
+    return get_failure_case()
 
 
 def score_case(case, candidate_lookup):
@@ -154,16 +163,34 @@ def score_case(case, candidate_lookup):
 
 def run_eval():
     hard_cases = load_hard_cases()
-    failure_case = get_failure_case()
     driver = get_driver()
+    candidate_lookup_by_failure_case_id = {}
+    rows = []
 
     try:
-        candidates = retrieve_failure_candidates_from_neo4j(driver, failure_case)
+        for hard_case in hard_cases:
+            failure_case = get_hard_case_failure_case(hard_case)
+            failure_case_id = failure_case["id"]
+
+            if failure_case_id not in candidate_lookup_by_failure_case_id:
+                candidates = retrieve_failure_candidates_from_neo4j(
+                    driver,
+                    failure_case,
+                )
+                candidate_lookup_by_failure_case_id[failure_case_id] = (
+                    build_candidate_lookup(candidates)
+                )
+
+            rows.append(
+                score_case(
+                    hard_case,
+                    candidate_lookup_by_failure_case_id[failure_case_id],
+                )
+            )
     finally:
         driver.close()
 
-    candidate_lookup = build_candidate_lookup(candidates)
-    return [score_case(case, candidate_lookup) for case in hard_cases]
+    return rows
 
 
 def save_results(rows):

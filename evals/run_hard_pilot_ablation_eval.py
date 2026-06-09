@@ -19,7 +19,7 @@ try:
         mean,
         normalize_list_of_strings,
     )
-    from failure_case import get_failure_case
+    from failure_case import get_failure_case, get_failure_case_by_id
     from llm_reasoner import (
         MAX_OUTPUT_TOKENS,
         MODEL_NAME,
@@ -187,6 +187,15 @@ def build_validation_summary(full_candidate_context):
         )
 
     return validation_summary
+
+
+def get_hard_case_failure_case(hard_case):
+    failure_case_id = hard_case.get("failure_case_id", "")
+
+    if failure_case_id:
+        return get_failure_case_by_id(failure_case_id)
+
+    return get_failure_case()
 
 
 def build_prompt(failure_case, hard_case, candidate_context, variant):
@@ -440,18 +449,33 @@ def score_case(variant, hard_case, llm_output, raw_text):
 
 def run_eval():
     hard_cases = load_hard_cases()
-    failure_case = get_failure_case()
     driver = get_driver()
     client = get_client()
+    full_context_by_failure_case_id = {}
+    variant_context_by_key = {}
     rows = []
 
     try:
-        full_candidate_context = fetch_full_candidate_context(driver, failure_case)
-
         for variant in VARIANTS:
-            candidate_context = build_variant_context(full_candidate_context, variant)
-
             for hard_case in hard_cases:
+                failure_case = get_hard_case_failure_case(hard_case)
+                failure_case_id = failure_case["id"]
+
+                if failure_case_id not in full_context_by_failure_case_id:
+                    full_context_by_failure_case_id[failure_case_id] = (
+                        fetch_full_candidate_context(driver, failure_case)
+                    )
+
+                variant_context_key = (failure_case_id, variant["variant_name"])
+                if variant_context_key not in variant_context_by_key:
+                    variant_context_by_key[variant_context_key] = (
+                        build_variant_context(
+                            full_context_by_failure_case_id[failure_case_id],
+                            variant,
+                        )
+                    )
+
+                candidate_context = variant_context_by_key[variant_context_key]
                 llm_output, raw_text = run_llm_case(
                     client,
                     failure_case,

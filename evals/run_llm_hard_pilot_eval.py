@@ -18,7 +18,7 @@ try:
         mean,
         normalize_list_of_strings,
     )
-    from failure_case import get_failure_case
+    from failure_case import get_failure_case, get_failure_case_by_id
     from llm_reasoner import (
         MAX_OUTPUT_TOKENS,
         MODEL_NAME,
@@ -139,6 +139,15 @@ the predicted/evaluated candidate is itself the strongest or most complete
 candidate, return that same candidate ID. Only return an empty string if the
 provided input does not support identifying any strongest candidate.
 """.strip()
+
+
+def get_hard_case_failure_case(hard_case):
+    failure_case_id = hard_case.get("failure_case_id", "")
+
+    if failure_case_id:
+        return get_failure_case_by_id(failure_case_id)
+
+    return get_failure_case()
 
 
 def validate_llm_output(data):
@@ -268,11 +277,11 @@ def score_case(hard_case, llm_output, raw_text):
 
 def run_eval():
     hard_cases = load_hard_cases()
-    failure_case = get_failure_case()
     client = get_client()
     rows = []
 
     for hard_case in hard_cases:
+        failure_case = get_hard_case_failure_case(hard_case)
         llm_output, raw_text = run_llm_case(client, failure_case, hard_case)
         rows.append(score_case(hard_case, llm_output, raw_text))
 

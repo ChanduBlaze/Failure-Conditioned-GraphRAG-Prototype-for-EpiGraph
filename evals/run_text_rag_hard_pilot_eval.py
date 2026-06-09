@@ -21,7 +21,7 @@ try:
         mean,
         normalize_list_of_strings,
     )
-    from failure_case import get_failure_case
+    from failure_case import get_failure_case, get_failure_case_by_id
     from llm_reasoner import (
         MAX_OUTPUT_TOKENS,
         MODEL_NAME,
@@ -226,6 +226,15 @@ provided input does not support identifying any strongest candidate.
 """.strip()
 
 
+def get_hard_case_failure_case(hard_case):
+    failure_case_id = hard_case.get("failure_case_id", "")
+
+    if failure_case_id:
+        return get_failure_case_by_id(failure_case_id)
+
+    return get_failure_case()
+
+
 def validate_llm_output(data):
     if not isinstance(data, dict):
         raise ValueError("LLM response must be a JSON object.")
@@ -360,11 +369,11 @@ def score_case(hard_case, llm_output, raw_text, retrieved_chunks):
 def run_eval():
     hard_cases = load_json_list(EVAL_FILE, "eval_cases_hard_pilot.json")
     corpus = load_json_list(CORPUS_FILE, "text_rag_corpus.json")
-    failure_case = get_failure_case()
     client = get_client()
     rows = []
 
     for hard_case in hard_cases:
+        failure_case = get_hard_case_failure_case(hard_case)
         retrieved_chunks = retrieve_text_chunks(hard_case, failure_case, corpus)
         llm_output, raw_text = run_llm_case(
             client,

@@ -18,7 +18,7 @@ try:
         mean,
         normalize_list_of_strings,
     )
-    from failure_case import get_failure_case
+    from failure_case import get_failure_case, get_failure_case_by_id
     from llm_reasoner import (
         MAX_OUTPUT_TOKENS,
         MODEL_NAME,
@@ -170,6 +170,15 @@ provided input does not support identifying any strongest candidate.
 """.strip()
 
 
+def get_hard_case_failure_case(hard_case):
+    failure_case_id = hard_case.get("failure_case_id", "")
+
+    if failure_case_id:
+        return get_failure_case_by_id(failure_case_id)
+
+    return get_failure_case()
+
+
 def validate_llm_output(data):
     if not isinstance(data, dict):
         raise ValueError("LLM response must be a JSON object.")
@@ -300,15 +309,22 @@ def score_case(hard_case, llm_output, raw_text, candidate_context):
 
 def run_eval():
     hard_cases = load_hard_cases()
-    failure_case = get_failure_case()
     driver = get_driver()
     client = get_client()
+    candidate_context_by_failure_case_id = {}
     rows = []
 
     try:
-        candidate_context = fetch_candidate_context(driver, failure_case)
-
         for hard_case in hard_cases:
+            failure_case = get_hard_case_failure_case(hard_case)
+            failure_case_id = failure_case["id"]
+
+            if failure_case_id not in candidate_context_by_failure_case_id:
+                candidate_context_by_failure_case_id[failure_case_id] = (
+                    fetch_candidate_context(driver, failure_case)
+                )
+
+            candidate_context = candidate_context_by_failure_case_id[failure_case_id]
             llm_output, raw_text = run_llm_case(
                 client,
                 failure_case,
