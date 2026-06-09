@@ -108,11 +108,25 @@ Use exactly this schema:
   "stronger_candidate_id": "..."
 }}
 
-For mentioned_evidence_edges and identified_missing_edges, use relationship type
-names such as "LEADING_INDICATOR_FOR" or "IMPORTATION_LINK".
-Use stronger_candidate_id for the candidate that is better supported overall. If
-the question is only about the expected candidate and no stronger candidate can be
-determined, return an empty string.
+For mentioned_evidence_edges and identified_missing_edges, use only exact
+relationship type names. Valid edge-list values are only:
+- "LEADING_INDICATOR_FOR"
+- "IMPORTATION_LINK"
+- "POSSIBLE_DRIVER_OF"
+
+mentioned_evidence_edges must contain only exact relationship type names that
+are present for the predicted/evaluated candidate.
+identified_missing_edges must contain only exact relationship type names that
+are missing for the predicted/evaluated candidate.
+Do not include edges belonging only to comparison candidates in
+mentioned_evidence_edges.
+Do not include explanatory text, node names, arrows, parentheses, or phrases in
+either edge list.
+
+Use stronger_candidate_id for the candidate that is best supported overall. If
+the predicted/evaluated candidate is itself the strongest or most complete
+candidate, return that same candidate ID. Only return an empty string if the
+provided input does not support identifying any strongest candidate.
 """.strip()
 
 
