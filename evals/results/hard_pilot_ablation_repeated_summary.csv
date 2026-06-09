@@ -1,4 +1,4 @@
 variant_name,run_count,cases_per_run,candidate_accuracy_mean,candidate_accuracy_std,avg_present_edge_precision_mean,avg_present_edge_precision_std,avg_present_edge_recall_mean,avg_present_edge_recall_std,avg_missing_edge_recall_mean,avg_missing_edge_recall_std,total_false_edge_claims_mean,total_false_edge_claims_std,stronger_candidate_accuracy_mean,stronger_candidate_accuracy_std,weak_candidate_rejection_accuracy_mean,weak_candidate_rejection_accuracy_std
-Full GraphRAG,3,6.000,1.000,0.000,1.000,0.000,1.000,0.000,1.000,0.000,0.000,0.000,0.944,0.096,1.000,0.000
-No validation,3,6.000,1.000,0.000,1.000,0.000,1.000,0.000,1.000,0.000,0.000,0.000,1.000,0.000,0.833,0.289
-"Ranking only, no support subgraph",3,6.000,1.000,0.000,0.167,0.000,0.083,0.000,0.806,0.127,0.000,0.000,1.000,0.000,1.000,0.000
+Full GraphRAG,3,10.000,1.000,0.000,1.000,0.000,1.000,0.000,1.000,0.000,0.000,0.000,1.000,0.000,1.000,0.000
+No validation,3,10.000,1.000,0.000,1.000,0.000,1.000,0.000,1.000,0.000,0.000,0.000,1.000,0.000,1.000,0.000
+"Ranking only, no support subgraph",3,10.000,0.933,0.058,0.000,0.000,0.000,0.000,0.233,0.058,0.000,0.000,0.967,0.058,1.000,0.000
