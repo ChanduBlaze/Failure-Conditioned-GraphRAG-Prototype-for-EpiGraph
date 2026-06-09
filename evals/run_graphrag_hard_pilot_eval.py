@@ -152,6 +152,17 @@ mentioned_evidence_edges.
 Do not include explanatory text, node names, arrows, parentheses, or phrases in
 either edge list.
 
+weak_candidate_ids are candidate IDs that are weak, partial, insufficiently
+supported, or should not be promoted as the main explanation.
+rejected_candidate_ids are candidate IDs that the answer rejects, demotes, or
+says should not be selected as the best explanation.
+If the evaluated/predicted candidate is described as weak, partial, or should
+not be promoted, include that candidate ID in weak_candidate_ids.
+Do not put stronger comparison candidates in rejected_candidate_ids just because
+they are being compared.
+For weak-candidate rejection questions, the weak evaluated candidate should
+usually appear in weak_candidate_ids.
+
 Use stronger_candidate_id for the candidate that is best supported overall. If
 the predicted/evaluated candidate is itself the strongest or most complete
 candidate, return that same candidate ID. Only return an empty string if the
