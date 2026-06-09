@@ -198,7 +198,12 @@ Use only the ranking context in the input:
 - candidate IDs, names, scores, and ranks
 
 Do not assume support-subgraph edges or detailed evidence edge lists are available.
-If an edge cannot be identified from the ranking context, do not invent it.
+If support-subgraph evidence and detailed evidence edge lists are not provided,
+do not invent edge types.
+In ranking-only mode, leave mentioned_evidence_edges empty unless an exact valid
+relationship type is explicitly present in the provided ranking context.
+In ranking-only mode, leave identified_missing_edges empty unless the provided
+context explicitly supports a missing valid relationship type.
 """.strip()
     else:
         evidence_instructions = """
@@ -264,18 +269,29 @@ Use exactly this schema:
   "stronger_candidate_id": "..."
 }}
 
-For mentioned_evidence_edges, include only relationship types that are present
-for the predicted_candidate_id / candidate being evaluated. Do not include edges
-that belong only to stronger comparison candidates.
-For identified_missing_edges, include only relationship types that are missing
-for the predicted_candidate_id / candidate being evaluated.
-If you discuss stronger candidates in the explanation, mention their edges only
-inside explanation, not in mentioned_evidence_edges.
-For mentioned_evidence_edges and identified_missing_edges, use relationship type
-names such as "LEADING_INDICATOR_FOR" or "IMPORTATION_LINK".
-Use stronger_candidate_id for the candidate that is better supported overall. If
-the input does not support identifying a stronger candidate, return an empty
-string.
+For mentioned_evidence_edges and identified_missing_edges, use only exact
+relationship type names. Valid edge-list values are only:
+- "LEADING_INDICATOR_FOR"
+- "IMPORTATION_LINK"
+- "POSSIBLE_DRIVER_OF"
+
+mentioned_evidence_edges must contain only exact relationship type names that
+are present for the predicted/evaluated candidate.
+identified_missing_edges must contain only exact relationship type names that
+are missing for the predicted/evaluated candidate.
+Do not include comparison-candidate edges in mentioned_evidence_edges.
+Do not include explanatory text, node names, arrows, parentheses, phrases, or
+invented edge names in either edge list.
+
+If this is the ranking-only variant, leave mentioned_evidence_edges empty unless
+an exact valid relationship type is explicitly present in the provided ranking
+context. Leave identified_missing_edges empty unless the provided context
+explicitly supports a missing valid relationship type.
+
+Use stronger_candidate_id for the candidate that is best supported overall. If
+the predicted/evaluated candidate is itself the strongest or most complete
+candidate, return that same candidate ID. Only return an empty string if the
+provided input truly does not support identifying any strongest candidate.
 """.strip()
 
 
