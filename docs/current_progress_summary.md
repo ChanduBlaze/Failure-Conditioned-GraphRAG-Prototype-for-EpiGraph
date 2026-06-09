@@ -82,7 +82,7 @@ Current hard pilot results:
 
 ## Ablation Study
 
-I have started a first hard-pilot ablation study using `evals/run_hard_pilot_ablation_eval.py`. This runner compares Full GraphRAG, No validation, and Ranking only without support-subgraph evidence on the same 6 hard cases. Full GraphRAG now receives an explicit `validation_summary` derived from retrieved graph evidence; No validation receives graph evidence/support context without that summary.
+I have started a first hard-pilot ablation study using `evals/run_hard_pilot_ablation_eval.py`. This runner compares Full GraphRAG, No validation, and Ranking only without support-subgraph evidence on the same 10 hard cases. Full GraphRAG receives an explicit `validation_summary` derived from retrieved graph evidence; No validation receives graph evidence/support context without that summary.
 
 The ablation workflow is now reproducible. The runner writes `evals/results/hard_pilot_ablation_results.csv`, and `evals/summarize_hard_pilot_ablation_results.py` writes `evals/results/hard_pilot_ablation_summary.csv`.
 
@@ -95,11 +95,11 @@ Current ablation results:
 
 | Variant | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Edge Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Full GraphRAG | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| No validation | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 0.833 | 1.000 |
-| Ranking only, no support subgraph | 6 | 1.000 | 0.167 | 0.083 | 0.750 | 0 | 1.000 | 1.000 |
+| Full GraphRAG | 10 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| No validation | 10 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| Ranking only, no support subgraph | 10 | 0.900 | 0.000 | 0.000 | 0.300 | 0 | 1.000 | 1.000 |
 
-A repeated-run check was also added to estimate LLM variability:
+A repeated-run check was also added to estimate LLM variability. These repeated-run results are still from the earlier 6-case setup unless rerun later:
 
 ```powershell
 python evals\run_hard_pilot_ablation_repeated_eval.py --runs 3
@@ -131,7 +131,9 @@ Text-RAG retrieval is now fairer because expected labels are excluded from the r
 
 GraphRAG is perfect across the current 10-case hard-pilot metrics. This supports graph-structured evidence as useful for grounded reasoning because it helps preserve edge-level distinctions that are easier to blur in text-only settings. The result is encouraging pilot evidence, not final thesis evidence.
 
-The repeated-run ablation check suggests that graph evidence and support context consistently preserve present-edge and missing-edge grounding. Ranking-only remains weak on present-edge recall even though it preserves candidate selection in this small pilot. Validation effects are mixed: Full GraphRAG is stronger on weak-candidate rejection, while No validation is stronger on stronger-candidate accuracy in this 3-run sample. Validation effects should not be overclaimed yet.
+The 10-case ablation shows that Full GraphRAG and No validation both perform perfectly. Ranking only preserves candidate selection fairly well at 0.900 candidate accuracy, but it fails on edge grounding: present-edge precision and recall are both 0.000. This shows that candidate ranking alone does not provide enough edge-level evidence for the hard-pilot tasks.
+
+Graph evidence/support context is the key ablated factor in this run. Validation is not isolated in this 10-case run because Full GraphRAG and No validation perform the same. Validation may still matter in harder or more diverse settings, but this run does not show a separate validation benefit.
 
 ## Limitations
 
@@ -141,13 +143,14 @@ The hard pilot is also still small and remains within one influenza scenario. It
 
 The added Text-RAG distractors make the setting more realistic, but more diseases, regions, candidate types, and failure modes are needed before making strong claims about method differences.
 
-The ablation study is also small and one-scenario. The repeated-run check has only 3 runs and 6 hard cases, so it is useful for a first variability check but not enough for strong validation claims.
+The ablation is now 10 cases, but it is still one influenza scenario. Validation effects need a more targeted ablation design or more diverse cases. The repeated-run ablation results are still from the earlier 6-case setup unless rerun later.
 
 ## Next Steps
 
 - Expand the hard pilot toward 15-30 hard cases.
 - Add another disease, region, or failure scenario.
-- Rerun or extend the ablation study after the hard pilot includes more cases or another scenario.
+- Rerun repeated ablation on 10 cases later if needed.
+- Revisit validation-specific ablation after adding more diverse cases.
 - Consider more repeated runs later if cost and time allow.
 - Later merge hard-case scoring into the main benchmark.
 - Eventually merge hard-case and ablation findings into the thesis results section.
