@@ -46,7 +46,7 @@ The benchmark has been expanded from 3 starter cases to 10 cases. The newer case
 
 ## Hard Pilot Evaluation
 
-I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot now has 6 cases and uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and separate hard-pilot runners for KG-only, LLM-only, Text-RAG, and GraphRAG.
+I have also started a separate hard pilot benchmark for cases that go beyond top-candidate selection. This pilot now has 10 cases and uses `evals/eval_cases_hard_pilot.json`, shared metric helpers in `evals/eval_metrics.py`, and separate hard-pilot runners for KG-only, LLM-only, Text-RAG, and GraphRAG.
 
 The hard pilot tests:
 
@@ -54,25 +54,31 @@ The hard pilot tests:
 - Partial-evidence detection.
 - Weak-candidate rejection.
 
-The six pilot cases are:
+The 10 pilot cases are:
 
 | Case | Purpose |
 |---|---|
-| Australia missing `IMPORTATION_LINK` | Tests whether the evaluator can identify that Australia has partial evidence but lacks importation support. |
-| Travel Pressure missing `LEADING_INDICATOR_FOR` | Tests whether the evaluator can identify that Travel Pressure has importation evidence but lacks leading-indicator evidence. |
-| Humidity Drop weak-candidate case | Tests whether the evaluator treats Humidity Drop as weak because it has only `POSSIBLE_DRIVER_OF` evidence. |
-| Chile strongest compared with Australia | Tests whether the evaluator identifies Chile as the strongest supported candidate because it has all three expected support edges. |
-| Travel Pressure as partial support | Tests whether the evaluator explains why Travel Pressure is partial support rather than the best hidden driver. |
-| Humidity Drop should not outrank importation candidates | Tests whether the evaluator avoids promoting Humidity Drop above candidates with importation-related support. |
+| `hard_case_001` | Australia missing `IMPORTATION_LINK`; tests whether the evaluator can identify partial evidence but missing importation support. |
+| `hard_case_002` | Travel Pressure missing `LEADING_INDICATOR_FOR`; tests whether the evaluator can identify importation support but missing leading-indicator evidence. |
+| `hard_case_003` | Humidity Drop weak-candidate case; tests whether the evaluator treats Humidity Drop as weak because it has only `POSSIBLE_DRIVER_OF` evidence. |
+| `hard_case_004` | Chile strongest compared with Australia; tests whether the evaluator identifies Chile as the strongest supported candidate. |
+| `hard_case_005` | Travel Pressure as partial support; tests whether the evaluator explains why Travel Pressure is not the best hidden driver. |
+| `hard_case_006` | Humidity Drop should not outrank importation candidates; tests whether the evaluator avoids promoting weak environmental support above importation-related support. |
+| `hard_case_007` | Humidity as noisy or plausible environmental distractor; tests whether the evaluator separates plausible environmental signals from stronger outbreak-relevant support. |
+| `hard_case_008` | Australia partial-vs-full support contrast; tests whether the evaluator recognizes partial support while identifying the more complete candidate. |
+| `hard_case_009` | Travel mechanism-only/importation support; tests whether the evaluator recognizes mechanism and importation support while identifying missing leading-indicator evidence. |
+| `hard_case_010` | Chile strongest-candidate completeness case; tests whether the evaluator returns the evaluated candidate itself when it is also strongest or most complete. |
+
+The LLM-based hard-pilot runners now use stricter non-leaking edge-list guidance. Edge-list fields must contain only exact relationship type names: `LEADING_INDICATOR_FOR`, `IMPORTATION_LINK`, and `POSSIBLE_DRIVER_OF`. Comparison-candidate edges should appear only in the explanation, not in `mentioned_evidence_edges`, and if the evaluated candidate is itself strongest or most complete, `stronger_candidate_id` should return that candidate ID.
 
 Current hard pilot results:
 
 | Method | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| KG-only | 6 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| LLM-only | 6 | 0.833 | 0.306 | 0.250 | 0.500 | 1 | 0.500 | 1.000 |
-| Text-RAG | 6 | 1.000 | 0.667 | 0.583 | 0.750 | 0 | 0.667 | 0.500 |
-| GraphRAG | 6 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| KG-only | 10 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| LLM-only | 10 | 0.900 | 0.900 | 0.617 | 0.950 | 1 | 0.900 | 0.667 |
+| Text-RAG | 10 | 1.000 | 0.750 | 0.700 | 0.900 | 1 | 0.700 | 1.000 |
+| GraphRAG | 10 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
 
 ## Ablation Study
 
@@ -115,13 +121,15 @@ Text-RAG performed strongly, but missed one candidate-selection case. This is us
 
 GraphRAG + LLM also performed perfectly on the 10-case benchmark. It kept the LLM grounded in the support subgraph while still producing natural-language explanations and model-edit proposals. This is the main behavior the thesis is trying to study: using graph-structured retrieval to support evidence-grounded scientific reasoning.
 
-The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on 6 missing-edge, partial-evidence, weak-candidate, and candidate-contrast tasks. Stronger-candidate scoring now uses an explicit `stronger_candidate_id` field, making that metric cleaner than the earlier inferred version.
+The hard pilot now compares KG-only, LLM-only, Text-RAG, and GraphRAG on 10 missing-edge, partial-evidence, weak-candidate, candidate-contrast, and strongest-candidate completeness tasks. Stronger-candidate scoring uses an explicit `stronger_candidate_id` field, making that metric cleaner than the earlier inferred version.
 
-The expanded hard pilot gives a clearer separation across methods. LLM-only becomes weaker on candidate selection, edge grounding, missing-edge recall, false claims, and stronger-candidate identification. This suggests that plausible natural-language reasoning alone is not enough to reliably track the graph evidence distinctions.
+The KG-only result confirms that the current graph evidence supports the expected hard-case distinctions. The graph representation recovers the expected present and missing edges, identifies the stronger candidate when applicable, and rejects the weak candidate in this pilot.
 
-Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query; it uses only the hard-pilot question and failure-case values. The Text-RAG corpus now has 15 chunks, expanded from 7 by adding realistic distractors. Text-RAG keeps candidate accuracy at 1.000, but it has imperfect edge grounding, missing-edge recall, stronger-candidate identification, and weak-candidate rejection.
+LLM-only improved after stricter edge-list formatting, but it remains weaker than the graph-based methods on present-edge recall and weak-candidate rejection. This suggests that plausible natural-language reasoning alone is still less reliable for tracking which graph relationships are present, absent, or comparatively stronger.
 
-GraphRAG remains perfect across the current 6-case hard-pilot metrics. This gives a clearer separation between LLM-only reasoning, flattened Text-RAG retrieval, and graph-structured retrieval.
+Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query; it uses only the hard-pilot question and failure-case values. The Text-RAG corpus now has 15 chunks, expanded from 7 by adding realistic distractors. Text-RAG gets candidate selection right across the current 10 hard cases, but it remains weaker on edge grounding and stronger-candidate identification.
+
+GraphRAG is perfect across the current 10-case hard-pilot metrics. This supports graph-structured evidence as useful for grounded reasoning because it helps preserve edge-level distinctions that are easier to blur in text-only settings. The result is encouraging pilot evidence, not final thesis evidence.
 
 The repeated-run ablation check suggests that graph evidence and support context consistently preserve present-edge and missing-edge grounding. Ranking-only remains weak on present-edge recall even though it preserves candidate selection in this small pilot. Validation effects are mixed: Full GraphRAG is stronger on weak-candidate rejection, while No validation is stronger on stronger-candidate accuracy in this 3-run sample. Validation effects should not be overclaimed yet.
 
@@ -129,13 +137,17 @@ The repeated-run ablation check suggests that graph evidence and support context
 
 These results are promising, but they are not final thesis-level evidence. The benchmark is still small and focused on one Chile hidden-driver scenario. It does not yet include enough variation across diseases, regions, mechanisms, candidate types, or failure modes.
 
-The hard pilot is also still small and remains within one influenza scenario. The added Text-RAG distractors make the setting more realistic, but more diseases, regions, candidate types, and failure modes are needed before making strong claims about method differences.
+The hard pilot is also still small and remains within one influenza scenario. It now has 10 hard cases, which is useful for debugging and comparison but still too small for strong claims. LLM stochasticity can affect LLM-only, Text-RAG, and GraphRAG results, so repeated runs may vary.
+
+The added Text-RAG distractors make the setting more realistic, but more diseases, regions, candidate types, and failure modes are needed before making strong claims about method differences.
 
 The ablation study is also small and one-scenario. The repeated-run check has only 3 runs and 6 hard cases, so it is useful for a first variability check but not enough for strong validation claims.
 
 ## Next Steps
 
 - Expand the hard pilot toward 15-30 hard cases.
+- Add another disease, region, or failure scenario.
+- Rerun or extend the ablation study after the hard pilot includes more cases or another scenario.
 - Consider more repeated runs later if cost and time allow.
 - Later merge hard-case scoring into the main benchmark.
 - Eventually merge hard-case and ablation findings into the thesis results section.
