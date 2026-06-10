@@ -18,7 +18,11 @@ try:
         mean,
         normalize_list_of_strings,
     )
-    from failure_case import get_failure_case, get_failure_case_by_id
+    from failure_case import (
+        get_candidates_for_failure_case,
+        get_failure_case,
+        get_failure_case_by_id,
+    )
     from llm_reasoner import (
         MAX_OUTPUT_TOKENS,
         MODEL_NAME,
@@ -29,25 +33,6 @@ except ModuleNotFoundError as exc:
     print(f"LLM hard pilot evaluation failed: missing dependency: {exc}", file=sys.stderr)
     raise SystemExit(1) from exc
 
-
-CANDIDATES = [
-    {
-        "candidate_id": "signal_chile_flu",
-        "candidate_name": "Chile Influenza Activity",
-    },
-    {
-        "candidate_id": "signal_australia_flu",
-        "candidate_name": "Australia Influenza Activity",
-    },
-    {
-        "candidate_id": "signal_travel_pressure",
-        "candidate_name": "Travel Importation Pressure",
-    },
-    {
-        "candidate_id": "signal_humidity_drop",
-        "candidate_name": "Humidity Drop Anomaly",
-    },
-]
 
 REQUIRED_LLM_KEYS = {
     "predicted_candidate_id",
@@ -74,11 +59,11 @@ def load_hard_cases():
     return cases
 
 
-def build_prompt(failure_case, hard_case):
+def build_prompt(failure_case, hard_case, candidates):
     payload = {
         "failure_case": failure_case,
         "question": hard_case["question"],
-        "possible_candidates": CANDIDATES,
+        "possible_candidates": candidates,
     }
 
     return f"""
@@ -150,6 +135,10 @@ def get_hard_case_failure_case(hard_case):
     return get_failure_case()
 
 
+def get_hard_case_candidates(failure_case):
+    return get_candidates_for_failure_case(failure_case.get("id", ""))
+
+
 def validate_llm_output(data):
     if not isinstance(data, dict):
         raise ValueError("LLM response must be a JSON object.")
@@ -177,7 +166,7 @@ def validate_llm_output(data):
     return True
 
 
-def run_llm_case(client, failure_case, hard_case):
+def run_llm_case(client, failure_case, hard_case, candidates):
     response = client.responses.create(
         model=MODEL_NAME,
         instructions=(
@@ -185,7 +174,7 @@ def run_llm_case(client, failure_case, hard_case):
             "This is an LLM-only hard pilot: use no retrieved evidence. "
             "Return valid JSON only."
         ),
-        input=build_prompt(failure_case, hard_case),
+        input=build_prompt(failure_case, hard_case, candidates),
         reasoning={"effort": "low"},
         max_output_tokens=MAX_OUTPUT_TOKENS,
     )
@@ -282,7 +271,13 @@ def run_eval():
 
     for hard_case in hard_cases:
         failure_case = get_hard_case_failure_case(hard_case)
-        llm_output, raw_text = run_llm_case(client, failure_case, hard_case)
+        candidates = get_hard_case_candidates(failure_case)
+        llm_output, raw_text = run_llm_case(
+            client,
+            failure_case,
+            hard_case,
+            candidates,
+        )
         rows.append(score_case(hard_case, llm_output, raw_text))
 
     return rows

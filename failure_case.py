@@ -15,6 +15,27 @@ FAILURE_CASES_BY_ID = {
     FAILURE_CASE["id"]: FAILURE_CASE,
 }
 
+FAILURE_CASE_CANDIDATES_BY_ID = {
+    FAILURE_CASE["id"]: [
+        {
+            "candidate_id": "signal_chile_flu",
+            "candidate_name": "Chile Influenza Activity",
+        },
+        {
+            "candidate_id": "signal_australia_flu",
+            "candidate_name": "Australia Influenza Activity",
+        },
+        {
+            "candidate_id": "signal_travel_pressure",
+            "candidate_name": "Travel Importation Pressure",
+        },
+        {
+            "candidate_id": "signal_humidity_drop",
+            "candidate_name": "Humidity Drop Anomaly",
+        },
+    ],
+}
+
 
 REQUIRED_FAILURE_FIELDS = {
     "id",
@@ -54,6 +75,18 @@ def get_failure_case_by_id(failure_case_id: str) -> dict:
 
     validate_failure_case(failure_case)
     return failure_case
+
+
+def get_candidates_for_failure_case(failure_case_id: str) -> list[dict]:
+    failure_case = get_failure_case_by_id(failure_case_id)
+    candidates = FAILURE_CASE_CANDIDATES_BY_ID.get(failure_case["id"])
+
+    if candidates is None:
+        raise ValueError(
+            f"No candidates configured for failure_case_id: {failure_case['id']}"
+        )
+
+    return [dict(candidate) for candidate in candidates]
 
 
 def print_failure_case(failure_case: dict) -> None:
