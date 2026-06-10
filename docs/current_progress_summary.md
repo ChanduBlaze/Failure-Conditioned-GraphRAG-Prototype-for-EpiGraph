@@ -56,11 +56,11 @@ The hard pilot tests missing-edge detection, partial-evidence detection, weak-ca
 
 I also ran a 3-run repeated check for the LLM-based methods.
 
-| Method | Runs | Cases/Run | Candidate Accuracy Mean/Std | Present Edge Recall Mean/Std | Missing Edge Recall Mean/Std | Stronger Candidate Accuracy Mean/Std | Weak Candidate Rejection Mean/Std |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| LLM-only | 3 | 14 | 0.976 / 0.041 | 0.706 / 0.025 | 0.905 / 0.041 | 0.905 / 0.041 | 1.000 / 0.000 |
-| Text-RAG | 3 | 14 | 0.976 / 0.041 | 0.786 / 0.062 | 0.964 / 0.036 | 0.643 / 0.071 | 1.000 / 0.000 |
-| GraphRAG | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
+| Method | Runs | Cases/Run | Candidate Accuracy Mean/Std | Present Edge Precision Mean/Std | Present Edge Recall Mean/Std | Missing Edge Recall Mean/Std | False Claims Mean/Std | Stronger Candidate Accuracy Mean/Std | Weak Candidate Rejection Mean/Std |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| LLM-only | 3 | 14 | 0.976 / 0.041 | 0.988 / 0.021 | 0.706 / 0.025 | 0.905 / 0.041 | 0.333 / 0.577 | 0.905 / 0.041 | 1.000 / 0.000 |
+| Text-RAG | 3 | 14 | 0.976 / 0.041 | 0.817 / 0.055 | 0.786 / 0.062 | 0.964 / 0.036 | 0.667 / 1.155 | 0.643 / 0.071 | 1.000 / 0.000 |
+| GraphRAG | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 0.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
 
 ## Ablation Study
 
@@ -84,11 +84,11 @@ The hard-pilot ablation compares three variants:
 
 I also ran a 3-run repeated ablation check.
 
-| Variant | Runs | Cases/Run | Candidate Accuracy Mean/Std | Present Edge Recall Mean/Std | Missing Edge Recall Mean/Std | Stronger Candidate Accuracy Mean/Std | Weak Candidate Rejection Mean/Std |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Full GraphRAG | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
-| No validation | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
-| Ranking only, no support subgraph | 3 | 14 | 0.929 / 0.000 | 0.012 / 0.021 | 0.286 / 0.071 | 1.000 / 0.000 | 1.000 / 0.000 |
+| Variant | Runs | Cases/Run | Candidate Accuracy Mean/Std | Present Edge Precision Mean/Std | Present Edge Recall Mean/Std | Missing Edge Recall Mean/Std | False Edge Claims Mean/Std | Stronger Candidate Accuracy Mean/Std | Weak Candidate Rejection Mean/Std |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Full GraphRAG | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 0.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
+| No validation | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 0.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
+| Ranking only, no support subgraph | 3 | 14 | 0.929 / 0.000 | 0.024 / 0.041 | 0.012 / 0.021 | 0.286 / 0.071 | 0.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
 
 ## Interpretation
 
@@ -120,4 +120,3 @@ LLM stochasticity can still affect LLM-only, Text-RAG, and GraphRAG outputs, alt
 - Avoid major new feature work unless it is necessary for the thesis.
 - Prepare thesis and presentation interpretation around the current hard-pilot and ablation findings.
 - Add real-data grounding only if time allows.
-- Treat additional scenarios as optional unless the current results are not sufficient for the thesis discussion.
