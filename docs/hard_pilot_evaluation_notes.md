@@ -2,82 +2,107 @@
 
 ## Purpose
 
-The hard pilot benchmark was created to test evaluation tasks that go beyond simple top-candidate selection. The main benchmark in `evals/eval_cases.json` currently focuses on selecting the expected top candidate and matching expected evidence edges. That is useful, but it does not fully test whether a method can recognize missing evidence, partial support, or weak candidates.
+The hard pilot tests reasoning tasks that go beyond simple top-candidate selection. It evaluates whether a method can identify missing evidence, distinguish partial from complete support, reject weak candidates, identify a stronger comparison candidate, and preserve candidate-specific edge grounding.
 
-For that reason, the hard pilot cases are kept in a separate file: `evals/eval_cases_hard_pilot.json`. This keeps the current 10-case benchmark stable while allowing the evaluation schema and scoring logic to be extended safely.
+The cases remain separate from the main benchmark in `evals/eval_cases_hard_pilot.json` so the extended schema and scoring logic can be evaluated independently.
+
+## Benchmark Scope
+
+The current hard pilot has 14 cases across 2 prototype scenarios:
+
+1. U.S. influenza missed hospitalization peak.
+2. Puerto Rico dengue regional outbreak underprediction.
+
+| Case Range | Scenario |
+|---|---|
+| `hard_case_001`-`hard_case_010` | U.S. influenza missed hospitalization peak |
+| `hard_case_011`-`hard_case_014` | Puerto Rico dengue regional outbreak underprediction |
+
+The dengue scenario provides prototype evidence for pipeline evaluation. It is not a final scientific claim about dengue causality.
 
 ## What The Hard Pilot Tests
 
 ### Missing-Edge Detection
 
-Missing-edge detection means checking whether a method can identify that a candidate lacks an important relationship. For example, Australia Influenza Activity has some relevant evidence, but it does not have an `IMPORTATION_LINK` to the U.S. influenza base mechanism in the current graph.
+Missing-edge detection checks whether a method can identify that a candidate lacks an important relationship, even when other relevant relationships are present.
 
 ### Partial-Evidence Detection
 
-Partial-evidence detection means recognizing that a candidate has some valid support but not the complete evidence pattern needed for full support. Travel Importation Pressure has importation and possible-driver evidence, but it lacks the `LEADING_INDICATOR_FOR` relationship to U.S. hospitalizations.
+Partial-evidence detection checks whether a method can recognize valid but incomplete support rather than treating every plausible candidate as fully supported.
 
 ### Weak-Candidate Rejection
 
-Weak-candidate rejection means avoiding the mistake of treating a weakly supported candidate as a fully supported explanation. Humidity Drop Anomaly has only `POSSIBLE_DRIVER_OF` evidence in the current graph, so it should be treated as weak compared with Chile Influenza Activity.
+Weak-candidate rejection checks whether a method avoids promoting candidates supported by only a limited subset of the expected evidence.
+
+### Candidate Comparison
+
+The benchmark also tests whether a method can identify the strongest or most complete candidate without mixing that candidate's evidence into the evaluated candidate's edge list.
 
 ## Pilot Cases
 
 | Case | Task | What It Tests |
 |---|---|---|
-| `hard_case_001` | Australia missing `IMPORTATION_LINK` | Tests whether the evaluator can identify that Australia has `LEADING_INDICATOR_FOR` and `POSSIBLE_DRIVER_OF`, but lacks `IMPORTATION_LINK`. |
-| `hard_case_002` | Travel Pressure missing `LEADING_INDICATOR_FOR` | Tests whether the evaluator can identify that Travel Pressure has `IMPORTATION_LINK` and `POSSIBLE_DRIVER_OF`, but lacks `LEADING_INDICATOR_FOR`. |
-| `hard_case_003` | Humidity Drop weak-candidate case | Tests whether the evaluator can treat Humidity Drop as weak because it has only `POSSIBLE_DRIVER_OF` and lacks both `LEADING_INDICATOR_FOR` and `IMPORTATION_LINK`. |
-| `hard_case_004` | Chile strongest compared with Australia | Tests whether the evaluator can identify Chile as the strongest supported candidate because it has all three expected support edges. |
-| `hard_case_005` | Travel Pressure as partial support | Tests whether the evaluator can explain why Travel Pressure has partial support but should not be treated as the best hidden driver. |
-| `hard_case_006` | Humidity Drop should not outrank importation candidates | Tests whether the evaluator can avoid promoting Humidity Drop above candidates with importation-related support. |
-| `hard_case_007` | Humidity as noisy environmental distractor | Tests whether the evaluator can distinguish a plausible environmental signal from candidates with stronger outbreak-relevant support. |
-| `hard_case_008` | Australia partial-vs-full support contrast | Tests whether the evaluator can recognize Australia as partially supported while identifying the more complete candidate. |
-| `hard_case_009` | Travel mechanism-only/importation support | Tests whether the evaluator can identify mechanism and importation support while recognizing missing leading-indicator evidence. |
-| `hard_case_010` | Chile strongest-candidate completeness case | Tests whether the evaluator can return the evaluated candidate itself when it is also the strongest or most complete candidate. |
+| `hard_case_001` | Australia missing `IMPORTATION_LINK` | Identifies partial influenza support and the missing importation relationship. |
+| `hard_case_002` | Travel Pressure missing `LEADING_INDICATOR_FOR` | Identifies importation and possible-driver support while recognizing the missing leading-indicator relationship. |
+| `hard_case_003` | Humidity Drop weak-candidate case | Treats a candidate with only `POSSIBLE_DRIVER_OF` as weak and incomplete. |
+| `hard_case_004` | Chile strongest compared with Australia | Identifies Chile Influenza Activity as the strongest supported candidate. |
+| `hard_case_005` | Travel Pressure as partial support | Explains why partial support does not make Travel Pressure the best hidden driver. |
+| `hard_case_006` | Humidity Drop should not outrank importation candidates | Avoids promoting weak environmental support above stronger importation-related support. |
+| `hard_case_007` | Humidity as an environmental distractor | Separates a plausible environmental signal from candidates with stronger outbreak-relevant support. |
+| `hard_case_008` | Australia partial-vs-full support contrast | Recognizes Australia's partial support while identifying the more complete candidate. |
+| `hard_case_009` | Travel mechanism/importation support | Recognizes mechanism and importation support while identifying missing leading-indicator evidence. |
+| `hard_case_010` | Chile strongest-candidate completeness | Returns the evaluated candidate itself when it is also the strongest or most complete candidate. |
+| `hard_case_011` | Mosquito Vector Index strongest candidate | Identifies Mosquito Vector Index as the strongest candidate in the dengue scenario. |
+| `hard_case_012` | Rainfall Anomaly partial support | Recognizes partial dengue support and the missing `IMPORTATION_LINK`. |
+| `hard_case_013` | Temperature Anomaly weak/incomplete support | Treats Temperature Anomaly as weak or incomplete rather than fully supported. |
+| `hard_case_014` | Dengue Travel Importation Pressure partial support | Recognizes partial support and the missing `LEADING_INDICATOR_FOR`. |
 
-The LLM-based hard-pilot prompts now use stricter non-leaking guidance for edge-list fields. The fields must contain only exact relationship type names: `LEADING_INDICATOR_FOR`, `IMPORTATION_LINK`, and `POSSIBLE_DRIVER_OF`. Comparison-candidate edges belong in the explanation only, not in `mentioned_evidence_edges`, and explanatory phrases, node names, arrows, and parentheses are not allowed in either edge list. A domain-specific Humidity/Chile formatting example was removed to avoid leaking answer patterns into the prompt.
+The LLM-based prompts use strict, non-leaking guidance for edge-list fields. These fields may contain only exact relationship type names such as `LEADING_INDICATOR_FOR`, `IMPORTATION_LINK`, and `POSSIBLE_DRIVER_OF`. Evidence from comparison candidates belongs in the explanation, not in the evaluated candidate's edge list.
 
 ## Current Results
 
-These results compare the hard pilot versions of KG-only, LLM-only, Text-RAG, and GraphRAG. The KG-only result uses graph retrieval directly. The other methods ask an LLM to return extended fields such as `identified_missing_edges`, `rejected_candidate_ids`, and `weak_candidate_ids`.
+Single-run results from `evals/results/hard_pilot_summary.csv`:
 
 | Method | Cases | Candidate Accuracy | Present Edge Precision | Present Edge Recall | Missing Edge Recall | False Claims | Stronger Candidate Accuracy | Weak Candidate Rejection |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| KG-only | 10 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
-| LLM-only | 10 | 0.900 | 0.900 | 0.617 | 0.950 | 1 | 0.900 | 0.667 |
-| Text-RAG | 10 | 1.000 | 0.750 | 0.700 | 0.900 | 1 | 0.700 | 1.000 |
-| GraphRAG | 10 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| KG-only | 14 | N/A | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+| LLM-only | 14 | 1.000 | 1.000 | 0.726 | 0.929 | 0 | 0.929 | 1.000 |
+| Text-RAG | 14 | 0.929 | 0.845 | 0.857 | 0.821 | 3 | 0.643 | 1.000 |
+| GraphRAG | 14 | 1.000 | 1.000 | 1.000 | 1.000 | 0 | 1.000 | 1.000 |
+
+## Repeated Method Comparison
+
+Three-run results from `evals/results/hard_pilot_repeated_summary.csv`:
+
+| Method | Runs | Cases/Run | Candidate Accuracy Mean/Std | Present Edge Precision Mean/Std | Present Edge Recall Mean/Std | Missing Edge Recall Mean/Std | False Claims Mean/Std | Stronger Candidate Accuracy Mean/Std | Weak Candidate Rejection Mean/Std |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| LLM-only | 3 | 14 | 0.976 / 0.041 | 0.988 / 0.021 | 0.706 / 0.025 | 0.905 / 0.041 | 0.333 / 0.577 | 0.905 / 0.041 | 1.000 / 0.000 |
+| Text-RAG | 3 | 14 | 0.976 / 0.041 | 0.817 / 0.055 | 0.786 / 0.062 | 0.964 / 0.036 | 0.667 / 1.155 | 0.643 / 0.071 | 1.000 / 0.000 |
+| GraphRAG | 3 | 14 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 | 0.000 / 0.000 | 1.000 / 0.000 | 1.000 / 0.000 |
 
 ## Interpretation
 
-The hard pilot has been expanded from 6 cases to 10 cases while staying within the same U.S. influenza scenario. The added cases increase coverage of noisy environmental distractors, partial-vs-full support, mechanism-only/importation support, and cases where the evaluated candidate is itself the strongest candidate.
+The benchmark now covers two prototype scenarios rather than influenza alone. This adds a second disease, region, target signal, mechanism, and candidate set to the pipeline evaluation.
 
-The KG-only hard pilot shows that the graph evidence itself supports these hard-case distinctions. The current Neo4j ranking and evidence representation recover the expected present and missing edges, identify the stronger candidate when applicable, and reject the weak candidate in the current pilot.
+GraphRAG remains stable across both prototype scenarios. It achieves perfect single-run and repeated-run results on candidate selection, present-edge recall, missing-edge recall, stronger-candidate identification, and weak-candidate rejection.
 
-The stronger-candidate metric is now cleaner because the LLM-based hard-pilot runners explicitly ask for a `stronger_candidate_id` field instead of inferring the answer from raw response text. The prompts also clarify that if the predicted or evaluated candidate is itself the strongest or most complete candidate, `stronger_candidate_id` should return that same candidate ID.
+LLM-only is strong on candidate selection, but it is weaker on edge recall and stronger-candidate identification. This suggests that plausible language reasoning can often select the expected candidate without preserving every graph evidence distinction.
 
-LLM-only performs better than in the earlier hard pilot after stricter edge-list formatting, but it still has weaker present-edge recall and weak-candidate rejection than the graph-based methods. This suggests that the LLM can produce plausible explanations, but without retrieval it remains less reliable about which evidence relationships are present, absent, or comparatively stronger.
+Text-RAG retrieves useful text, but it can blur candidate-specific evidence with comparison evidence. Its weaker stronger-candidate identification and nonzero false-claim results show the difficulty of preserving candidate boundaries in flattened text retrieval.
 
-Text-RAG retrieval is now fairer because expected labels are excluded from the retrieval query. It uses only the hard pilot question and failure-case values. The text corpus has also been expanded from 7 chunks to 15 chunks by adding realistic distractor chunks about surveillance, travel seasonality, respiratory transmission, hospitalization reporting lag, generic model underprediction, noisy warnings, incomplete evidence, and external-driver model edits.
+These results support graph-structured retrieval as useful for edge-grounded reasoning in the current prototype benchmark. They remain pilot evidence rather than final thesis evidence.
 
-Adding these distractor chunks makes the Text-RAG setting harder and more realistic. Text-RAG gets candidate selection right across the current 10 cases, but its edge grounding remains imperfect. It has lower present-edge precision and recall than GraphRAG, one false edge claim, and weaker stronger-candidate identification.
+## Limitations
 
-GraphRAG is perfect across the current 10-case hard-pilot metrics. It recovers the expected present and missing edges, identifies the stronger candidate, and rejects the weak candidate in the current pilot.
+The benchmark is still small, with 14 cases across 2 prototype scenarios.
 
-This gives a clearer separation between LLM-only reasoning, flattened Text-RAG retrieval, and graph-structured retrieval. The current result supports graph-structured evidence as useful for grounded reasoning because it helps preserve edge-level distinctions that are easier to blur in text-only settings. The benchmark is still small, so this should be treated as encouraging pilot evidence rather than a final thesis claim.
+The dengue scenario is prototype evidence for evaluation, not a final scientific claim. The graph and text evidence are still manually constructed for pipeline testing.
 
-## Important Limitation
-
-The pilot is still small and remains within one U.S. influenza hidden-driver scenario. It should be treated as a schema and scoring sanity check, not final thesis evidence.
-
-The benchmark now has 10 hard cases, which is useful for debugging and comparison but still too small for strong general claims. LLM stochasticity can also affect LLM-only, Text-RAG, and GraphRAG results, so repeated runs may vary.
-
-Text-RAG retrieval may still be helped by the limited corpus and narrow scenario. It no longer uses expected labels directly, and the added distractors make the setting more realistic, but more diseases, regions, candidate types, and failure modes are needed before making strong claims about method differences.
+More real-data grounding and greater scenario diversity are needed before making broad thesis-level claims about epidemiological discovery or general method performance.
 
 ## Next Steps
 
-- Update `current_progress_summary.md` next.
-- Expand the hard pilot toward 15-30 hard cases.
-- Add another disease, region, or failure scenario before relying on large claims.
-- Rerun or extend the ablation study after the hard pilot includes more cases or another scenario.
-- Later merge hard-case scoring into the main benchmark once the schema and metrics are stable.
+- Stabilize the current results.
+- Avoid major new feature work unless necessary.
+- Prepare thesis and presentation interpretation around the 14-case, two-scenario findings.
+- Add real-data grounding only if time allows.
