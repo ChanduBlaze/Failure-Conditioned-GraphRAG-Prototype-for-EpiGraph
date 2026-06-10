@@ -33,6 +33,31 @@ GRAPH = {
         {"id": "dataset_humidity", "type": "Dataset", "name": "Humidity Dataset"},
 
         {"id": "paper_climate", "type": "Paper", "name": "Paper on Climate and Influenza Dynamics"},
+
+        # Prototype dengue scenario for multi-failure-case evaluation. These
+        # edges reuse the hard-pilot relationship types for metric compatibility,
+        # not as a final scientific claim about dengue causality.
+        {"id": "disease_dengue", "type": "Disease", "name": "Dengue"},
+        {"id": "region_puerto_rico", "type": "Region", "name": "Puerto Rico"},
+        {"id": "eq_dengue_base", "type": "MechanismEquation", "name": "Puerto Rico Dengue Base Mechanism"},
+        {"id": "state_i_pr_dengue", "type": "StateVariable", "name": "Infectious Dengue Population in Puerto Rico"},
+        {"id": "param_beta_pr_dengue", "type": "Parameter", "name": "Puerto Rico Dengue Transmission Rate"},
+        {"id": "signal_pr_dengue_cases", "type": "Signal", "name": "Puerto Rico Dengue Cases"},
+        {"id": "signal_rainfall_anomaly", "type": "Signal", "name": "Rainfall Anomaly"},
+        {"id": "signal_temperature_anomaly", "type": "Signal", "name": "Temperature Anomaly"},
+        {"id": "signal_vector_index", "type": "Signal", "name": "Mosquito Vector Index"},
+        {"id": "signal_travel_importation_dengue", "type": "Signal", "name": "Dengue Travel Importation Pressure"},
+        {"id": "context_vector_surveillance", "type": "Context", "name": "Vector Surveillance"},
+        {"id": "context_dengue_climate", "type": "Context", "name": "Dengue Climate Forcing"},
+        {"id": "context_dengue_importation", "type": "Context", "name": "Dengue Importation Pressure"},
+        {"id": "dataset_pr_dengue_cases", "type": "Dataset", "name": "Puerto Rico Dengue Cases Dataset"},
+        {"id": "dataset_rainfall_anomaly", "type": "Dataset", "name": "Rainfall Anomaly Dataset"},
+        {"id": "dataset_temperature_anomaly", "type": "Dataset", "name": "Temperature Anomaly Dataset"},
+        {"id": "dataset_vector_index", "type": "Dataset", "name": "Mosquito Vector Index Dataset"},
+        {"id": "dataset_dengue_travel_importation", "type": "Dataset", "name": "Dengue Travel Importation Dataset"},
+        {"id": "paper_vector_surveillance", "type": "Paper", "name": "Paper on Vector Surveillance and Dengue Risk"},
+        {"id": "paper_dengue_climate", "type": "Paper", "name": "Paper on Climate and Dengue Dynamics"},
+        {"id": "paper_dengue_importation", "type": "Paper", "name": "Paper on Dengue Importation Pressure"},
     ],
     "edges": [
         {"source": "eq_us_flu_base", "type": "MODELS", "target": "disease_influenza"},
@@ -76,6 +101,47 @@ GRAPH = {
         {"source": "signal_humidity_drop", "type": "HAS_DATASET", "target": "dataset_humidity"},
         {"source": "signal_humidity_drop", "type": "SUPPORTED_BY", "target": "paper_climate"},
         {"source": "signal_humidity_drop", "type": "POSSIBLE_DRIVER_OF", "target": "eq_us_flu_base"},
+
+        {"source": "eq_dengue_base", "type": "MODELS", "target": "disease_dengue"},
+        {"source": "eq_dengue_base", "type": "APPLIES_TO", "target": "region_puerto_rico"},
+        {"source": "eq_dengue_base", "type": "USES_VARIABLE", "target": "state_i_pr_dengue"},
+        {"source": "eq_dengue_base", "type": "USES_PARAMETER", "target": "param_beta_pr_dengue"},
+
+        {"source": "signal_pr_dengue_cases", "type": "APPLIES_TO", "target": "region_puerto_rico"},
+        {"source": "signal_pr_dengue_cases", "type": "MODELS", "target": "disease_dengue"},
+        {"source": "signal_pr_dengue_cases", "type": "HAS_DATASET", "target": "dataset_pr_dengue_cases"},
+
+        {"source": "signal_vector_index", "type": "APPLIES_TO", "target": "region_puerto_rico"},
+        {"source": "signal_vector_index", "type": "MODELS", "target": "disease_dengue"},
+        {"source": "signal_vector_index", "type": "HAS_CONTEXT", "target": "context_vector_surveillance"},
+        {"source": "signal_vector_index", "type": "HAS_DATASET", "target": "dataset_vector_index"},
+        {"source": "signal_vector_index", "type": "SUPPORTED_BY", "target": "paper_vector_surveillance"},
+        {"source": "signal_vector_index", "type": "LEADING_INDICATOR_FOR", "target": "signal_pr_dengue_cases"},
+        {"source": "signal_vector_index", "type": "IMPORTATION_LINK", "target": "eq_dengue_base"},
+        {"source": "signal_vector_index", "type": "POSSIBLE_DRIVER_OF", "target": "eq_dengue_base"},
+
+        {"source": "signal_rainfall_anomaly", "type": "APPLIES_TO", "target": "region_puerto_rico"},
+        {"source": "signal_rainfall_anomaly", "type": "MODELS", "target": "disease_dengue"},
+        {"source": "signal_rainfall_anomaly", "type": "HAS_CONTEXT", "target": "context_dengue_climate"},
+        {"source": "signal_rainfall_anomaly", "type": "HAS_DATASET", "target": "dataset_rainfall_anomaly"},
+        {"source": "signal_rainfall_anomaly", "type": "SUPPORTED_BY", "target": "paper_dengue_climate"},
+        {"source": "signal_rainfall_anomaly", "type": "LEADING_INDICATOR_FOR", "target": "signal_pr_dengue_cases"},
+        {"source": "signal_rainfall_anomaly", "type": "POSSIBLE_DRIVER_OF", "target": "eq_dengue_base"},
+
+        {"source": "signal_temperature_anomaly", "type": "APPLIES_TO", "target": "region_puerto_rico"},
+        {"source": "signal_temperature_anomaly", "type": "MODELS", "target": "disease_dengue"},
+        {"source": "signal_temperature_anomaly", "type": "HAS_CONTEXT", "target": "context_dengue_climate"},
+        {"source": "signal_temperature_anomaly", "type": "HAS_DATASET", "target": "dataset_temperature_anomaly"},
+        {"source": "signal_temperature_anomaly", "type": "SUPPORTED_BY", "target": "paper_dengue_climate"},
+        {"source": "signal_temperature_anomaly", "type": "POSSIBLE_DRIVER_OF", "target": "eq_dengue_base"},
+
+        {"source": "signal_travel_importation_dengue", "type": "APPLIES_TO", "target": "region_puerto_rico"},
+        {"source": "signal_travel_importation_dengue", "type": "MODELS", "target": "disease_dengue"},
+        {"source": "signal_travel_importation_dengue", "type": "HAS_CONTEXT", "target": "context_dengue_importation"},
+        {"source": "signal_travel_importation_dengue", "type": "HAS_DATASET", "target": "dataset_dengue_travel_importation"},
+        {"source": "signal_travel_importation_dengue", "type": "SUPPORTED_BY", "target": "paper_dengue_importation"},
+        {"source": "signal_travel_importation_dengue", "type": "IMPORTATION_LINK", "target": "eq_dengue_base"},
+        {"source": "signal_travel_importation_dengue", "type": "POSSIBLE_DRIVER_OF", "target": "eq_dengue_base"},
     ]
 }
 def build_graph_summary(graph):

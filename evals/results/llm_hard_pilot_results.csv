@@ -1,8 +1,8 @@
 case_id,task_type,expected_answer_type,expected_candidate_id,predicted_candidate_id,predicted_candidate_name,candidate_correct,expected_present_edges,mentioned_evidence_edges,present_edge_precision,present_edge_recall,expected_missing_edges,identified_missing_edges,missing_edge_recall,missing_edge_false_claim_count,expected_stronger_candidate_id,stronger_candidate_id,stronger_candidate_identified,expected_weak_candidate_id,rejected_candidate_ids,weak_candidate_ids,weak_candidate_rejected,explanation,raw_response
-hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR,1.0,0.5,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_australia_flu,,"Australia shows some southern-hemisphere timing correlation (a leading indicator) but lacks a demonstrated importation link to the US that would explain direct seeding of US hospitalizations. Chile has stronger evidence of importation pathways, making it a more complete explanatory signal for the missed US peak.","{
+hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR,1.0,0.5,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_travel_pressure;signal_humidity_drop,signal_australia_flu,,"Australia provides southern-hemisphere influenza signal support (acting as a leading indicator), but it lacks a clear importation linkage to the US that would explain timing and magnitude of a US hospitalization peak. Chile has stronger evidence connecting its activity to US importation pathways, making it a more complete explanation.","{
   ""predicted_candidate_id"": ""signal_australia_flu"",
   ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Australia shows some southern-hemisphere timing correlation (a leading indicator) but lacks a demonstrated importation link to the US that would explain direct seeding of US hospitalizations. Chile has stronger evidence of importation pathways, making it a more complete explanatory signal for the missed US peak."",
+  ""explanation"": ""Australia provides southern-hemisphere influenza signal support (acting as a leading indicator), but it lacks a clear importation linkage to the US that would explain timing and magnitude of a US hospitalization peak. Chile has stronger evidence connecting its activity to US importation pathways, making it a more complete explanation."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR""
   ],
@@ -10,6 +10,7 @@ hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu
     ""IMPORTATION_LINK""
   ],
   ""rejected_candidate_ids"": [
+    ""signal_travel_pressure"",
     ""signal_humidity_drop""
   ],
   ""weak_candidate_ids"": [
@@ -17,16 +18,52 @@ hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_humidity_drop,signal_travel_pressure,,"Travel Importation Pressure has importation evidence linking it to the US mechanism (IMPORTATION_LINK) but lacks a direct LEADING_INDICATOR_FOR relationship to the US hospitalization signal. Chile Influenza Activity has both importation and leading-indicator support, so the missing LEADING_INDICATOR_FOR edge prevents Travel Importation Pressure from having the same full support.","{
+hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop;signal_australia_flu,signal_travel_pressure,,"Travel Importation Pressure for the US has an IMPORTATION_LINK to the mechanism but lacks the LEADING_INDICATOR_FOR edge that Chile Influenza Activity has, so it does not have the same full support.","{
   ""predicted_candidate_id"": ""signal_travel_pressure"",
   ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure has importation evidence linking it to the US mechanism (IMPORTATION_LINK) but lacks a direct LEADING_INDICATOR_FOR relationship to the US hospitalization signal. Chile Influenza Activity has both importation and leading-indicator support, so the missing LEADING_INDICATOR_FOR edge prevents Travel Importation Pressure from having the same full support."",
+  ""explanation"": ""Travel Importation Pressure for the US has an IMPORTATION_LINK to the mechanism but lacks the LEADING_INDICATOR_FOR edge that Chile Influenza Activity has, so it does not have the same full support."",
   ""mentioned_evidence_edges"": [
     ""IMPORTATION_LINK""
   ],
   ""identified_missing_edges"": [
     ""LEADING_INDICATOR_FOR""
   ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop"",
+    ""signal_australia_flu""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"The link between a humidity drop anomaly and the US influenza hospitalization peak is supported only by limited, indirect evidence. The anomaly is plausible as a local exacerbating factor but lacks consistent time-series correlation that would make it a reliable early or primary driver of a national hospitalization surge. Key causal pathways are not demonstrated: there is no demonstrated leading-indicator relationship showing the humidity drop precedes increases in US hospitalizations, and no importation or transmission pathway connecting this anomaly to the broader epidemic dynamics. Given those gaps, the humidity signal should be treated as a weak, partial contributor rather than a fully supported hidden driver. Southern-hemisphere influenza activity (e.g., Chile) provides a more complete explanatory candidate because it better matches the expected international seeding/importation patterns that can precede a US peak.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""The link between a humidity drop anomaly and the US influenza hospitalization peak is supported only by limited, indirect evidence. The anomaly is plausible as a local exacerbating factor but lacks consistent time-series correlation that would make it a reliable early or primary driver of a national hospitalization surge. Key causal pathways are not demonstrated: there is no demonstrated leading-indicator relationship showing the humidity drop precedes increases in US hospitalizations, and no importation or transmission pathway connecting this anomaly to the broader epidemic dynamics. Given those gaps, the humidity signal should be treated as a weak, partial contributor rather than a fully supported hidden driver. Southern-hemisphere influenza activity (e.g., Chile) provides a more complete explanatory candidate because it better matches the expected international seeding/importation patterns that can precede a US peak."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_humidity_drop,signal_travel_pressure,,"Chile influenza activity is the best-supported explanation because its seasonal peak timing and magnitude more closely precede and align with the missed US hospitalization peak than Australia’s activity, providing a timely leading indicator for northern-hemisphere spread. Chile also has stronger travel and epidemiological connections to the US during the relevant interval (consistent importation pathways), making it a plausible source seeding additional US cases that raised hospitalizations. Australia’s peak was either temporally more distant or smaller in magnitude, reducing its explanatory power. Other candidates (travel importation pressure, humidity anomaly) lack the combined timing, signal strength, and direct epidemiological linkage that Chile provides here.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile influenza activity is the best-supported explanation because its seasonal peak timing and magnitude more closely precede and align with the missed US hospitalization peak than Australia’s activity, providing a timely leading indicator for northern-hemisphere spread. Chile also has stronger travel and epidemiological connections to the US during the relevant interval (consistent importation pathways), making it a plausible source seeding additional US cases that raised hospitalizations. Australia’s peak was either temporally more distant or smaller in magnitude, reducing its explanatory power. Other candidates (travel importation pressure, humidity anomaly) lack the combined timing, signal strength, and direct epidemiological linkage that Chile provides here."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
   ""rejected_candidate_ids"": [
     ""signal_australia_flu"",
     ""signal_humidity_drop""
@@ -36,16 +73,35 @@ hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_trave
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_travel_pressure,False,signal_humidity_drop,,signal_humidity_drop,True,"Humidity Drop Anomaly has only limited, suggestive association with the US hospitalization peak and lacks the stronger, direct evidence needed to treat it as a supported hidden driver. The current link is plausibly a possible driver (mechanistic hypothesis: low humidity can enhance transmission), but there is no clear evidence that the anomaly preceded the US hospitalization increase consistently (no leading-indicator pattern), nor is there evidence connecting it to importation or introduction pathways. In short: plausibility without temporal/causal corroboration and without corroborating signals of importation or consistent precede-follow behavior makes it a weak candidate rather than a fully supported driver.","{
+hard_case_005,partial_evidence_detection,partial_support_not_best_driver,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure;signal_australia_flu,,"Travel Importation Pressure plausibly contributed to seeding cases (partial support) because it creates importation pathways into the US, but it lacks direct evidence as a timely leading indicator of a large hospitalization peak. Travel explains how viruses can be introduced (an importation link) but does not by itself account for the timing, amplification, or local transmission dynamics needed to produce the missed surge in hospitalizations. Southern-hemisphere influenza activity (e.g., Chile) provides a clearer temporal, epidemiological pattern that can act as a leading indicator of upcoming US waves, so Travel Importation Pressure should be treated as a partial/mediating factor rather than the best hidden driver.","{
+  ""predicted_candidate_id"": ""signal_travel_pressure"",
+  ""predicted_candidate_name"": ""Travel Importation Pressure"",
+  ""explanation"": ""Travel Importation Pressure plausibly contributed to seeding cases (partial support) because it creates importation pathways into the US, but it lacks direct evidence as a timely leading indicator of a large hospitalization peak. Travel explains how viruses can be introduced (an importation link) but does not by itself account for the timing, amplification, or local transmission dynamics needed to produce the missed surge in hospitalizations. Southern-hemisphere influenza activity (e.g., Chile) provides a clearer temporal, epidemiological pattern that can act as a leading indicator of upcoming US waves, so Travel Importation Pressure should be treated as a partial/mediating factor rather than the best hidden driver."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure"",
+    ""signal_australia_flu""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_006,weak_candidate_rejection,weak_candidate_not_promoted,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_travel_pressure,False,signal_humidity_drop,,signal_humidity_drop,True,"Humidity Drop Anomaly is a plausible local modifier of transmission but is not the best explanation for a missed national hospitalization peak. It lacks a clear importation pathway linking exogenous seeding to the US hospitalization signal and does not function as a documented leading indicator of hospitalizations at the national scale. In contrast, importation-related candidates (travel/importation pressure and southern-hemisphere activity) provide parsimonious mechanisms for an unexpected, large, and temporally concentrated influx of cases that could produce a missed peak. Therefore Humidity Drop Anomaly should not be promoted above importation-related candidates because it is a more local/conditional driver, missing critical importation and leading-indicator relationships needed to explain a national missed peak.","{
   ""predicted_candidate_id"": ""signal_humidity_drop"",
   ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Humidity Drop Anomaly has only limited, suggestive association with the US hospitalization peak and lacks the stronger, direct evidence needed to treat it as a supported hidden driver. The current link is plausibly a possible driver (mechanistic hypothesis: low humidity can enhance transmission), but there is no clear evidence that the anomaly preceded the US hospitalization increase consistently (no leading-indicator pattern), nor is there evidence connecting it to importation or introduction pathways. In short: plausibility without temporal/causal corroboration and without corroborating signals of importation or consistent precede-follow behavior makes it a weak candidate rather than a fully supported driver."",
+  ""explanation"": ""Humidity Drop Anomaly is a plausible local modifier of transmission but is not the best explanation for a missed national hospitalization peak. It lacks a clear importation pathway linking exogenous seeding to the US hospitalization signal and does not function as a documented leading indicator of hospitalizations at the national scale. In contrast, importation-related candidates (travel/importation pressure and southern-hemisphere activity) provide parsimonious mechanisms for an unexpected, large, and temporally concentrated influx of cases that could produce a missed peak. Therefore Humidity Drop Anomaly should not be promoted above importation-related candidates because it is a more local/conditional driver, missing critical importation and leading-indicator relationships needed to explain a national missed peak."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF""
   ],
   ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK""
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
   ],
   ""rejected_candidate_ids"": [],
   ""weak_candidate_ids"": [
@@ -53,85 +109,30 @@ hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_
   ],
   ""stronger_candidate_id"": ""signal_travel_pressure""
 }"
-hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0.6666666666666666,,POSSIBLE_DRIVER_OF,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu,signal_travel_pressure;signal_humidity_drop,,"Chile flu activity is the best-supported explanation because its seasonal peak led US hospitalizations temporally and its epidemic magnitude and timing align more closely with the missed US hospitalization peak than Australia. Chile’s peak occurs earlier in the southern-hemisphere season and therefore provides a clearer leading signal that can presage northern-hemisphere importations. In addition, flight and travel connections between Chile and US population centers that experienced the hospitalization surge make an importation pathway plausible. Australia’s activity was either later, smaller, or less temporally aligned in this season, reducing its explanatory power. Other candidates (travel pressure, humidity drop) are plausible contributors but lack the same direct temporal alignment and observed epidemic signal strength as Chile in this instance.","{
-  ""predicted_candidate_id"": ""signal_chile_flu"",
-  ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile flu activity is the best-supported explanation because its seasonal peak led US hospitalizations temporally and its epidemic magnitude and timing align more closely with the missed US hospitalization peak than Australia. Chile’s peak occurs earlier in the southern-hemisphere season and therefore provides a clearer leading signal that can presage northern-hemisphere importations. In addition, flight and travel connections between Chile and US population centers that experienced the hospitalization surge make an importation pathway plausible. Australia’s activity was either later, smaller, or less temporally aligned in this season, reducing its explanatory power. Other candidates (travel pressure, humidity drop) are plausible contributors but lack the same direct temporal alignment and observed epidemic signal strength as Chile in this instance."",
+hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_australia_flu,signal_humidity_drop;signal_travel_pressure,True,"While a humidity drop is biologically plausible to increase influenza transmission, that environmental plausibility is an isolated mechanism without the broader relational evidence connecting it to the observed US hospitalization peak. The humidity-drop hypothesis lacks documented importation or temporal leading-indicator links to US hospitalizations; it does not explain cross-region seeding or timing that would reconcile a southern-hemisphere activity signal with the missed US peak. In contrast, Chile influenza activity has stronger graph-consistent support (temporal and importation relationships) that better account for a sudden, higher-than-predicted US hospitalization peak. Therefore the humidity-drop plausibility should not override the more complete graph evidence implicating Chile activity as the stronger explanation.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""While a humidity drop is biologically plausible to increase influenza transmission, that environmental plausibility is an isolated mechanism without the broader relational evidence connecting it to the observed US hospitalization peak. The humidity-drop hypothesis lacks documented importation or temporal leading-indicator links to US hospitalizations; it does not explain cross-region seeding or timing that would reconcile a southern-hemisphere activity signal with the missed US peak. In contrast, Chile influenza activity has stronger graph-consistent support (temporal and importation relationships) that better account for a sudden, higher-than-predicted US hospitalization peak. Therefore the humidity-drop plausibility should not override the more complete graph evidence implicating Chile activity as the stronger explanation."",
   ""mentioned_evidence_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK""
+    ""POSSIBLE_DRIVER_OF""
   ],
   ""identified_missing_edges"": [
-    ""POSSIBLE_DRIVER_OF""
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
   ],
   ""rejected_candidate_ids"": [
     ""signal_australia_flu""
   ],
   ""weak_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_005,partial_evidence_detection,partial_support_not_best_driver,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure,,"Travel importation plausibly contributes but should be treated as partial support because the available signal primarily reflects movement pathways (an importation link) without direct evidence of timely, quantitative seeding that would act as a leading indicator or a dominant causal driver of the US hospitalization peak. The travel signal can explain some increased risk of introductions but not the observed magnitude and timing of the missed peak by itself. Southern-hemisphere influenza activity (e.g., Chile) aligns better with timing and epidemic momentum that could serve as a leading indicator and plausible proximate driver for the US peak, so travel pressure complements but does not replace that stronger epidemiological explanation.","{
-  ""predicted_candidate_id"": ""signal_travel_pressure"",
-  ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel importation plausibly contributes but should be treated as partial support because the available signal primarily reflects movement pathways (an importation link) without direct evidence of timely, quantitative seeding that would act as a leading indicator or a dominant causal driver of the US hospitalization peak. The travel signal can explain some increased risk of introductions but not the observed magnitude and timing of the missed peak by itself. Southern-hemisphere influenza activity (e.g., Chile) aligns better with timing and epidemic momentum that could serve as a leading indicator and plausible proximate driver for the US peak, so travel pressure complements but does not replace that stronger epidemiological explanation."",
-  ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
+    ""signal_humidity_drop"",
     ""signal_travel_pressure""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_006,weak_candidate_rejection,weak_candidate_not_promoted,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_travel_pressure,False,signal_humidity_drop,,signal_humidity_drop,True,"Humidity drop is a plausible local modulator of influenza transmission but, for this missed US hospitalization peak, it lacks the mechanistic and temporal coverage that would make it a better primary explanation than importation-related factors. The observed failure is a sudden, large elevation in hospitalizations consistent with an introduced surge rather than a gradual amplification from local environmental change. Humidity anomalies typically act as a contributing driver that modifies transmission intensity (partial, local effect) rather than creating synchronized national peaks without concurrent seeding. In contrast, travel/importation pressure provides a direct pathway to introduce new infections and strain variants at scale and can align temporally with rapid nationwide increases. Therefore humidity drop should not be promoted above importation-related candidates as the principal explanation.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Humidity drop is a plausible local modulator of influenza transmission but, for this missed US hospitalization peak, it lacks the mechanistic and temporal coverage that would make it a better primary explanation than importation-related factors. The observed failure is a sudden, large elevation in hospitalizations consistent with an introduced surge rather than a gradual amplification from local environmental change. Humidity anomalies typically act as a contributing driver that modifies transmission intensity (partial, local effect) rather than creating synchronized national peaks without concurrent seeding. In contrast, travel/importation pressure provides a direct pathway to introduce new infections and strain variants at scale and can align temporally with rapid nationwide increases. Therefore humidity drop should not be promoted above importation-related candidates as the principal explanation."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_travel_pressure""
-}"
-hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_australia_flu,signal_humidity_drop,True,"While a sudden humidity drop is biologically plausible to increase influenza transmissibility locally, environmental plausibility alone does not account for the broader epidemiological evidence linking this US hospitalization peak to influenza activity in Chile. Graph-derived signals indicating Chile influenza activity provide temporal and cross-regional correlation and plausible importation pathways that explain the timing and magnitude of the US peak (consistent with known hemispheric seasonality and travel-mediated spread). The humidity anomaly lacks direct edges showing it led or imported cases into the US hospitalization signal and does not explain cross-border synchronization; therefore it is a weaker, local-only hypothesis and should not override the stronger Chile signal highlighted by the graph.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""While a sudden humidity drop is biologically plausible to increase influenza transmissibility locally, environmental plausibility alone does not account for the broader epidemiological evidence linking this US hospitalization peak to influenza activity in Chile. Graph-derived signals indicating Chile influenza activity provide temporal and cross-regional correlation and plausible importation pathways that explain the timing and magnitude of the US peak (consistent with known hemispheric seasonality and travel-mediated spread). The humidity anomaly lacks direct edges showing it led or imported cases into the US hospitalization signal and does not explain cross-border synchronization; therefore it is a weaker, local-only hypothesis and should not override the stronger Chile signal highlighted by the graph."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_australia_flu""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR,1.0,0.5,IMPORTATION_LINK,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_australia_flu,,"Although Australia provided a southern-hemisphere signal, its seasonal peak was smaller and/or temporally misaligned with the US missed hospitalization peak. Possible reasons: Australia's peak amplitude that season was lower than Chile's (smaller upstream epidemic), timing lag or phase mismatch reduced its utility as a lead signal for the US peak, and there is weaker travel/epidemiological connectivity between Australia and the US compared with Chile in the relevant time window (fewer traveler-seeding events or different travel routes). Surveillance differences (differences in sampling, case ascertainment, or reporting delays) can also make Australia's measured activity appear weaker relative to Chile even if true incidence was similar. These factors make Australia a weaker leading indicator for this specific US hospitalization surge than Chile.","{
+hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR,1.0,0.5,IMPORTATION_LINK,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu,,"Although Australian influenza shows southern-hemisphere seasonality that can lead US models to treat it as a leading indicator, its signal was weaker than Chile's for this US hospitalization peak because: Australian seasonal amplitude this cycle was lower than Chile's (smaller epidemic magnitude), Australia has weaker travel/seed linkages into the US during the relevant time window (fewer importation opportunities), and timing differences meant Australia's peak either led too early or was less temporally aligned with the US surge. Thus Australia provides a leading but low-amplitude signal that is insufficient to explain the missed US hospitalization peak compared with the stronger importation- and magnitude-supported Chile signal.","{
   ""predicted_candidate_id"": ""signal_australia_flu"",
   ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Although Australia provided a southern-hemisphere signal, its seasonal peak was smaller and/or temporally misaligned with the US missed hospitalization peak. Possible reasons: Australia's peak amplitude that season was lower than Chile's (smaller upstream epidemic), timing lag or phase mismatch reduced its utility as a lead signal for the US peak, and there is weaker travel/epidemiological connectivity between Australia and the US compared with Chile in the relevant time window (fewer traveler-seeding events or different travel routes). Surveillance differences (differences in sampling, case ascertainment, or reporting delays) can also make Australia's measured activity appear weaker relative to Chile even if true incidence was similar. These factors make Australia a weaker leading indicator for this specific US hospitalization surge than Chile."",
+  ""explanation"": ""Although Australian influenza shows southern-hemisphere seasonality that can lead US models to treat it as a leading indicator, its signal was weaker than Chile's for this US hospitalization peak because: Australian seasonal amplitude this cycle was lower than Chile's (smaller epidemic magnitude), Australia has weaker travel/seed linkages into the US during the relevant time window (fewer importation opportunities), and timing differences meant Australia's peak either led too early or was less temporally aligned with the US surge. Thus Australia provides a leading but low-amplitude signal that is insufficient to explain the missed US hospitalization peak compared with the stronger importation- and magnitude-supported Chile signal."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR""
   ],
@@ -139,23 +140,22 @@ hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,si
     ""IMPORTATION_LINK"",
     ""POSSIBLE_DRIVER_OF""
   ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
+  ""rejected_candidate_ids"": [],
   ""weak_candidate_ids"": [
     ""signal_australia_flu""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_australia_flu,False,,signal_humidity_drop,signal_travel_pressure,,"Travel Importation Pressure provides importation-related mechanistic support (plausible seeding of cases), but it lacks direct evidence that it functioned as a leading indicator of the observed US hospitalization peak. Importation links explain why additional introductions could raise local transmission risk, but without a demonstrated temporal/predictive relationship to the target signal (e.g., that rises in travel pressure preceded and predicted increases in US hospitalizations), the importation signal alone does not fully explain a missed peak. Therefore importation support is partial: it identifies a mechanism for additional risk but not the lead-time predictive connection to the hospitalization outcome.","{
+hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure,,"Travel importation pressure provides mechanistic support that infections could be brought into the US (an importation pathway). However, by itself it does not supply target-leading evidence that would indicate timing or magnitude of a forthcoming US hospitalization peak. Without a documented leading-indicator relationship (e.g., southern-hemisphere influenza activity consistently leading US hospitalizations, or a direct statistical LEADING_INDICATOR_FOR link to signal_us_hosp), importation evidence leaves a gap: it explains a plausible source but not the temporal signal needed to anticipate the missed peak. Therefore importation support is partial — it strengthens plausibility of the mechanism but is insufficient alone to explain why the model underpredicted the hospitalization peak.","{
   ""predicted_candidate_id"": ""signal_travel_pressure"",
   ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure provides importation-related mechanistic support (plausible seeding of cases), but it lacks direct evidence that it functioned as a leading indicator of the observed US hospitalization peak. Importation links explain why additional introductions could raise local transmission risk, but without a demonstrated temporal/predictive relationship to the target signal (e.g., that rises in travel pressure preceded and predicted increases in US hospitalizations), the importation signal alone does not fully explain a missed peak. Therefore importation support is partial: it identifies a mechanism for additional risk but not the lead-time predictive connection to the hospitalization outcome."",
+  ""explanation"": ""Travel importation pressure provides mechanistic support that infections could be brought into the US (an importation pathway). However, by itself it does not supply target-leading evidence that would indicate timing or magnitude of a forthcoming US hospitalization peak. Without a documented leading-indicator relationship (e.g., southern-hemisphere influenza activity consistently leading US hospitalizations, or a direct statistical LEADING_INDICATOR_FOR link to signal_us_hosp), importation evidence leaves a gap: it explains a plausible source but not the temporal signal needed to anticipate the missed peak. Therefore importation support is partial — it strengthens plausibility of the mechanism but is insufficient alone to explain why the model underpredicted the hospitalization peak."",
   ""mentioned_evidence_edges"": [
     ""IMPORTATION_LINK""
   ],
   ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR""
+    ""LEADING_INDICATOR_FOR"",
+    ""POSSIBLE_DRIVER_OF""
   ],
   ""rejected_candidate_ids"": [
     ""signal_humidity_drop""
@@ -163,25 +163,99 @@ hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pr
   ""weak_candidate_ids"": [
     ""signal_travel_pressure""
   ],
-  ""stronger_candidate_id"": ""signal_australia_flu""
+  ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_010,strongest_candidate_completeness,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0.6666666666666666,,POSSIBLE_DRIVER_OF,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_travel_pressure;signal_humidity_drop,signal_australia_flu,,"Chile influenza activity is the most complete graph-supported candidate because it provides both temporal precedent and plausible transmission linkage to the US peak: historical seasonal alignment in the southern hemisphere makes Chile a reliable leading indicator for subsequent northern-hemisphere outbreaks, and travel-mediated connections create an importation pathway that can seed US hospitalizations. Other candidates either lack the combined temporal + importation evidence (e.g., Australia is similar but has sparser linkage in the available graph) or represent mechanistic hypotheses without the same multi-edge support (travel pressure and humidity anomalies).","{
+hard_case_010,strongest_candidate_completeness,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile influenza activity is the most complete graph-supported candidate because it exhibits the fullest set of supporting relationships linking a southern-hemisphere season to a subsequent US hospitalization surge: temporally leading southern-hemisphere influenza activity, an inferred importation connection via travel pathways, and a plausible causal role as a driver of increased US cases/hospitalizations. Together these relationships form a coherent mechanistic path that explains how a late-season peak in Chile could presage and contribute to a missed US hospitalization peak, making it a more complete explanation than the other candidates.","{
   ""predicted_candidate_id"": ""signal_chile_flu"",
   ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile influenza activity is the most complete graph-supported candidate because it provides both temporal precedent and plausible transmission linkage to the US peak: historical seasonal alignment in the southern hemisphere makes Chile a reliable leading indicator for subsequent northern-hemisphere outbreaks, and travel-mediated connections create an importation pathway that can seed US hospitalizations. Other candidates either lack the combined temporal + importation evidence (e.g., Australia is similar but has sparser linkage in the available graph) or represent mechanistic hypotheses without the same multi-edge support (travel pressure and humidity anomalies)."",
+  ""explanation"": ""Chile influenza activity is the most complete graph-supported candidate because it exhibits the fullest set of supporting relationships linking a southern-hemisphere season to a subsequent US hospitalization surge: temporally leading southern-hemisphere influenza activity, an inferred importation connection via travel pathways, and a plausible causal role as a driver of increased US cases/hospitalizations. Together these relationships form a coherent mechanistic path that explains how a late-season peak in Chile could presage and contribute to a missed US hospitalization peak, making it a more complete explanation than the other candidates."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK""
-  ],
-  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK"",
     ""POSSIBLE_DRIVER_OF""
   ],
+  ""identified_missing_edges"": [],
   ""rejected_candidate_ids"": [
+    ""signal_australia_flu"",
     ""signal_travel_pressure"",
     ""signal_humidity_drop""
   ],
   ""weak_candidate_ids"": [
-    ""signal_australia_flu""
+    ""signal_australia_flu"",
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_011,candidate_contrast,strongest_supported_candidate,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,1.0,0.6666666666666666,,IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,,signal_travel_importation_dengue,signal_rainfall_anomaly;signal_temperature_anomaly,,"The Mosquito Vector Index directly measures vector abundance and infection potential, providing both a proximate driver of transmission (vector abundance increases human infection risk) and a leading indicator of case rises, making it the most complete candidate to explain an underpredicted regional outbreak peak. It links mechanistically to increased transmission risk and typically precedes reported case increases, whereas climate anomalies are indirect drivers and importation pressure explains introductions but not local amplification.","{
+  ""predicted_candidate_id"": ""signal_vector_index"",
+  ""predicted_candidate_name"": ""Mosquito Vector Index"",
+  ""explanation"": ""The Mosquito Vector Index directly measures vector abundance and infection potential, providing both a proximate driver of transmission (vector abundance increases human infection risk) and a leading indicator of case rises, making it the most complete candidate to explain an underpredicted regional outbreak peak. It links mechanistically to increased transmission risk and typically precedes reported case increases, whereas climate anomalies are indirect drivers and importation pressure explains introductions but not local amplification."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_travel_importation_dengue""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_rainfall_anomaly"",
+    ""signal_temperature_anomaly""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_012,partial_evidence_detection,missing_edge_detection,signal_rainfall_anomaly,signal_rainfall_anomaly,Rainfall Anomaly,True,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,0.5,IMPORTATION_LINK,LEADING_INDICATOR_FOR,0.0,0,signal_vector_index,signal_vector_index,True,,signal_temperature_anomaly;signal_travel_importation_dengue,signal_rainfall_anomaly,,"Rainfall anomaly plausibly affects mosquito habitat and thus can be a driver of transmission (POSSIBLE_DRIVER_OF) but lacks an observed leading-indicator relationship with reported case counts that would make it as complete for outbreak detection as Mosquito Vector Index, which more directly serves as a leading indicator.","{
+  ""predicted_candidate_id"": ""signal_rainfall_anomaly"",
+  ""predicted_candidate_name"": ""Rainfall Anomaly"",
+  ""explanation"": ""Rainfall anomaly plausibly affects mosquito habitat and thus can be a driver of transmission (POSSIBLE_DRIVER_OF) but lacks an observed leading-indicator relationship with reported case counts that would make it as complete for outbreak detection as Mosquito Vector Index, which more directly serves as a leading indicator."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_temperature_anomaly"",
+    ""signal_travel_importation_dengue""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_rainfall_anomaly""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_013,weak_candidate_rejection,weak_candidate_rejection,signal_temperature_anomaly,signal_temperature_anomaly,Temperature Anomaly,True,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,signal_temperature_anomaly,,signal_temperature_anomaly,True,"Temperature anomaly is biologically plausible for dengue (affects mosquito development, biting and virus replication), but in the Puerto Rico prototype it is a weak/incomplete explanation because: (1) the signal is often coarse in space and time relative to local transmission foci, so it does not function as a reliable leading indicator of case peaks; (2) the prototype lacks entomological or surveillance links that show a direct causal chain from temperature anomalies to increased vector abundance or transmission intensity; (3) temperature effects are confounded by rainfall, human behavior, and control efforts, so without concurrent vector index or importation evidence the anomaly alone cannot explain a missed peak. Thus the candidate is plausible but insufficiently connected in the graph and should be treated as weak unless paired with vector surveillance or importation signals.","{
+  ""predicted_candidate_id"": ""signal_temperature_anomaly"",
+  ""predicted_candidate_name"": ""Temperature Anomaly"",
+  ""explanation"": ""Temperature anomaly is biologically plausible for dengue (affects mosquito development, biting and virus replication), but in the Puerto Rico prototype it is a weak/incomplete explanation because: (1) the signal is often coarse in space and time relative to local transmission foci, so it does not function as a reliable leading indicator of case peaks; (2) the prototype lacks entomological or surveillance links that show a direct causal chain from temperature anomalies to increased vector abundance or transmission intensity; (3) temperature effects are confounded by rainfall, human behavior, and control efforts, so without concurrent vector index or importation evidence the anomaly alone cannot explain a missed peak. Thus the candidate is plausible but insufficiently connected in the graph and should be treated as weak unless paired with vector surveillance or importation signals."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_temperature_anomaly""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_014,partial_evidence_detection,mechanism_only_support,signal_travel_importation_dengue,signal_travel_importation_dengue,Dengue Travel Importation Pressure,True,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK,1.0,0.5,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_travel_importation_dengue,,"There is prototype/importation evidence linking travel-related introductions to the Puerto Rico dengue mechanism, so this candidate partially supports the outbreak explanation. However, it lacks observed target-leading indicator evidence showing that importation pressure preceded and predicted the regional case peak in the target signal. Without a demonstrated lead relationship to local cases, the support remains partial (importation plausibly necessary but not shown to have driven the missed peak).","{
+  ""predicted_candidate_id"": ""signal_travel_importation_dengue"",
+  ""predicted_candidate_name"": ""Dengue Travel Importation Pressure"",
+  ""explanation"": ""There is prototype/importation evidence linking travel-related introductions to the Puerto Rico dengue mechanism, so this candidate partially supports the outbreak explanation. However, it lacks observed target-leading indicator evidence showing that importation pressure preceded and predicted the regional case peak in the target signal. Without a demonstrated lead relationship to local cases, the support remains partial (importation plausibly necessary but not shown to have driven the missed peak)."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_travel_importation_dengue""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
 }"

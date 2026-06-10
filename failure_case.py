@@ -11,8 +11,22 @@ FAILURE_CASE = {
     "summary": "US influenza mechanism underpredicted a missed hospitalization peak.",
 }
 
+DENGUE_FAILURE_CASE = {
+    "id": "failure_case_dengue_regional_outbreak_001",
+    "mechanism_id": "eq_dengue_base",
+    "region": "Puerto Rico",
+    "disease": "Dengue",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_pr_dengue_cases",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "climate_vector_surveillance_and_importation_signals",
+    "summary": "Puerto Rico dengue mechanism underpredicted a regional outbreak peak.",
+}
+
 FAILURE_CASES_BY_ID = {
     FAILURE_CASE["id"]: FAILURE_CASE,
+    DENGUE_FAILURE_CASE["id"]: DENGUE_FAILURE_CASE,
 }
 
 FAILURE_CASE_CANDIDATES_BY_ID = {
@@ -32,6 +46,24 @@ FAILURE_CASE_CANDIDATES_BY_ID = {
         {
             "candidate_id": "signal_humidity_drop",
             "candidate_name": "Humidity Drop Anomaly",
+        },
+    ],
+    DENGUE_FAILURE_CASE["id"]: [
+        {
+            "candidate_id": "signal_rainfall_anomaly",
+            "candidate_name": "Rainfall Anomaly",
+        },
+        {
+            "candidate_id": "signal_temperature_anomaly",
+            "candidate_name": "Temperature Anomaly",
+        },
+        {
+            "candidate_id": "signal_vector_index",
+            "candidate_name": "Mosquito Vector Index",
+        },
+        {
+            "candidate_id": "signal_travel_importation_dengue",
+            "candidate_name": "Dengue Travel Importation Pressure",
         },
     ],
 }

@@ -220,5 +220,91 @@
       "unsupported causal proof",
       "invented dataset"
     ]
+  },
+  {
+    "id": "hard_case_011",
+    "task_type": "candidate_contrast",
+    "expected_answer_type": "strongest_supported_candidate",
+    "question": "For the Puerto Rico dengue regional outbreak underprediction, why is Mosquito Vector Index the most complete prototype graph-supported candidate?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_vector_index",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Mosquito Vector Index lacks LEADING_INDICATOR_FOR",
+      "claim Mosquito Vector Index lacks IMPORTATION_LINK",
+      "claim Mosquito Vector Index lacks POSSIBLE_DRIVER_OF",
+      "unsupported causal proof"
+    ]
+  },
+  {
+    "id": "hard_case_012",
+    "task_type": "partial_evidence_detection",
+    "expected_answer_type": "missing_edge_detection",
+    "question": "Rainfall Anomaly has prototype climate support for the Puerto Rico dengue outbreak case. Which evidence edge is missing that makes it less complete than Mosquito Vector Index?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_rainfall_anomaly",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "IMPORTATION_LINK"
+    ],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Rainfall Anomaly has IMPORTATION_LINK",
+      "claim Rainfall Anomaly is stronger than Mosquito Vector Index",
+      "unsupported causal proof"
+    ]
+  },
+  {
+    "id": "hard_case_013",
+    "task_type": "weak_candidate_rejection",
+    "expected_answer_type": "weak_candidate_rejection",
+    "question": "Temperature Anomaly is environmentally plausible for dengue transmission. Why should it be treated as weak or incomplete in the Puerto Rico dengue prototype graph?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_temperature_anomaly",
+    "expected_present_edges": [
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK"
+    ],
+    "expected_weak_candidate_id": "signal_temperature_anomaly",
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Temperature Anomaly has LEADING_INDICATOR_FOR",
+      "claim Temperature Anomaly has IMPORTATION_LINK",
+      "claim Temperature Anomaly is stronger than Mosquito Vector Index",
+      "unsupported causal proof"
+    ]
+  },
+  {
+    "id": "hard_case_014",
+    "task_type": "partial_evidence_detection",
+    "expected_answer_type": "mechanism_only_support",
+    "question": "Dengue Travel Importation Pressure supports the Puerto Rico dengue mechanism through prototype importation evidence. Why is it still partial support without target leading-indicator evidence?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_travel_importation_dengue",
+    "expected_present_edges": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR"
+    ],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Dengue Travel Importation Pressure has LEADING_INDICATOR_FOR",
+      "claim Dengue Travel Importation Pressure is stronger than Mosquito Vector Index",
+      "unsupported causal proof"
+    ]
   }
 ]

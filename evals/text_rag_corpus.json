@@ -134,5 +134,57 @@
     "source_type": "model_revision_background",
     "related_candidate_id": null,
     "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_pr_dengue_vector_index",
+    "title": "Mosquito Vector Index",
+    "text": "Mosquito Vector Index is a prototype candidate hidden driver for the Puerto Rico dengue regional outbreak underprediction case. For hard-pilot metric compatibility, the prototype graph treats this signal as a LEADING_INDICATOR_FOR Puerto Rico dengue cases, an IMPORTATION_LINK to the Puerto Rico dengue base mechanism, and a POSSIBLE_DRIVER_OF that mechanism. This makes it the strongest current candidate in the dengue prototype evidence graph.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_vector_index",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_pr_dengue_rainfall_anomaly",
+    "title": "Rainfall Anomaly",
+    "text": "Rainfall Anomaly is a prototype climate candidate for the Puerto Rico dengue regional outbreak underprediction case. The prototype graph includes LEADING_INDICATOR_FOR evidence for Puerto Rico dengue cases and POSSIBLE_DRIVER_OF evidence for the Puerto Rico dengue base mechanism. It does not include an IMPORTATION_LINK relationship to the dengue mechanism, so it should be treated as partial support rather than a complete candidate.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_rainfall_anomaly",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_pr_dengue_temperature_anomaly",
+    "title": "Temperature Anomaly",
+    "text": "Temperature Anomaly is a prototype climate candidate for the Puerto Rico dengue regional outbreak underprediction case. In the prototype graph it is connected to the Puerto Rico dengue base mechanism only through a POSSIBLE_DRIVER_OF relationship. It lacks LEADING_INDICATOR_FOR evidence for Puerto Rico dengue cases and lacks IMPORTATION_LINK evidence to the dengue mechanism, so it should be treated as weak or incomplete.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_temperature_anomaly",
+    "edge_types": [
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_pr_dengue_travel_importation",
+    "title": "Dengue Travel Importation Pressure",
+    "text": "Dengue Travel Importation Pressure is a prototype importation candidate for the Puerto Rico dengue regional outbreak underprediction case. The prototype graph includes IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships to the Puerto Rico dengue base mechanism. It does not include a LEADING_INDICATOR_FOR relationship to Puerto Rico dengue cases, so it should be treated as partial mechanism/importation support rather than full support.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_travel_importation_dengue",
+    "edge_types": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_pr_dengue_failure_case",
+    "title": "Puerto Rico Dengue Regional Outbreak Failure Case",
+    "text": "The Puerto Rico dengue regional outbreak failure case describes a dengue mechanism that underpredicted a regional outbreak peak. This is a prototype second scenario used to test whether the hard-pilot evaluation pipeline can handle a different disease, region, mechanism, target signal, and candidate set while preserving the same hard-pilot relationship-type metrics.",
+    "source_type": "failure_case_summary",
+    "related_candidate_id": null,
+    "edge_types": []
   }
 ]
