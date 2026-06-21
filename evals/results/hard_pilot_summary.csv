@@ -1,5 +1,5 @@
 method_name,case_count,candidate_accuracy,avg_present_edge_precision,avg_present_edge_recall,avg_missing_edge_recall,total_missing_edge_false_claim_count,stronger_candidate_identification_accuracy,weak_candidate_rejection_accuracy
-KG-only,14,,1.000,1.000,1.000,0,1.000,1.000
-LLM-only,14,1.000,1.000,0.726,0.929,0,0.929,1.000
-Text-RAG,14,0.929,0.845,0.857,0.821,3,0.643,1.000
-GraphRAG,14,1.000,1.000,1.000,1.000,0,1.000,1.000
+KG-only,24,,1.000,1.000,1.000,0,1.000,1.000
+LLM-only,24,1.000,0.979,0.771,0.938,1,0.875,1.000
+Text-RAG,24,1.000,0.938,0.917,0.958,1,0.708,1.000
+GraphRAG,24,1.000,1.000,1.000,1.000,0,1.000,1.000

@@ -306,5 +306,226 @@
       "claim Dengue Travel Importation Pressure is stronger than Mosquito Vector Index",
       "unsupported causal proof"
     ]
+  },
+  {
+    "id": "hard_case_015",
+    "task_type": "strongest_candidate_completeness",
+    "expected_answer_type": "complete_support_no_overclaim",
+    "question": "Chile influenza activity has all three prototype graph support relationships for the missed US hospitalization peak. Why should it be treated as the strongest graph-supported candidate without claiming confirmed causality?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Chile lacks LEADING_INDICATOR_FOR",
+      "claim Chile lacks IMPORTATION_LINK",
+      "claim Chile lacks POSSIBLE_DRIVER_OF",
+      "claim confirmed causality",
+      "unsupported causal proof"
+    ]
+  },
+  {
+    "id": "hard_case_016",
+    "task_type": "missing_edge_detection",
+    "expected_answer_type": "partial_support_missing_importation",
+    "question": "Australia influenza activity has leading-indicator and possible-driver support. Why does the missing IMPORTATION_LINK still make it less complete than Chile influenza activity?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_australia_flu",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "IMPORTATION_LINK"
+    ],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Australia has IMPORTATION_LINK",
+      "claim Australia is stronger than Chile",
+      "claim confirmed causality",
+      "invented dataset"
+    ]
+  },
+  {
+    "id": "hard_case_017",
+    "task_type": "missing_edge_detection",
+    "expected_answer_type": "partial_support_missing_leading_indicator",
+    "question": "Travel Importation Pressure has importation and possible-driver support for the US flu mechanism. Why does the missing LEADING_INDICATOR_FOR relationship limit its support for the missed hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_travel_pressure",
+    "expected_present_edges": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR"
+    ],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Travel Importation Pressure has LEADING_INDICATOR_FOR",
+      "claim Travel Importation Pressure is stronger than Chile",
+      "claim confirmed causality",
+      "invented relationship"
+    ]
+  },
+  {
+    "id": "hard_case_018",
+    "task_type": "distractor_noisy_candidate",
+    "expected_answer_type": "plausible_but_weak_candidate",
+    "question": "Humidity Drop Anomaly sounds biologically plausible for influenza transmission. Why should the system still treat it as weak evidence in this graph-supported model revision task?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_humidity_drop",
+    "expected_present_edges": [
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK"
+    ],
+    "expected_weak_candidate_id": "signal_humidity_drop",
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Humidity Drop Anomaly has LEADING_INDICATOR_FOR",
+      "claim Humidity Drop Anomaly has IMPORTATION_LINK",
+      "claim Humidity Drop Anomaly is stronger than Chile",
+      "claim confirmed causality"
+    ]
+  },
+  {
+    "id": "hard_case_019",
+    "task_type": "candidate_contrast",
+    "expected_answer_type": "strongest_candidate_contrast_against_partial_candidates",
+    "question": "Why is Chile influenza activity stronger than both Australia influenza activity and Travel Importation Pressure for the missed US hospitalization peak?",
+    "failure_case_id": "failure_case_us_flu_missed_peak_001",
+    "expected_candidate_id": "signal_chile_flu",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [],
+    "expected_stronger_candidate_id": "signal_chile_flu",
+    "must_not_include": [
+      "claim Chile lacks LEADING_INDICATOR_FOR",
+      "claim Chile lacks IMPORTATION_LINK",
+      "claim Chile lacks POSSIBLE_DRIVER_OF",
+      "claim Australia is stronger than Chile",
+      "claim Travel Importation Pressure is stronger than Chile",
+      "claim confirmed causality"
+    ]
+  },
+  {
+    "id": "hard_case_020",
+    "task_type": "strongest_candidate_completeness",
+    "expected_answer_type": "complete_support_no_overclaim",
+    "question": "Mosquito Vector Index has all three prototype support relationships in the Puerto Rico dengue graph. Why does that make it the most complete graph-supported candidate while still not proving real-world causality?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_vector_index",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Mosquito Vector Index lacks LEADING_INDICATOR_FOR",
+      "claim Mosquito Vector Index lacks IMPORTATION_LINK",
+      "claim Mosquito Vector Index lacks POSSIBLE_DRIVER_OF",
+      "claim confirmed causality"
+    ]
+  },
+  {
+    "id": "hard_case_021",
+    "task_type": "missing_edge_detection",
+    "expected_answer_type": "partial_support_missing_importation",
+    "question": "Rainfall Anomaly has leading-indicator and possible-driver support in the dengue prototype graph. Which missing relationship prevents it from being as complete as Mosquito Vector Index?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_rainfall_anomaly",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "IMPORTATION_LINK"
+    ],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Rainfall Anomaly has IMPORTATION_LINK",
+      "claim Rainfall Anomaly is stronger than Mosquito Vector Index",
+      "claim confirmed causality"
+    ]
+  },
+  {
+    "id": "hard_case_022",
+    "task_type": "missing_edge_detection",
+    "expected_answer_type": "partial_support_missing_leading_indicator",
+    "question": "Dengue Travel Importation Pressure has importation and possible-driver support. Why is it still incomplete without a LEADING_INDICATOR_FOR relationship to Puerto Rico dengue cases?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_travel_importation_dengue",
+    "expected_present_edges": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR"
+    ],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Dengue Travel Importation Pressure has LEADING_INDICATOR_FOR",
+      "claim Dengue Travel Importation Pressure is stronger than Mosquito Vector Index",
+      "claim confirmed causality"
+    ]
+  },
+  {
+    "id": "hard_case_023",
+    "task_type": "distractor_noisy_candidate",
+    "expected_answer_type": "plausible_but_weak_candidate",
+    "question": "Temperature Anomaly is environmentally plausible for dengue transmission. Why should plausibility alone not make it a strong hidden-driver explanation in the Puerto Rico dengue prototype graph?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_temperature_anomaly",
+    "expected_present_edges": [
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK"
+    ],
+    "expected_weak_candidate_id": "signal_temperature_anomaly",
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Temperature Anomaly has LEADING_INDICATOR_FOR",
+      "claim Temperature Anomaly has IMPORTATION_LINK",
+      "claim Temperature Anomaly is stronger than Mosquito Vector Index",
+      "claim confirmed causality"
+    ]
+  },
+  {
+    "id": "hard_case_024",
+    "task_type": "candidate_contrast",
+    "expected_answer_type": "strongest_candidate_contrast_against_partial_candidates",
+    "question": "Why is Mosquito Vector Index stronger than both Rainfall Anomaly and Dengue Travel Importation Pressure in the Puerto Rico dengue prototype graph?",
+    "failure_case_id": "failure_case_dengue_regional_outbreak_001",
+    "expected_candidate_id": "signal_vector_index",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ],
+    "expected_missing_edges": [],
+    "expected_stronger_candidate_id": "signal_vector_index",
+    "must_not_include": [
+      "claim Mosquito Vector Index lacks LEADING_INDICATOR_FOR",
+      "claim Mosquito Vector Index lacks IMPORTATION_LINK",
+      "claim Mosquito Vector Index lacks POSSIBLE_DRIVER_OF",
+      "claim Rainfall Anomaly is stronger than Mosquito Vector Index",
+      "claim Dengue Travel Importation Pressure is stronger than Mosquito Vector Index",
+      "claim confirmed causality"
+    ]
   }
 ]
