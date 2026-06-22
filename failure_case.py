@@ -24,9 +24,24 @@ DENGUE_FAILURE_CASE = {
     "summary": "Puerto Rico dengue mechanism underpredicted a regional outbreak peak.",
 }
 
+
+RSV_FAILURE_CASE = {
+    "id": "failure_case_rsv_pediatric_hosp_underprediction_001",
+    "mechanism_id": "eq_rsv_pediatric_base",
+    "region": "Southeast US",
+    "disease": "RSV",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_peak",
+    "target_signal": "signal_rsv_pediatric_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "rsv_surveillance_contact_mobility_and_weather_signals",
+    "summary": "Southeast US pediatric RSV mechanism underpredicted a hospitalization peak.",
+}
+
 FAILURE_CASES_BY_ID = {
     FAILURE_CASE["id"]: FAILURE_CASE,
     DENGUE_FAILURE_CASE["id"]: DENGUE_FAILURE_CASE,
+    RSV_FAILURE_CASE["id"]: RSV_FAILURE_CASE,
 }
 
 FAILURE_CASE_CANDIDATES_BY_ID = {
@@ -64,6 +79,24 @@ FAILURE_CASE_CANDIDATES_BY_ID = {
         {
             "candidate_id": "signal_travel_importation_dengue",
             "candidate_name": "Dengue Travel Importation Pressure",
+        },
+    ],
+    RSV_FAILURE_CASE["id"]: [
+        {
+            "candidate_id": "signal_regional_rsv_early",
+            "candidate_name": "Regional RSV Early Signal",
+        },
+        {
+            "candidate_id": "signal_school_reopening_pressure",
+            "candidate_name": "School Reopening Contact Pressure",
+        },
+        {
+            "candidate_id": "signal_mobility_pressure_rsv",
+            "candidate_name": "RSV Mobility Pressure",
+        },
+        {
+            "candidate_id": "signal_cold_weather_anomaly_rsv",
+            "candidate_name": "Cold Weather Anomaly",
         },
     ],
 }

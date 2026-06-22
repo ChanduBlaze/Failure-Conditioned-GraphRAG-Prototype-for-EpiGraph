@@ -58,6 +58,34 @@ GRAPH = {
         {"id": "paper_vector_surveillance", "type": "Paper", "name": "Paper on Vector Surveillance and Dengue Risk"},
         {"id": "paper_dengue_climate", "type": "Paper", "name": "Paper on Climate and Dengue Dynamics"},
         {"id": "paper_dengue_importation", "type": "Paper", "name": "Paper on Dengue Importation Pressure"},
+
+        # Prototype RSV scenario for additional multi-failure-case evaluation.
+        # These edges reuse the same hard-pilot relationship types for metric
+        # compatibility, not as a final scientific claim about RSV causality.
+        {"id": "disease_rsv", "type": "Disease", "name": "Respiratory Syncytial Virus"},
+        {"id": "region_southeast_us", "type": "Region", "name": "Southeast United States"},
+        {"id": "region_rsv_surveillance_network", "type": "Region", "name": "Regional RSV Surveillance Network"},
+        {"id": "eq_rsv_pediatric_base", "type": "MechanismEquation", "name": "Southeast US Pediatric RSV Base Mechanism"},
+        {"id": "state_i_rsv_peds", "type": "StateVariable", "name": "Infectious Pediatric RSV Population"},
+        {"id": "param_beta_rsv_peds", "type": "Parameter", "name": "Pediatric RSV Transmission Rate"},
+        {"id": "signal_rsv_pediatric_hosp", "type": "Signal", "name": "Pediatric RSV Hospitalizations"},
+        {"id": "signal_regional_rsv_early", "type": "Signal", "name": "Regional RSV Early Signal"},
+        {"id": "signal_school_reopening_pressure", "type": "Signal", "name": "School Reopening Contact Pressure"},
+        {"id": "signal_mobility_pressure_rsv", "type": "Signal", "name": "RSV Mobility Pressure"},
+        {"id": "signal_cold_weather_anomaly_rsv", "type": "Signal", "name": "Cold Weather Anomaly"},
+        {"id": "context_rsv_surveillance", "type": "Context", "name": "RSV Surveillance Lead Signal"},
+        {"id": "context_school_contact", "type": "Context", "name": "School Contact Pattern Shift"},
+        {"id": "context_rsv_mobility", "type": "Context", "name": "Respiratory Virus Mobility Pressure"},
+        {"id": "context_rsv_climate", "type": "Context", "name": "RSV Weather Forcing"},
+        {"id": "dataset_rsv_pediatric_hosp", "type": "Dataset", "name": "Pediatric RSV Hospitalization Dataset"},
+        {"id": "dataset_regional_rsv_early", "type": "Dataset", "name": "Regional RSV Early Signal Dataset"},
+        {"id": "dataset_school_reopening", "type": "Dataset", "name": "School Reopening Contact Dataset"},
+        {"id": "dataset_mobility_pressure_rsv", "type": "Dataset", "name": "RSV Mobility Pressure Dataset"},
+        {"id": "dataset_cold_weather_rsv", "type": "Dataset", "name": "Cold Weather RSV Dataset"},
+        {"id": "paper_rsv_surveillance", "type": "Paper", "name": "Paper on RSV Surveillance and Pediatric Hospitalization Risk"},
+        {"id": "paper_school_contact", "type": "Paper", "name": "Paper on School Contacts and Respiratory Virus Spread"},
+        {"id": "paper_respiratory_mobility", "type": "Paper", "name": "Paper on Mobility and Respiratory Virus Importation"},
+        {"id": "paper_rsv_weather", "type": "Paper", "name": "Paper on Weather and RSV Transmission"},
     ],
     "edges": [
         {"source": "eq_us_flu_base", "type": "MODELS", "target": "disease_influenza"},
@@ -142,6 +170,47 @@ GRAPH = {
         {"source": "signal_travel_importation_dengue", "type": "SUPPORTED_BY", "target": "paper_dengue_importation"},
         {"source": "signal_travel_importation_dengue", "type": "IMPORTATION_LINK", "target": "eq_dengue_base"},
         {"source": "signal_travel_importation_dengue", "type": "POSSIBLE_DRIVER_OF", "target": "eq_dengue_base"},
+
+        {"source": "eq_rsv_pediatric_base", "type": "MODELS", "target": "disease_rsv"},
+        {"source": "eq_rsv_pediatric_base", "type": "APPLIES_TO", "target": "region_southeast_us"},
+        {"source": "eq_rsv_pediatric_base", "type": "USES_VARIABLE", "target": "state_i_rsv_peds"},
+        {"source": "eq_rsv_pediatric_base", "type": "USES_PARAMETER", "target": "param_beta_rsv_peds"},
+
+        {"source": "signal_rsv_pediatric_hosp", "type": "APPLIES_TO", "target": "region_southeast_us"},
+        {"source": "signal_rsv_pediatric_hosp", "type": "MODELS", "target": "disease_rsv"},
+        {"source": "signal_rsv_pediatric_hosp", "type": "HAS_DATASET", "target": "dataset_rsv_pediatric_hosp"},
+
+        {"source": "signal_regional_rsv_early", "type": "APPLIES_TO", "target": "region_rsv_surveillance_network"},
+        {"source": "signal_regional_rsv_early", "type": "MODELS", "target": "disease_rsv"},
+        {"source": "signal_regional_rsv_early", "type": "HAS_CONTEXT", "target": "context_rsv_surveillance"},
+        {"source": "signal_regional_rsv_early", "type": "HAS_DATASET", "target": "dataset_regional_rsv_early"},
+        {"source": "signal_regional_rsv_early", "type": "SUPPORTED_BY", "target": "paper_rsv_surveillance"},
+        {"source": "signal_regional_rsv_early", "type": "LEADING_INDICATOR_FOR", "target": "signal_rsv_pediatric_hosp"},
+        {"source": "signal_regional_rsv_early", "type": "IMPORTATION_LINK", "target": "eq_rsv_pediatric_base"},
+        {"source": "signal_regional_rsv_early", "type": "POSSIBLE_DRIVER_OF", "target": "eq_rsv_pediatric_base"},
+
+        {"source": "signal_school_reopening_pressure", "type": "APPLIES_TO", "target": "region_southeast_us"},
+        {"source": "signal_school_reopening_pressure", "type": "MODELS", "target": "disease_rsv"},
+        {"source": "signal_school_reopening_pressure", "type": "HAS_CONTEXT", "target": "context_school_contact"},
+        {"source": "signal_school_reopening_pressure", "type": "HAS_DATASET", "target": "dataset_school_reopening"},
+        {"source": "signal_school_reopening_pressure", "type": "SUPPORTED_BY", "target": "paper_school_contact"},
+        {"source": "signal_school_reopening_pressure", "type": "LEADING_INDICATOR_FOR", "target": "signal_rsv_pediatric_hosp"},
+        {"source": "signal_school_reopening_pressure", "type": "POSSIBLE_DRIVER_OF", "target": "eq_rsv_pediatric_base"},
+
+        {"source": "signal_mobility_pressure_rsv", "type": "APPLIES_TO", "target": "region_southeast_us"},
+        {"source": "signal_mobility_pressure_rsv", "type": "MODELS", "target": "disease_rsv"},
+        {"source": "signal_mobility_pressure_rsv", "type": "HAS_CONTEXT", "target": "context_rsv_mobility"},
+        {"source": "signal_mobility_pressure_rsv", "type": "HAS_DATASET", "target": "dataset_mobility_pressure_rsv"},
+        {"source": "signal_mobility_pressure_rsv", "type": "SUPPORTED_BY", "target": "paper_respiratory_mobility"},
+        {"source": "signal_mobility_pressure_rsv", "type": "IMPORTATION_LINK", "target": "eq_rsv_pediatric_base"},
+        {"source": "signal_mobility_pressure_rsv", "type": "POSSIBLE_DRIVER_OF", "target": "eq_rsv_pediatric_base"},
+
+        {"source": "signal_cold_weather_anomaly_rsv", "type": "APPLIES_TO", "target": "region_southeast_us"},
+        {"source": "signal_cold_weather_anomaly_rsv", "type": "MODELS", "target": "disease_rsv"},
+        {"source": "signal_cold_weather_anomaly_rsv", "type": "HAS_CONTEXT", "target": "context_rsv_climate"},
+        {"source": "signal_cold_weather_anomaly_rsv", "type": "HAS_DATASET", "target": "dataset_cold_weather_rsv"},
+        {"source": "signal_cold_weather_anomaly_rsv", "type": "SUPPORTED_BY", "target": "paper_rsv_weather"},
+        {"source": "signal_cold_weather_anomaly_rsv", "type": "POSSIBLE_DRIVER_OF", "target": "eq_rsv_pediatric_base"},
     ]
 }
 def build_graph_summary(graph):

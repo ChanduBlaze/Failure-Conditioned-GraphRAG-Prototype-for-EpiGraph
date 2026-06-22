@@ -1,25 +1,28 @@
 case_id,task_type,expected_answer_type,expected_candidate_id,predicted_candidate_id,predicted_candidate_name,candidate_correct,retrieved_candidate_ids,expected_present_edges,mentioned_evidence_edges,present_edge_precision,present_edge_recall,expected_missing_edges,identified_missing_edges,missing_edge_recall,missing_edge_false_claim_count,expected_stronger_candidate_id,stronger_candidate_id,stronger_candidate_identified,expected_weak_candidate_id,rejected_candidate_ids,weak_candidate_ids,weak_candidate_rejected,explanation,raw_response
-hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu,,"Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but it lacks an IMPORTATION_LINK to the US mechanism that Chile has. The missing IMPORTATION_LINK makes Australia weaker than Chile for explaining the missed US hospitalization peak.","{
+hard_case_001,missing_edge_detection,missing_edge_detection,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_travel_pressure;signal_humidity_drop,signal_australia_flu,,"Australia has LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF edges to the US mechanism/target, but lacks an IMPORTATION_LINK edge to the mechanism. Chile includes an IMPORTATION_LINK in its support subgraph, which makes Chile better supported as an explanation for the missed US hospitalization peak.","{
   ""predicted_candidate_id"": ""signal_australia_flu"",
   ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but it lacks an IMPORTATION_LINK to the US mechanism that Chile has. The missing IMPORTATION_LINK makes Australia weaker than Chile for explaining the missed US hospitalization peak."",
+  ""explanation"": ""Australia has LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF edges to the US mechanism/target, but lacks an IMPORTATION_LINK edge to the mechanism. Chile includes an IMPORTATION_LINK in its support subgraph, which makes Chile better supported as an explanation for the missed US hospitalization peak."",
   ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF"",
-    ""LEADING_INDICATOR_FOR""
+    ""LEADING_INDICATOR_FOR"",
+    ""POSSIBLE_DRIVER_OF""
   ],
   ""identified_missing_edges"": [
     ""IMPORTATION_LINK""
   ],
-  ""rejected_candidate_ids"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
   ""weak_candidate_ids"": [
     ""signal_australia_flu""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"Travel Importation Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US mechanism, but it lacks a LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). This missing LEADING_INDICATOR_FOR edge is what prevents it from having the same full support as Chile Influenza Activity, which has IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and LEADING_INDICATOR_FOR.","{
+hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"The Travel Importation Pressure candidate has IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US mechanism in the support subgraph, but it lacks a LEADING_INDICATOR_FOR edge to the US hospitalization target signal. Chile Influenza Activity has all three relationships (IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and LEADING_INDICATOR_FOR), so the missing LEADING_INDICATOR_FOR edge prevents Travel Importation Pressure from having the same full support.","{
   ""predicted_candidate_id"": ""signal_travel_pressure"",
   ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US mechanism, but it lacks a LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). This missing LEADING_INDICATOR_FOR edge is what prevents it from having the same full support as Chile Influenza Activity, which has IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and LEADING_INDICATOR_FOR."",
+  ""explanation"": ""The Travel Importation Pressure candidate has IMPORTATION_LINK and POSSIBLE_DRIVER_OF edges to the US mechanism in the support subgraph, but it lacks a LEADING_INDICATOR_FOR edge to the US hospitalization target signal. Chile Influenza Activity has all three relationships (IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and LEADING_INDICATOR_FOR), so the missing LEADING_INDICATOR_FOR edge prevents Travel Importation Pressure from having the same full support."",
   ""mentioned_evidence_edges"": [
     ""IMPORTATION_LINK"",
     ""POSSIBLE_DRIVER_OF""
@@ -33,10 +36,10 @@ hard_case_002,partial_evidence_detection,partial_evidence_detection,signal_trave
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Humidity Drop Anomaly has only a single POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved subgraph. It lacks an IMPORTATION_LINK to the mechanism and it has no LEADING_INDICATOR_FOR connection to the target signal (US hospitalizations). Because it does not show either an importation pathway or a demonstrated leading relationship to the observed hospitalization peak, the evidence is limited and insufficient to promote it as a fully supported hidden driver. A stronger-supported candidate (signal_chile_flu) has multiple relationship types including IMPORTATION_LINK and LEADING_INDICATOR_FOR in addition to POSSIBLE_DRIVER_OF.","{
+hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"The Humidity Drop Anomaly is only connected to the US influenza mechanism via a single POSSIBLE_DRIVER_OF relationship in the retrieved graph. That limited single-edge support lacks the IMPORTATION_LINK and LEADING_INDICATOR_FOR relationships that would indicate a pathway for introduction or temporal leading evidence linking the candidate to the observed US hospitalization peak. Other candidates (e.g., Chile Influenza Activity) have both IMPORTATION_LINK and LEADING_INDICATOR_FOR in addition to POSSIBLE_DRIVER_OF, so Humidity Drop Anomaly should be treated as a weak/partial candidate rather than a fully supported hidden driver.","{
   ""predicted_candidate_id"": ""signal_humidity_drop"",
   ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Humidity Drop Anomaly has only a single POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved subgraph. It lacks an IMPORTATION_LINK to the mechanism and it has no LEADING_INDICATOR_FOR connection to the target signal (US hospitalizations). Because it does not show either an importation pathway or a demonstrated leading relationship to the observed hospitalization peak, the evidence is limited and insufficient to promote it as a fully supported hidden driver. A stronger-supported candidate (signal_chile_flu) has multiple relationship types including IMPORTATION_LINK and LEADING_INDICATOR_FOR in addition to POSSIBLE_DRIVER_OF."",
+  ""explanation"": ""The Humidity Drop Anomaly is only connected to the US influenza mechanism via a single POSSIBLE_DRIVER_OF relationship in the retrieved graph. That limited single-edge support lacks the IMPORTATION_LINK and LEADING_INDICATOR_FOR relationships that would indicate a pathway for introduction or temporal leading evidence linking the candidate to the observed US hospitalization peak. Other candidates (e.g., Chile Influenza Activity) have both IMPORTATION_LINK and LEADING_INDICATOR_FOR in addition to POSSIBLE_DRIVER_OF, so Humidity Drop Anomaly should be treated as a weak/partial candidate rather than a fully supported hidden driver."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF""
   ],
@@ -50,10 +53,216 @@ hard_case_003,weak_candidate_rejection,weak_candidate_rejection,signal_humidity_
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu,,"Chile Influenza Activity is best supported because its subgraph contains three supporting relations: it is a LEADING_INDICATOR_FOR the US hospitalization signal, and it has both an IMPORTATION_LINK and a POSSIBLE_DRIVER_OF connection to the US mechanism. Australia has a LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF but lacks an IMPORTATION_LINK in its retrieved subgraph, so Chile has an additional importation relationship that raises its score and makes it the stronger candidate.","{
+hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu,signal_travel_pressure;signal_humidity_drop,,"Chile is best supported because its subgraph includes all three relationship types: it is a LEADING_INDICATOR_FOR the US hospitalization signal and it has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF connections to the US influenza mechanism. Australia, by contrast, lacks an IMPORTATION_LINK to the mechanism in the retrieved evidence, so it has weaker mechanistic/importation support despite being a leading indicator.","{
   ""predicted_candidate_id"": ""signal_chile_flu"",
   ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile Influenza Activity is best supported because its subgraph contains three supporting relations: it is a LEADING_INDICATOR_FOR the US hospitalization signal, and it has both an IMPORTATION_LINK and a POSSIBLE_DRIVER_OF connection to the US mechanism. Australia has a LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF but lacks an IMPORTATION_LINK in its retrieved subgraph, so Chile has an additional importation relationship that raises its score and makes it the stronger candidate."",
+  ""explanation"": ""Chile is best supported because its subgraph includes all three relationship types: it is a LEADING_INDICATOR_FOR the US hospitalization signal and it has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF connections to the US influenza mechanism. Australia, by contrast, lacks an IMPORTATION_LINK to the mechanism in the retrieved evidence, so it has weaker mechanistic/importation support despite being a leading indicator."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_australia_flu""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_005,partial_evidence_detection,partial_support_not_best_driver,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_travel_pressure,signal_travel_pressure,,"Travel Importation Pressure has direct links to the US mechanism (IMPORTATION_LINK) and is a POSSIBLE_DRIVER_OF the mechanism, so it provides partial mechanistic support. However, it lacks a documented LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations) in the retrieved graph. Compared to Chile Influenza Activity, which includes IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and an explicit LEADING_INDICATOR_FOR -> target signal, Travel Importation Pressure is missing the leading-indicator relationship that would make it the best hidden driver rather than only partial support.","{
+  ""predicted_candidate_id"": ""signal_travel_pressure"",
+  ""predicted_candidate_name"": ""Travel Importation Pressure"",
+  ""explanation"": ""Travel Importation Pressure has direct links to the US mechanism (IMPORTATION_LINK) and is a POSSIBLE_DRIVER_OF the mechanism, so it provides partial mechanistic support. However, it lacks a documented LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations) in the retrieved graph. Compared to Chile Influenza Activity, which includes IMPORTATION_LINK, POSSIBLE_DRIVER_OF, and an explicit LEADING_INDICATOR_FOR -> target signal, Travel Importation Pressure is missing the leading-indicator relationship that would make it the best hidden driver rather than only partial support."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_travel_pressure""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_006,weak_candidate_rejection,weak_candidate_not_promoted,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_humidity_drop,signal_humidity_drop,True,"Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved graph. It lacks both an IMPORTATION_LINK and any LEADING_INDICATOR_FOR connection to the US hospitalization signal, whereas importation-related candidates (e.g., Chile Influenza Activity and Travel Importation Pressure) include IMPORTATION_LINK and leading-indicator evidence. Because key relationships that would justify promoting Humidity Drop above importation-related candidates are missing in the graph, it should not be promoted.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved graph. It lacks both an IMPORTATION_LINK and any LEADING_INDICATOR_FOR connection to the US hospitalization signal, whereas importation-related candidates (e.g., Chile Influenza Activity and Travel Importation Pressure) include IMPORTATION_LINK and leading-indicator evidence. Because key relationships that would justify promoting Humidity Drop above importation-related candidates are missing in the graph, it should not be promoted."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Although humidity drop is a possible driver of the mechanism (POSSIBLE_DRIVER_OF), the graph evidence for Chile Influenza Activity is stronger: Chile has IMPORTATION_LINK to the mechanism and is a LEADING_INDICATOR_FOR the US hospitalization signal in addition to being a POSSIBLE_DRIVER_OF. Humidity Drop only shows POSSIBLE_DRIVER_OF in the retrieved subgraph and lacks both IMPORTATION_LINK (so no pathway for importation-driven increase in US hospitalizations) and LEADING_INDICATOR_FOR (no direct leading signal relationship to the target). Therefore environmental plausibility alone should not override the multi-edge support that links Chile activity to the mechanism and to the target signal.","{
+  ""predicted_candidate_id"": ""signal_humidity_drop"",
+  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
+  ""explanation"": ""Although humidity drop is a possible driver of the mechanism (POSSIBLE_DRIVER_OF), the graph evidence for Chile Influenza Activity is stronger: Chile has IMPORTATION_LINK to the mechanism and is a LEADING_INDICATOR_FOR the US hospitalization signal in addition to being a POSSIBLE_DRIVER_OF. Humidity Drop only shows POSSIBLE_DRIVER_OF in the retrieved subgraph and lacks both IMPORTATION_LINK (so no pathway for importation-driven increase in US hospitalizations) and LEADING_INDICATOR_FOR (no direct leading signal relationship to the target). Therefore environmental plausibility alone should not override the multi-edge support that links Chile activity to the mechanism and to the target signal."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_australia_flu;signal_humidity_drop,,"Australia is supported as a possible driver and a leading indicator for US hospitalizations, but it lacks an IMPORTATION_LINK to the US influenza mechanism in the retrieved graph. Chile has IMPORTATION_LINK plus POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR, giving Chile stronger, more complete connectivity to the mechanism and target; the missing IMPORTATION_LINK for Australia explains why it scores weaker than Chile.","{
+  ""predicted_candidate_id"": ""signal_australia_flu"",
+  ""predicted_candidate_name"": ""Australia Influenza Activity"",
+  ""explanation"": ""Australia is supported as a possible driver and a leading indicator for US hospitalizations, but it lacks an IMPORTATION_LINK to the US influenza mechanism in the retrieved graph. Chile has IMPORTATION_LINK plus POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR, giving Chile stronger, more complete connectivity to the mechanism and target; the missing IMPORTATION_LINK for Australia explains why it scores weaker than Chile."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_australia_flu"",
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"signal_travel_pressure links to the US mechanism via IMPORTATION_LINK and POSSIBLE_DRIVER_OF in the graph, so it provides mechanism/importation support. However, it lacks a LEADING_INDICATOR_FOR edge to the target signal (signal_us_hosp), so there is no graph evidence that travel pressure acts as a temporal/leading signal for the hospitalization peak. Without that target-leading-indicator relationship the candidate cannot fully explain the observed missed_peak where the actual was above prediction.","{
+  ""predicted_candidate_id"": ""signal_travel_pressure"",
+  ""predicted_candidate_name"": ""Travel Importation Pressure"",
+  ""explanation"": ""signal_travel_pressure links to the US mechanism via IMPORTATION_LINK and POSSIBLE_DRIVER_OF in the graph, so it provides mechanism/importation support. However, it lacks a LEADING_INDICATOR_FOR edge to the target signal (signal_us_hosp), so there is no graph evidence that travel pressure acts as a temporal/leading signal for the hospitalization peak. Without that target-leading-indicator relationship the candidate cannot fully explain the observed missed_peak where the actual was above prediction."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_travel_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_010,strongest_candidate_completeness,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph includes all three relationship types: it is a POSSIBLE_DRIVER_OF the US mechanism, it has an IMPORTATION_LINK to the mechanism, and it is a LEADING_INDICATOR_FOR the US hospitalization signal. Comparison candidates lack one or more of these relationships (Australia lacks an IMPORTATION_LINK; Travel Importation Pressure lacks LEADING_INDICATOR_FOR; Humidity Drop Anomaly lacks IMPORTATION_LINK and LEADING_INDICATOR_FOR), making Chile the strongest single candidate based on the retrieved graph evidence.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph includes all three relationship types: it is a POSSIBLE_DRIVER_OF the US mechanism, it has an IMPORTATION_LINK to the mechanism, and it is a LEADING_INDICATOR_FOR the US hospitalization signal. Comparison candidates lack one or more of these relationships (Australia lacks an IMPORTATION_LINK; Travel Importation Pressure lacks LEADING_INDICATOR_FOR; Humidity Drop Anomaly lacks IMPORTATION_LINK and LEADING_INDICATOR_FOR), making Chile the strongest single candidate based on the retrieved graph evidence."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_australia_flu"",
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_australia_flu"",
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_011,candidate_contrast,strongest_supported_candidate,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_vector_index,signal_vector_index,True,,signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,,"Mosquito Vector Index is the most complete prototype-supported candidate because, in the retrieved support subgraph, it has all three prototype relationship types tying it to the failure: it is a POSSIBLE_DRIVER_OF the Puerto Rico dengue mechanism, it has an IMPORTATION_LINK to the mechanism, and it is a LEADING_INDICATOR_FOR the Puerto Rico dengue cases target signal. Other candidates lack one or more of these relationship types in their support subgraphs, making them less complete as explanations for the missed outbreak peak.","{
+  ""predicted_candidate_id"": ""signal_vector_index"",
+  ""predicted_candidate_name"": ""Mosquito Vector Index"",
+  ""explanation"": ""Mosquito Vector Index is the most complete prototype-supported candidate because, in the retrieved support subgraph, it has all three prototype relationship types tying it to the failure: it is a POSSIBLE_DRIVER_OF the Puerto Rico dengue mechanism, it has an IMPORTATION_LINK to the mechanism, and it is a LEADING_INDICATOR_FOR the Puerto Rico dengue cases target signal. Other candidates lack one or more of these relationship types in their support subgraphs, making them less complete as explanations for the missed outbreak peak."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_rainfall_anomaly"",
+    ""signal_travel_importation_dengue"",
+    ""signal_temperature_anomaly""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_rainfall_anomaly"",
+    ""signal_travel_importation_dengue"",
+    ""signal_temperature_anomaly""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_012,partial_evidence_detection,missing_edge_detection,signal_rainfall_anomaly,signal_rainfall_anomaly,Rainfall Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_rainfall_anomaly,,"Rainfall Anomaly has POSSIBLE_DRIVER_OF to the mechanism and LEADING_INDICATOR_FOR the target signal, but it lacks an IMPORTATION_LINK to the mechanism that Mosquito Vector Index has. The missing IMPORTATION_LINK makes its support less complete compared to Mosquito Vector Index.","{
+  ""predicted_candidate_id"": ""signal_rainfall_anomaly"",
+  ""predicted_candidate_name"": ""Rainfall Anomaly"",
+  ""explanation"": ""Rainfall Anomaly has POSSIBLE_DRIVER_OF to the mechanism and LEADING_INDICATOR_FOR the target signal, but it lacks an IMPORTATION_LINK to the mechanism that Mosquito Vector Index has. The missing IMPORTATION_LINK makes its support less complete compared to Mosquito Vector Index."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_rainfall_anomaly""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_013,weak_candidate_rejection,weak_candidate_rejection,signal_temperature_anomaly,signal_temperature_anomaly,Temperature Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,signal_temperature_anomaly,,signal_temperature_anomaly,True,"Temperature Anomaly is present in the Puerto Rico dengue prototype only as a POSSIBLE_DRIVER_OF the dengue mechanism (score 2). It should be treated as weak/incomplete because the support subgraph lacks two relationship types that stronger candidates have: there is no LEADING_INDICATOR_FOR link to the Puerto Rico dengue cases signal and no IMPORTATION_LINK to the mechanism. Other candidates (e.g., Mosquito Vector Index) include LEADING_INDICATOR_FOR and IMPORTATION_LINK edges and have higher scores, indicating more complete support in the graph.","{
+  ""predicted_candidate_id"": ""signal_temperature_anomaly"",
+  ""predicted_candidate_name"": ""Temperature Anomaly"",
+  ""explanation"": ""Temperature Anomaly is present in the Puerto Rico dengue prototype only as a POSSIBLE_DRIVER_OF the dengue mechanism (score 2). It should be treated as weak/incomplete because the support subgraph lacks two relationship types that stronger candidates have: there is no LEADING_INDICATOR_FOR link to the Puerto Rico dengue cases signal and no IMPORTATION_LINK to the mechanism. Other candidates (e.g., Mosquito Vector Index) include LEADING_INDICATOR_FOR and IMPORTATION_LINK edges and have higher scores, indicating more complete support in the graph."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_temperature_anomaly""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_014,partial_evidence_detection,mechanism_only_support,signal_travel_importation_dengue,signal_travel_importation_dengue,Dengue Travel Importation Pressure,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_travel_importation_dengue,,"The graph shows Dengue Travel Importation Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF connections to the Puerto Rico dengue mechanism, which provides prototype importation support. It lacks a LEADING_INDICATOR_FOR edge to the Puerto Rico dengue cases signal in the retrieved subgraph, so there is no graph evidence that the importation signal leads the target. Because the leading-indicator relationship to the target is missing, the support is partial and cannot explain a missed_peak where a leading indicator would be expected.","{
+  ""predicted_candidate_id"": ""signal_travel_importation_dengue"",
+  ""predicted_candidate_name"": ""Dengue Travel Importation Pressure"",
+  ""explanation"": ""The graph shows Dengue Travel Importation Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF connections to the Puerto Rico dengue mechanism, which provides prototype importation support. It lacks a LEADING_INDICATOR_FOR edge to the Puerto Rico dengue cases signal in the retrieved subgraph, so there is no graph evidence that the importation signal leads the target. Because the leading-indicator relationship to the target is missing, the support is partial and cannot explain a missed_peak where a leading indicator would be expected."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_travel_importation_dengue""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_015,strongest_candidate_completeness,complete_support_no_overclaim,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity should be treated as the strongest graph-supported candidate because its support subgraph contains all three prototype relationships linking it to the US failure: LEADING_INDICATOR_FOR to the US hospitalization signal, plus both IMPORTATION_LINK and POSSIBLE_DRIVER_OF to the US mechanism. These three relationship types together produce the highest composite ranking score and directly map to the expected mechanistic and temporal pathways in the retrieved graph evidence. However, the graph relationships are associative evidence recorded in the knowledge graph; they do not by themselves prove causality. The lack of explicit causal-validation nodes/edges (e.g., experimental confirmation, temporal causality annotations, or alternative-counterfactual links) in the retrieved subgraph means we should not claim confirmed causality—only that Chile activity is the best-supported hypothesis given the available graph links.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile Influenza Activity should be treated as the strongest graph-supported candidate because its support subgraph contains all three prototype relationships linking it to the US failure: LEADING_INDICATOR_FOR to the US hospitalization signal, plus both IMPORTATION_LINK and POSSIBLE_DRIVER_OF to the US mechanism. These three relationship types together produce the highest composite ranking score and directly map to the expected mechanistic and temporal pathways in the retrieved graph evidence. However, the graph relationships are associative evidence recorded in the knowledge graph; they do not by themselves prove causality. The lack of explicit causal-validation nodes/edges (e.g., experimental confirmation, temporal causality annotations, or alternative-counterfactual links) in the retrieved subgraph means we should not claim confirmed causality—only that Chile activity is the best-supported hypothesis given the available graph links."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR"",
     ""IMPORTATION_LINK"",
@@ -62,52 +271,53 @@ hard_case_004,candidate_contrast,strongest_supported_candidate,signal_chile_flu,
   ""identified_missing_edges"": [],
   ""rejected_candidate_ids"": [],
   ""weak_candidate_ids"": [
+    ""signal_australia_flu"",
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""stronger_candidate_id"": ""signal_chile_flu""
+}"
+hard_case_016,missing_edge_detection,partial_support_missing_importation,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_travel_pressure;signal_humidity_drop,signal_australia_flu,,"Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the mechanism/target but lacks an IMPORTATION_LINK. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), so the missing IMPORTATION_LINK makes Australia less complete as an explanation for the missed US hospitalization peak.","{
+  ""predicted_candidate_id"": ""signal_australia_flu"",
+  ""predicted_candidate_name"": ""Australia Influenza Activity"",
+  ""explanation"": ""Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the mechanism/target but lacks an IMPORTATION_LINK. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), so the missing IMPORTATION_LINK makes Australia less complete as an explanation for the missed US hospitalization peak."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_travel_pressure"",
+    ""signal_humidity_drop""
+  ],
+  ""weak_candidate_ids"": [
     ""signal_australia_flu""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_005,partial_evidence_detection,partial_support_not_best_driver,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop,signal_travel_pressure,,"Travel Importation Pressure has partial graph support: it is linked to the mechanism as a POSSIBLE_DRIVER_OF and has an IMPORTATION_LINK to the mechanism, but it lacks a direct LEADING_INDICATOR_FOR edge to the US hospitalization target. Other candidates (notably Chile Influenza Activity) include a LEADING_INDICATOR_FOR relationship to the target in addition to importation/mechanism links, giving them stronger, more complete support as explanations for the missed hospitalization peak. Therefore Travel Importation Pressure should be treated as partial support rather than the best hidden driver.","{
+hard_case_017,missing_edge_detection,partial_support_missing_leading_indicator,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"Travel Importation Pressure has POSSIBLE_DRIVER_OF and IMPORTATION_LINK edges to the US flu mechanism in the retrieved subgraph, indicating it is a plausible driver and linked as an importation pathway. However, it lacks a LEADING_INDICATOR_FOR edge to the target signal (US hospitalizations). Because the subgraph does not show Travel Importation Pressure as a leading indicator for the hospitalization signal, it cannot provide the direct temporal/predictive link present for better-supported candidates (e.g., Chile Influenza Activity and Australia Influenza Activity which include LEADING_INDICATOR_FOR). This missing LEADING_INDICATOR_FOR relationship limits Travel Importation Pressure's support for explaining the missed hospitalization peak.","{
   ""predicted_candidate_id"": ""signal_travel_pressure"",
   ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure has partial graph support: it is linked to the mechanism as a POSSIBLE_DRIVER_OF and has an IMPORTATION_LINK to the mechanism, but it lacks a direct LEADING_INDICATOR_FOR edge to the US hospitalization target. Other candidates (notably Chile Influenza Activity) include a LEADING_INDICATOR_FOR relationship to the target in addition to importation/mechanism links, giving them stronger, more complete support as explanations for the missed hospitalization peak. Therefore Travel Importation Pressure should be treated as partial support rather than the best hidden driver."",
+  ""explanation"": ""Travel Importation Pressure has POSSIBLE_DRIVER_OF and IMPORTATION_LINK edges to the US flu mechanism in the retrieved subgraph, indicating it is a plausible driver and linked as an importation pathway. However, it lacks a LEADING_INDICATOR_FOR edge to the target signal (US hospitalizations). Because the subgraph does not show Travel Importation Pressure as a leading indicator for the hospitalization signal, it cannot provide the direct temporal/predictive link present for better-supported candidates (e.g., Chile Influenza Activity and Australia Influenza Activity which include LEADING_INDICATOR_FOR). This missing LEADING_INDICATOR_FOR relationship limits Travel Importation Pressure's support for explaining the missed hospitalization peak."",
   ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
+    ""POSSIBLE_DRIVER_OF"",
+    ""IMPORTATION_LINK""
   ],
   ""identified_missing_edges"": [
     ""LEADING_INDICATOR_FOR""
   ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
+  ""rejected_candidate_ids"": [],
   ""weak_candidate_ids"": [
     ""signal_travel_pressure""
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_006,weak_candidate_rejection,weak_candidate_not_promoted,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,signal_humidity_drop,signal_humidity_drop,True,"Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved graph. It lacks an IMPORTATION_LINK and a LEADING_INDICATOR_FOR relationship that importation-related candidates (e.g., Chile Influenza Activity) do have. Because the missed US hospitalization peak is characterized as actual_above_prediction and the top-ranked candidate (signal_chile_flu) provides both IMPORTATION_LINK and LEADING_INDICATOR_FOR plus POSSIBLE_DRIVER_OF, humidity-drop evidence is weaker and should not be promoted above importation-related candidates.","{
+hard_case_018,distractor_noisy_candidate,plausible_but_weak_candidate,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Graph evidence for Humidity Drop Anomaly is limited: it only has a POSSIBLE_DRIVER_OF link to the US mechanism and a low ranking score (2). It lacks an IMPORTATION_LINK and lacks a LEADING_INDICATOR_FOR connection to the target hospitalization signal—both of which are present for stronger candidates (e.g., Chile Influenza Activity). Because the support subgraph contains only a POSSIBLE_DRIVER_OF edge, the system should treat this candidate as weak evidence for explaining the missed hospitalization peak.","{
   ""predicted_candidate_id"": ""signal_humidity_drop"",
   ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Humidity Drop Anomaly has only a POSSIBLE_DRIVER_OF link to the US influenza mechanism in the retrieved graph. It lacks an IMPORTATION_LINK and a LEADING_INDICATOR_FOR relationship that importation-related candidates (e.g., Chile Influenza Activity) do have. Because the missed US hospitalization peak is characterized as actual_above_prediction and the top-ranked candidate (signal_chile_flu) provides both IMPORTATION_LINK and LEADING_INDICATOR_FOR plus POSSIBLE_DRIVER_OF, humidity-drop evidence is weaker and should not be promoted above importation-related candidates."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Although humidity drop is a plausible environmental driver, the graph evidence for Humidity Drop Anomaly contains only a POSSIBLE_DRIVER_OF link to the US mechanism. It lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR link to the US hospitalization target, which would be needed to explain a missed hospitalization peak. In contrast, Chile Influenza Activity (signal_chile_flu) has all three supporting relationships (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR) connecting it to the mechanism and the target, making it the stronger graph-supported explanation.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Although humidity drop is a plausible environmental driver, the graph evidence for Humidity Drop Anomaly contains only a POSSIBLE_DRIVER_OF link to the US mechanism. It lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR link to the US hospitalization target, which would be needed to explain a missed hospitalization peak. In contrast, Chile Influenza Activity (signal_chile_flu) has all three supporting relationships (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR) connecting it to the mechanism and the target, making it the stronger graph-supported explanation."",
+  ""explanation"": ""Graph evidence for Humidity Drop Anomaly is limited: it only has a POSSIBLE_DRIVER_OF link to the US mechanism and a low ranking score (2). It lacks an IMPORTATION_LINK and lacks a LEADING_INDICATOR_FOR connection to the target hospitalization signal—both of which are present for stronger candidates (e.g., Chile Influenza Activity). Because the support subgraph contains only a POSSIBLE_DRIVER_OF edge, the system should treat this candidate as weak evidence for explaining the missed hospitalization peak."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF""
   ],
@@ -121,90 +331,44 @@ hard_case_007,distractor_noisy_candidate,weak_candidate_rejection,signal_humidit
   ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_008,candidate_contrast,partial_vs_full_support,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_humidity_drop;signal_travel_pressure,signal_australia_flu,,"Australia has evidence as a possible driver and as a leading indicator (POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR) for the US hospitalization peak, but it lacks an IMPORTATION_LINK to the US mechanism in the retrieved graph. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), making Chile better supported as the driver/import source for the missed US hospitalization peak.","{
-  ""predicted_candidate_id"": ""signal_australia_flu"",
-  ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Australia has evidence as a possible driver and as a leading indicator (POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR) for the US hospitalization peak, but it lacks an IMPORTATION_LINK to the US mechanism in the retrieved graph. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), making Chile better supported as the driver/import source for the missed US hospitalization peak."",
+hard_case_019,candidate_contrast,strongest_candidate_contrast_against_partial_candidates,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure,signal_humidity_drop;signal_travel_pressure,,"Chile is ranked highest because its support subgraph includes three direct relationships to the US mechanism and target: it is a leading indicator for US hospitalizations, has an importation link to the US mechanism, and is listed as a possible driver of the mechanism. Australia lacks an IMPORTATION_LINK in its subgraph (it only has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR), and Travel Importation Pressure lacks a LEADING_INDICATOR_FOR edge (it only has IMPORTATION_LINK and POSSIBLE_DRIVER_OF), making Chile the most complete explanatory candidate for the missed US hospitalization peak.","{
+  ""predicted_candidate_id"": ""signal_chile_flu"",
+  ""predicted_candidate_name"": ""Chile Influenza Activity"",
+  ""explanation"": ""Chile is ranked highest because its support subgraph includes three direct relationships to the US mechanism and target: it is a leading indicator for US hospitalizations, has an importation link to the US mechanism, and is listed as a possible driver of the mechanism. Australia lacks an IMPORTATION_LINK in its subgraph (it only has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR), and Travel Importation Pressure lacks a LEADING_INDICATOR_FOR edge (it only has IMPORTATION_LINK and POSSIBLE_DRIVER_OF), making Chile the most complete explanatory candidate for the missed US hospitalization peak."",
   ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF"",
-    ""LEADING_INDICATOR_FOR""
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
   ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK""
-  ],
+  ""identified_missing_edges"": [],
   ""rejected_candidate_ids"": [
+    ""signal_australia_flu"",
+    ""signal_travel_pressure""
+  ],
+  ""weak_candidate_ids"": [
     ""signal_humidity_drop"",
     ""signal_travel_pressure""
   ],
-  ""weak_candidate_ids"": [
-    ""signal_australia_flu""
-  ],
   ""stronger_candidate_id"": ""signal_chile_flu""
 }"
-hard_case_009,partial_evidence_detection,mechanism_only_support,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"Travel Importation Pressure links to the US mechanism via IMPORTATION_LINK and is marked as a POSSIBLE_DRIVER_OF the mechanism, so it supports importation-related mechanism revision. However, it lacks a LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Without evidence that travel pressure leads the observed hospitalization signal, the candidate cannot explain the timing of the missed hospitalization peak and thus is only partial support for the failure.","{
-  ""predicted_candidate_id"": ""signal_travel_pressure"",
-  ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""Travel Importation Pressure links to the US mechanism via IMPORTATION_LINK and is marked as a POSSIBLE_DRIVER_OF the mechanism, so it supports importation-related mechanism revision. However, it lacks a LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Without evidence that travel pressure leads the observed hospitalization signal, the candidate cannot explain the timing of the missed hospitalization peak and thus is only partial support for the failure."",
-  ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_travel_pressure""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_010,strongest_candidate_completeness,strongest_supported_candidate,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph includes all three relationship types linking it to the failure: POSSIBLE_DRIVER_OF and IMPORTATION_LINK to the US influenza mechanism and LEADING_INDICATOR_FOR to the US hospitalization signal. Comparison candidates lack one or more of these relationship types (Australia lacks IMPORTATION_LINK; Travel Importation Pressure lacks LEADING_INDICATOR_FOR; Humidity Drop Anomaly lacks IMPORTATION_LINK and LEADING_INDICATOR_FOR), making Chile the strongest, most fully connected candidate in the retrieved evidence.","{
-  ""predicted_candidate_id"": ""signal_chile_flu"",
-  ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile Influenza Activity is the most complete graph-supported candidate because its support subgraph includes all three relationship types linking it to the failure: POSSIBLE_DRIVER_OF and IMPORTATION_LINK to the US influenza mechanism and LEADING_INDICATOR_FOR to the US hospitalization signal. Comparison candidates lack one or more of these relationship types (Australia lacks IMPORTATION_LINK; Travel Importation Pressure lacks LEADING_INDICATOR_FOR; Humidity Drop Anomaly lacks IMPORTATION_LINK and LEADING_INDICATOR_FOR), making Chile the strongest, most fully connected candidate in the retrieved evidence."",
-  ""mentioned_evidence_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_011,candidate_contrast,strongest_supported_candidate,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_vector_index,signal_vector_index,True,,signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,,"Mosquito Vector Index is the most complete prototype-supported candidate because its support subgraph includes all three relationship types available in the ranking scheme (it is linked to the mechanism as a possible driver and via an importation link, and it is a leading indicator for the target signal). Comparison candidates lack one or more of these relationships (Rainfall Anomaly lacks an IMPORTATION_LINK; Dengue Travel Importation Pressure lacks LEADING_INDICATOR_FOR; Temperature Anomaly lacks LEADING_INDICATOR_FOR and IMPORTATION_LINK), making them less complete explanations for the missed outbreak peak.","{
+hard_case_020,strongest_candidate_completeness,complete_support_no_overclaim,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_vector_index,signal_vector_index,True,,,,,"The Mosquito Vector Index has all three prototype support relationships in the retrieved Puerto Rico dengue graph: it is linked to the mechanism both as a POSSIBLE_DRIVER_OF and via an IMPORTATION_LINK, and it is also a LEADING_INDICATOR_FOR the target dengue cases signal. That combination makes it the most complete graph-supported candidate because it connects directly to the mechanism and to the observed outcome in multiple, complementary ways. However, these graph relationships are associative evidence encoded in the knowledge graph rather than proof of real-world causality: the graph does not provide experimental/interventional validation, temporal-model-based causal inference, or control for confounders within the retrieved edges. Thus while completeness of support-subgraph connections raises confidence for further investigation, it does not by itself establish that changes in the Mosquito Vector Index caused the outbreak peak.","{
   ""predicted_candidate_id"": ""signal_vector_index"",
   ""predicted_candidate_name"": ""Mosquito Vector Index"",
-  ""explanation"": ""Mosquito Vector Index is the most complete prototype-supported candidate because its support subgraph includes all three relationship types available in the ranking scheme (it is linked to the mechanism as a possible driver and via an importation link, and it is a leading indicator for the target signal). Comparison candidates lack one or more of these relationships (Rainfall Anomaly lacks an IMPORTATION_LINK; Dengue Travel Importation Pressure lacks LEADING_INDICATOR_FOR; Temperature Anomaly lacks LEADING_INDICATOR_FOR and IMPORTATION_LINK), making them less complete explanations for the missed outbreak peak."",
+  ""explanation"": ""The Mosquito Vector Index has all three prototype support relationships in the retrieved Puerto Rico dengue graph: it is linked to the mechanism both as a POSSIBLE_DRIVER_OF and via an IMPORTATION_LINK, and it is also a LEADING_INDICATOR_FOR the target dengue cases signal. That combination makes it the most complete graph-supported candidate because it connects directly to the mechanism and to the observed outcome in multiple, complementary ways. However, these graph relationships are associative evidence encoded in the knowledge graph rather than proof of real-world causality: the graph does not provide experimental/interventional validation, temporal-model-based causal inference, or control for confounders within the retrieved edges. Thus while completeness of support-subgraph connections raises confidence for further investigation, it does not by itself establish that changes in the Mosquito Vector Index caused the outbreak peak."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR"",
     ""IMPORTATION_LINK"",
     ""POSSIBLE_DRIVER_OF""
   ],
   ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [
-    ""signal_rainfall_anomaly"",
-    ""signal_travel_importation_dengue"",
-    ""signal_temperature_anomaly""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_rainfall_anomaly"",
-    ""signal_travel_importation_dengue"",
-    ""signal_temperature_anomaly""
-  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [],
   ""stronger_candidate_id"": ""signal_vector_index""
 }"
-hard_case_012,partial_evidence_detection,missing_edge_detection,signal_rainfall_anomaly,signal_rainfall_anomaly,Rainfall Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_rainfall_anomaly,,Rainfall Anomaly has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the mechanism/target but lacks the IMPORTATION_LINK edge that Mosquito Vector Index has. The missing IMPORTATION_LINK makes its support less complete compared with Mosquito Vector Index.,"{
+hard_case_021,missing_edge_detection,partial_support_missing_importation,signal_rainfall_anomaly,signal_rainfall_anomaly,Rainfall Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_rainfall_anomaly,,"Rainfall Anomaly has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR links to the dengue mechanism and target signal, but it lacks an IMPORTATION_LINK to the mechanism. Mosquito Vector Index includes IMPORTATION_LINK in its support subgraph, making it more complete for explaining the regional outbreak.","{
   ""predicted_candidate_id"": ""signal_rainfall_anomaly"",
   ""predicted_candidate_name"": ""Rainfall Anomaly"",
-  ""explanation"": ""Rainfall Anomaly has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the mechanism/target but lacks the IMPORTATION_LINK edge that Mosquito Vector Index has. The missing IMPORTATION_LINK makes its support less complete compared with Mosquito Vector Index."",
+  ""explanation"": ""Rainfall Anomaly has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR links to the dengue mechanism and target signal, but it lacks an IMPORTATION_LINK to the mechanism. Mosquito Vector Index includes IMPORTATION_LINK in its support subgraph, making it more complete for explaining the regional outbreak."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF"",
     ""LEADING_INDICATOR_FOR""
@@ -218,27 +382,10 @@ hard_case_012,partial_evidence_detection,missing_edge_detection,signal_rainfall_
   ],
   ""stronger_candidate_id"": ""signal_vector_index""
 }"
-hard_case_013,weak_candidate_rejection,weak_candidate_rejection,signal_temperature_anomaly,signal_temperature_anomaly,Temperature Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,signal_temperature_anomaly,,signal_temperature_anomaly,True,"In the retrieved support subgraph, Temperature Anomaly is connected to the Puerto Rico dengue mechanism only by POSSIBLE_DRIVER_OF. It lacks both LEADING_INDICATOR_FOR to the target dengue cases signal and IMPORTATION_LINK to the mechanism. Because the graph evidence for this candidate is limited to a single possible-driver relationship, it is weak/incomplete relative to candidates that show additional supporting relationships (e.g., Mosquito Vector Index, which has POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR).","{
-  ""predicted_candidate_id"": ""signal_temperature_anomaly"",
-  ""predicted_candidate_name"": ""Temperature Anomaly"",
-  ""explanation"": ""In the retrieved support subgraph, Temperature Anomaly is connected to the Puerto Rico dengue mechanism only by POSSIBLE_DRIVER_OF. It lacks both LEADING_INDICATOR_FOR to the target dengue cases signal and IMPORTATION_LINK to the mechanism. Because the graph evidence for this candidate is limited to a single possible-driver relationship, it is weak/incomplete relative to candidates that show additional supporting relationships (e.g., Mosquito Vector Index, which has POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR)."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_temperature_anomaly""
-  ],
-  ""stronger_candidate_id"": ""signal_vector_index""
-}"
-hard_case_014,partial_evidence_detection,mechanism_only_support,signal_travel_importation_dengue,signal_travel_importation_dengue,Dengue Travel Importation Pressure,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_travel_importation_dengue,,"The travel importation signal links to the Puerto Rico dengue mechanism as a POSSIBLE_DRIVER_OF and via an IMPORTATION_LINK in the retrieved graph evidence, so it provides prototype importation support. It is still only partial support because the graph does not show a LEADING_INDICATOR_FOR relationship from this signal to the Puerto Rico dengue cases target signal; without that leading-indicator edge the evidence lacks a direct temporal/forecasting link to the missed case peak.","{
+hard_case_022,missing_edge_detection,partial_support_missing_leading_indicator,signal_travel_importation_dengue,signal_travel_importation_dengue,Dengue Travel Importation Pressure,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_travel_importation_dengue,,"The candidate has POSSIBLE_DRIVER_OF and IMPORTATION_LINK edges to the Puerto Rico dengue mechanism, so it can be linked as an importation-related driver. However it lacks a LEADING_INDICATOR_FOR relationship to the Puerto Rico dengue cases signal in the retrieved graph. Without LEADING_INDICATOR_FOR, the subgraph does not provide the required direct temporal/forecasting link that would support this signal explaining a missed outbreak peak (i.e., showing importation pressure precedes increases in cases). Therefore the candidate is incomplete as an explanation for the missed_peak underprediction.","{
   ""predicted_candidate_id"": ""signal_travel_importation_dengue"",
   ""predicted_candidate_name"": ""Dengue Travel Importation Pressure"",
-  ""explanation"": ""The travel importation signal links to the Puerto Rico dengue mechanism as a POSSIBLE_DRIVER_OF and via an IMPORTATION_LINK in the retrieved graph evidence, so it provides prototype importation support. It is still only partial support because the graph does not show a LEADING_INDICATOR_FOR relationship from this signal to the Puerto Rico dengue cases target signal; without that leading-indicator edge the evidence lacks a direct temporal/forecasting link to the missed case peak."",
+  ""explanation"": ""The candidate has POSSIBLE_DRIVER_OF and IMPORTATION_LINK edges to the Puerto Rico dengue mechanism, so it can be linked as an importation-related driver. However it lacks a LEADING_INDICATOR_FOR relationship to the Puerto Rico dengue cases signal in the retrieved graph. Without LEADING_INDICATOR_FOR, the subgraph does not provide the required direct temporal/forecasting link that would support this signal explaining a missed outbreak peak (i.e., showing importation pressure precedes increases in cases). Therefore the candidate is incomplete as an explanation for the missed_peak underprediction."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF"",
     ""IMPORTATION_LINK""
@@ -252,157 +399,10 @@ hard_case_014,partial_evidence_detection,mechanism_only_support,signal_travel_im
   ],
   ""stronger_candidate_id"": ""signal_vector_index""
 }"
-hard_case_015,strongest_candidate_completeness,complete_support_no_overclaim,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Chile Influenza Activity has all three prototype graph support relationships to explain the missed US hospitalization peak: it is connected as a LEADING_INDICATOR_FOR the target signal and has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF links to the US influenza mechanism. Because the graph evidence shows these three supportive relationships, Chile is the strongest graph-supported candidate. However, the graph evidence alone does not provide definitive causal proof (e.g., temporally validated mechanistic intervention or experimental confirmation), so we should treat it as the best-supported hypothesis from the available graph data without claiming confirmed causality.","{
-  ""predicted_candidate_id"": ""signal_chile_flu"",
-  ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile Influenza Activity has all three prototype graph support relationships to explain the missed US hospitalization peak: it is connected as a LEADING_INDICATOR_FOR the target signal and has both IMPORTATION_LINK and POSSIBLE_DRIVER_OF links to the US influenza mechanism. Because the graph evidence shows these three supportive relationships, Chile is the strongest graph-supported candidate. However, the graph evidence alone does not provide definitive causal proof (e.g., temporally validated mechanistic intervention or experimental confirmation), so we should treat it as the best-supported hypothesis from the available graph data without claiming confirmed causality."",
-  ""mentioned_evidence_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_016,missing_edge_detection,partial_support_missing_importation,signal_australia_flu,signal_australia_flu,Australia Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_australia_flu;signal_travel_pressure;signal_humidity_drop,,"Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but it lacks an IMPORTATION_LINK edge. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), so Chile provides the additional direct importation connection that makes its support more complete for explaining the missed US hospitalization peak.","{
-  ""predicted_candidate_id"": ""signal_australia_flu"",
-  ""predicted_candidate_name"": ""Australia Influenza Activity"",
-  ""explanation"": ""Australia has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the US mechanism/target, but it lacks an IMPORTATION_LINK edge. Chile has all three relationships (POSSIBLE_DRIVER_OF, LEADING_INDICATOR_FOR, and IMPORTATION_LINK), so Chile provides the additional direct importation connection that makes its support more complete for explaining the missed US hospitalization peak."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure"",
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_017,missing_edge_detection,partial_support_missing_leading_indicator,signal_travel_pressure,signal_travel_pressure,Travel Importation Pressure,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_chile_flu,signal_chile_flu,True,,,signal_travel_pressure,,"The Travel Importation Pressure candidate links to the US mechanism via IMPORTATION_LINK and POSSIBLE_DRIVER_OF, so it can plausibly affect the mechanism. However, it lacks a LEADING_INDICATOR_FOR edge to the target hospitalization signal in the retrieved graph. That missing temporal/leading-indicator relationship means there is no graph evidence that travel pressure precedes or predicts the observed hospitalization peak, so it cannot explain the timing of the missed peak despite being an importation-related possible driver.","{
-  ""predicted_candidate_id"": ""signal_travel_pressure"",
-  ""predicted_candidate_name"": ""Travel Importation Pressure"",
-  ""explanation"": ""The Travel Importation Pressure candidate links to the US mechanism via IMPORTATION_LINK and POSSIBLE_DRIVER_OF, so it can plausibly affect the mechanism. However, it lacks a LEADING_INDICATOR_FOR edge to the target hospitalization signal in the retrieved graph. That missing temporal/leading-indicator relationship means there is no graph evidence that travel pressure precedes or predicts the observed hospitalization peak, so it cannot explain the timing of the missed peak despite being an importation-related possible driver."",
-  ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_travel_pressure""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_018,distractor_noisy_candidate,plausible_but_weak_candidate,signal_humidity_drop,signal_humidity_drop,Humidity Drop Anomaly,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_chile_flu,signal_chile_flu,True,signal_humidity_drop,,signal_humidity_drop,True,"Although humidity drop is marked as a POSSIBLE_DRIVER_OF the US influenza mechanism, the graph evidence for this candidate is limited. It lacks an IMPORTATION_LINK to the mechanism and, crucially, has no LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Its ranking score is low (2) compared with other candidates that have additional supportive edges. Because the only present edge is POSSIBLE_DRIVER_OF, the system should treat this as weak evidence for explaining the missed hospitalization peak.","{
-  ""predicted_candidate_id"": ""signal_humidity_drop"",
-  ""predicted_candidate_name"": ""Humidity Drop Anomaly"",
-  ""explanation"": ""Although humidity drop is marked as a POSSIBLE_DRIVER_OF the US influenza mechanism, the graph evidence for this candidate is limited. It lacks an IMPORTATION_LINK to the mechanism and, crucially, has no LEADING_INDICATOR_FOR relationship to the target signal (US hospitalizations). Its ranking score is low (2) compared with other candidates that have additional supportive edges. Because the only present edge is POSSIBLE_DRIVER_OF, the system should treat this as weak evidence for explaining the missed hospitalization peak."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_humidity_drop""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_019,candidate_contrast,strongest_candidate_contrast_against_partial_candidates,signal_chile_flu,signal_chile_flu,Chile Influenza Activity,True,signal_chile_flu;signal_australia_flu;signal_travel_pressure;signal_humidity_drop,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_chile_flu,signal_chile_flu,True,,signal_australia_flu;signal_travel_pressure,signal_australia_flu;signal_travel_pressure,,"Chile Influenza Activity is best supported because its subgraph contains all three supportive relationship types: it is a LEADING_INDICATOR_FOR the US hospitalization signal, it has an IMPORTATION_LINK to the US influenza mechanism, and it is a POSSIBLE_DRIVER_OF the mechanism. Australia lacks an IMPORTATION_LINK in its subgraph (has only POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR) and Travel Importation Pressure lacks a LEADING_INDICATOR_FOR relationship to the target signal, making Chile the stronger candidate.","{
-  ""predicted_candidate_id"": ""signal_chile_flu"",
-  ""predicted_candidate_name"": ""Chile Influenza Activity"",
-  ""explanation"": ""Chile Influenza Activity is best supported because its subgraph contains all three supportive relationship types: it is a LEADING_INDICATOR_FOR the US hospitalization signal, it has an IMPORTATION_LINK to the US influenza mechanism, and it is a POSSIBLE_DRIVER_OF the mechanism. Australia lacks an IMPORTATION_LINK in its subgraph (has only POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR) and Travel Importation Pressure lacks a LEADING_INDICATOR_FOR relationship to the target signal, making Chile the stronger candidate."",
-  ""mentioned_evidence_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure""
-  ],
-  ""weak_candidate_ids"": [
-    ""signal_australia_flu"",
-    ""signal_travel_pressure""
-  ],
-  ""stronger_candidate_id"": ""signal_chile_flu""
-}"
-hard_case_020,strongest_candidate_completeness,complete_support_no_overclaim,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,,"Within the retrieved Puerto Rico dengue graph, Mosquito Vector Index has all three prototype support relationships to the mechanism and target signal (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR). That combination makes it the most complete graph-supported candidate because it links as a possible mechanistic driver, an importation-related connector to the mechanism, and a lead signal for the observed case signal. However, these graph relationships are evidence of model-revision relevance in the graph only; they do not by themselves prove real-world causality because the graph lacks independent observational, experimental, or temporal validation nodes/edges (not provided in the retrieved evidence) that would establish that changes in the signal actually caused the observed outbreak in reality.","{
-  ""predicted_candidate_id"": ""signal_vector_index"",
-  ""predicted_candidate_name"": ""Mosquito Vector Index"",
-  ""explanation"": ""Within the retrieved Puerto Rico dengue graph, Mosquito Vector Index has all three prototype support relationships to the mechanism and target signal (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR). That combination makes it the most complete graph-supported candidate because it links as a possible mechanistic driver, an importation-related connector to the mechanism, and a lead signal for the observed case signal. However, these graph relationships are evidence of model-revision relevance in the graph only; they do not by themselves prove real-world causality because the graph lacks independent observational, experimental, or temporal validation nodes/edges (not provided in the retrieved evidence) that would establish that changes in the signal actually caused the observed outbreak in reality."",
-  ""mentioned_evidence_edges"": [
-    ""LEADING_INDICATOR_FOR"",
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_rainfall_anomaly"",
-    ""signal_travel_importation_dengue"",
-    ""signal_temperature_anomaly""
-  ],
-  ""stronger_candidate_id"": ""signal_vector_index""
-}"
-hard_case_021,missing_edge_detection,partial_support_missing_importation,signal_rainfall_anomaly,signal_rainfall_anomaly,Rainfall Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_rainfall_anomaly,,"Rainfall Anomaly has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges in the retrieved graph, like Mosquito Vector Index, but it lacks the IMPORTATION_LINK edge that Mosquito Vector Index has; this missing IMPORTATION_LINK prevents it from being as complete.","{
-  ""predicted_candidate_id"": ""signal_rainfall_anomaly"",
-  ""predicted_candidate_name"": ""Rainfall Anomaly"",
-  ""explanation"": ""Rainfall Anomaly has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges in the retrieved graph, like Mosquito Vector Index, but it lacks the IMPORTATION_LINK edge that Mosquito Vector Index has; this missing IMPORTATION_LINK prevents it from being as complete."",
-  ""mentioned_evidence_edges"": [
-    ""POSSIBLE_DRIVER_OF"",
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""identified_missing_edges"": [
-    ""IMPORTATION_LINK""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_rainfall_anomaly""
-  ],
-  ""stronger_candidate_id"": ""signal_vector_index""
-}"
-hard_case_022,missing_edge_detection,partial_support_missing_leading_indicator,signal_travel_importation_dengue,signal_travel_importation_dengue,Dengue Travel Importation Pressure,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_travel_importation_dengue,,"The Dengue Travel Importation Pressure candidate has support linking it to the mechanism (POSSIBLE_DRIVER_OF) and specifically to importation (IMPORTATION_LINK), but it lacks a LEADING_INDICATOR_FOR relationship to the Puerto Rico dengue cases signal. Without LEADING_INDICATOR_FOR, the graph has no direct evidence that changes in this importation pressure precede and predict the target signal (timing of the outbreak peak), so it is incomplete as an explanation for the missed peak.","{
-  ""predicted_candidate_id"": ""signal_travel_importation_dengue"",
-  ""predicted_candidate_name"": ""Dengue Travel Importation Pressure"",
-  ""explanation"": ""The Dengue Travel Importation Pressure candidate has support linking it to the mechanism (POSSIBLE_DRIVER_OF) and specifically to importation (IMPORTATION_LINK), but it lacks a LEADING_INDICATOR_FOR relationship to the Puerto Rico dengue cases signal. Without LEADING_INDICATOR_FOR, the graph has no direct evidence that changes in this importation pressure precede and predict the target signal (timing of the outbreak peak), so it is incomplete as an explanation for the missed peak."",
-  ""mentioned_evidence_edges"": [
-    ""IMPORTATION_LINK"",
-    ""POSSIBLE_DRIVER_OF""
-  ],
-  ""identified_missing_edges"": [
-    ""LEADING_INDICATOR_FOR""
-  ],
-  ""rejected_candidate_ids"": [],
-  ""weak_candidate_ids"": [
-    ""signal_travel_importation_dengue""
-  ],
-  ""stronger_candidate_id"": ""signal_vector_index""
-}"
-hard_case_023,distractor_noisy_candidate,plausible_but_weak_candidate,signal_temperature_anomaly,signal_temperature_anomaly,Temperature Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,signal_temperature_anomaly,,signal_temperature_anomaly,True,"Although Temperature Anomaly is plausibly a driver (POSSIBLE_DRIVER_OF present), the prototype graph lacks key supporting relationships that would make it a strong hidden-driver explanation for the observed missed peak. Specifically, there is no LEADING_INDICATOR_FOR edge linking Temperature Anomaly to the Puerto Rico dengue cases signal, so it is not shown as a timely predictor of the target signal, and there is no IMPORTATION_LINK to the mechanism, which would support a pathway by which the signal enters or alters the modeled mechanism. By contrast, the Mosquito Vector Index has both IMPORTATION_LINK and LEADING_INDICATOR_FOR edges in the graph, providing more complete mechanistic and predictive support.","{
+hard_case_023,distractor_noisy_candidate,plausible_but_weak_candidate,signal_temperature_anomaly,signal_temperature_anomaly,Temperature Anomaly,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_vector_index,signal_vector_index,True,signal_temperature_anomaly,,signal_temperature_anomaly,True,"Although Temperature Anomaly is environmentally plausible (POSSIBLE_DRIVER_OF the dengue mechanism), it lacks other supporting relationships in the prototype graph that would make it a strong hidden-driver explanation. The subgraph provides only a POSSIBLE_DRIVER_OF link; it does not show Temperature Anomaly as a LEADING_INDICATOR_FOR the observed dengue cases nor as an IMPORTATION_LINK to the mechanism. By contrast, the Mosquito Vector Index has both LEADING_INDICATOR_FOR and IMPORTATION_LINK relationships in addition to POSSIBLE_DRIVER_OF, giving it stronger, multi-path support for explaining the missed outbreak peak. Plausibility alone (a single POSSIBLE_DRIVER_OF edge) is insufficient without leading-indicator or importation relationships that connect the signal to the observed target and to mechanism importation pathways.","{
   ""predicted_candidate_id"": ""signal_temperature_anomaly"",
   ""predicted_candidate_name"": ""Temperature Anomaly"",
-  ""explanation"": ""Although Temperature Anomaly is plausibly a driver (POSSIBLE_DRIVER_OF present), the prototype graph lacks key supporting relationships that would make it a strong hidden-driver explanation for the observed missed peak. Specifically, there is no LEADING_INDICATOR_FOR edge linking Temperature Anomaly to the Puerto Rico dengue cases signal, so it is not shown as a timely predictor of the target signal, and there is no IMPORTATION_LINK to the mechanism, which would support a pathway by which the signal enters or alters the modeled mechanism. By contrast, the Mosquito Vector Index has both IMPORTATION_LINK and LEADING_INDICATOR_FOR edges in the graph, providing more complete mechanistic and predictive support."",
+  ""explanation"": ""Although Temperature Anomaly is environmentally plausible (POSSIBLE_DRIVER_OF the dengue mechanism), it lacks other supporting relationships in the prototype graph that would make it a strong hidden-driver explanation. The subgraph provides only a POSSIBLE_DRIVER_OF link; it does not show Temperature Anomaly as a LEADING_INDICATOR_FOR the observed dengue cases nor as an IMPORTATION_LINK to the mechanism. By contrast, the Mosquito Vector Index has both LEADING_INDICATOR_FOR and IMPORTATION_LINK relationships in addition to POSSIBLE_DRIVER_OF, giving it stronger, multi-path support for explaining the missed outbreak peak. Plausibility alone (a single POSSIBLE_DRIVER_OF edge) is insufficient without leading-indicator or importation relationships that connect the signal to the observed target and to mechanism importation pathways."",
   ""mentioned_evidence_edges"": [
     ""POSSIBLE_DRIVER_OF""
   ],
@@ -416,10 +416,27 @@ hard_case_023,distractor_noisy_candidate,plausible_but_weak_candidate,signal_tem
   ],
   ""stronger_candidate_id"": ""signal_vector_index""
 }"
-hard_case_024,candidate_contrast,strongest_candidate_contrast_against_partial_candidates,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_vector_index,signal_vector_index,True,,signal_rainfall_anomaly;signal_travel_importation_dengue,signal_rainfall_anomaly;signal_travel_importation_dengue,,"Mosquito Vector Index is ranked strongest because its support subgraph includes three evidence relationships to the mechanism and target: POSSIBLE_DRIVER_OF to the Puerto Rico dengue mechanism, IMPORTATION_LINK to the mechanism, and LEADING_INDICATOR_FOR to the Puerto Rico dengue cases. Rainfall Anomaly lacks an IMPORTATION_LINK to the mechanism (it has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR only). Dengue Travel Importation Pressure lacks a LEADING_INDICATOR_FOR edge to the target signal (it has POSSIBLE_DRIVER_OF and IMPORTATION_LINK only). The combination of all three relationship types for Mosquito Vector Index makes it better supported in the retrieved graph.","{
+hard_case_024,candidate_contrast,strongest_candidate_contrast_against_partial_candidates,signal_vector_index,signal_vector_index,Mosquito Vector Index,True,signal_vector_index;signal_rainfall_anomaly;signal_travel_importation_dengue;signal_temperature_anomaly,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_vector_index,signal_vector_index,True,,,signal_rainfall_anomaly;signal_travel_importation_dengue,,"Mosquito Vector Index is ranked strongest because, in the provided graph evidence, it has all three supporting relationship types linking it to the mechanism and target: it is a POSSIBLE_DRIVER_OF the Puerto Rico dengue mechanism, it has an IMPORTATION_LINK to that mechanism, and it is a LEADING_INDICATOR_FOR the Puerto Rico dengue cases signal. By contrast, Rainfall Anomaly lacks an IMPORTATION_LINK (it has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR) and Dengue Travel Importation Pressure lacks a LEADING_INDICATOR_FOR (it has POSSIBLE_DRIVER_OF and IMPORTATION_LINK). The vector index therefore uniquely combines both an importation link and a leading-indicator relationship in the support subgraph, making it the strongest candidate.","{
   ""predicted_candidate_id"": ""signal_vector_index"",
   ""predicted_candidate_name"": ""Mosquito Vector Index"",
-  ""explanation"": ""Mosquito Vector Index is ranked strongest because its support subgraph includes three evidence relationships to the mechanism and target: POSSIBLE_DRIVER_OF to the Puerto Rico dengue mechanism, IMPORTATION_LINK to the mechanism, and LEADING_INDICATOR_FOR to the Puerto Rico dengue cases. Rainfall Anomaly lacks an IMPORTATION_LINK to the mechanism (it has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR only). Dengue Travel Importation Pressure lacks a LEADING_INDICATOR_FOR edge to the target signal (it has POSSIBLE_DRIVER_OF and IMPORTATION_LINK only). The combination of all three relationship types for Mosquito Vector Index makes it better supported in the retrieved graph."",
+  ""explanation"": ""Mosquito Vector Index is ranked strongest because, in the provided graph evidence, it has all three supporting relationship types linking it to the mechanism and target: it is a POSSIBLE_DRIVER_OF the Puerto Rico dengue mechanism, it has an IMPORTATION_LINK to that mechanism, and it is a LEADING_INDICATOR_FOR the Puerto Rico dengue cases signal. By contrast, Rainfall Anomaly lacks an IMPORTATION_LINK (it has POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR) and Dengue Travel Importation Pressure lacks a LEADING_INDICATOR_FOR (it has POSSIBLE_DRIVER_OF and IMPORTATION_LINK). The vector index therefore uniquely combines both an importation link and a leading-indicator relationship in the support subgraph, making it the strongest candidate."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_rainfall_anomaly"",
+    ""signal_travel_importation_dengue""
+  ],
+  ""stronger_candidate_id"": ""signal_vector_index""
+}"
+hard_case_025,strongest_candidate_completeness,complete_support_no_overclaim,signal_regional_rsv_early,signal_regional_rsv_early,Regional RSV Early Signal,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,,"Regional RSV Early Signal should be treated as the strongest graph-supported candidate because its support subgraph contains all three prototype support relationships linking it to the failure: POSSIBLE_DRIVER_OF and IMPORTATION_LINK to the Southeast US pediatric RSV mechanism, plus LEADING_INDICATOR_FOR to the pediatric hospitalization target signal. These three relationship types together provide mechanistic, importation, and leading-indicator support within the retrieved graph. However, this is graph-derived support, not confirmation of causality: the presence of these relationships indicates consistent and multifaceted support in the knowledge graph but does not by itself prove a causal effect.","{
+  ""predicted_candidate_id"": ""signal_regional_rsv_early"",
+  ""predicted_candidate_name"": ""Regional RSV Early Signal"",
+  ""explanation"": ""Regional RSV Early Signal should be treated as the strongest graph-supported candidate because its support subgraph contains all three prototype support relationships linking it to the failure: POSSIBLE_DRIVER_OF and IMPORTATION_LINK to the Southeast US pediatric RSV mechanism, plus LEADING_INDICATOR_FOR to the pediatric hospitalization target signal. These three relationship types together provide mechanistic, importation, and leading-indicator support within the retrieved graph. However, this is graph-derived support, not confirmation of causality: the presence of these relationships indicates consistent and multifaceted support in the knowledge graph but does not by itself prove a causal effect."",
   ""mentioned_evidence_edges"": [
     ""LEADING_INDICATOR_FOR"",
     ""IMPORTATION_LINK"",
@@ -427,12 +444,236 @@ hard_case_024,candidate_contrast,strongest_candidate_contrast_against_partial_ca
   ],
   ""identified_missing_edges"": [],
   ""rejected_candidate_ids"": [
-    ""signal_rainfall_anomaly"",
-    ""signal_travel_importation_dengue""
+    ""signal_school_reopening_pressure"",
+    ""signal_mobility_pressure_rsv"",
+    ""signal_cold_weather_anomaly_rsv""
   ],
   ""weak_candidate_ids"": [
-    ""signal_rainfall_anomaly"",
-    ""signal_travel_importation_dengue""
+    ""signal_school_reopening_pressure"",
+    ""signal_mobility_pressure_rsv"",
+    ""signal_cold_weather_anomaly_rsv""
   ],
-  ""stronger_candidate_id"": ""signal_vector_index""
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_026,missing_edge_detection,partial_support_missing_importation,signal_school_reopening_pressure,signal_school_reopening_pressure,School Reopening Contact Pressure,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,,signal_school_reopening_pressure,,"School Reopening Contact Pressure has POSSIBLE_DRIVER_OF to the mechanism and LEADING_INDICATOR_FOR the target signal in its support subgraph, but it lacks an IMPORTATION_LINK to the mechanism that Regional RSV Early Signal includes, making it less complete.","{
+  ""predicted_candidate_id"": ""signal_school_reopening_pressure"",
+  ""predicted_candidate_name"": ""School Reopening Contact Pressure"",
+  ""explanation"": ""School Reopening Contact Pressure has POSSIBLE_DRIVER_OF to the mechanism and LEADING_INDICATOR_FOR the target signal in its support subgraph, but it lacks an IMPORTATION_LINK to the mechanism that Regional RSV Early Signal includes, making it less complete."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_school_reopening_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_027,missing_edge_detection,partial_support_missing_leading_indicator,signal_mobility_pressure_rsv,signal_mobility_pressure_rsv,RSV Mobility Pressure,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,,signal_mobility_pressure_rsv,,"RSV Mobility Pressure has POSSIBLE_DRIVER_OF and IMPORTATION_LINK to the Southeast US pediatric RSV mechanism, but it lacks a LEADING_INDICATOR_FOR edge to the pediatric hospitalization signal. The missing LEADING_INDICATOR_FOR relationship to signal_rsv_pediatric_hosp prevents full support for explaining the missed hospitalization peak.","{
+  ""predicted_candidate_id"": ""signal_mobility_pressure_rsv"",
+  ""predicted_candidate_name"": ""RSV Mobility Pressure"",
+  ""explanation"": ""RSV Mobility Pressure has POSSIBLE_DRIVER_OF and IMPORTATION_LINK to the Southeast US pediatric RSV mechanism, but it lacks a LEADING_INDICATOR_FOR edge to the pediatric hospitalization signal. The missing LEADING_INDICATOR_FOR relationship to signal_rsv_pediatric_hosp prevents full support for explaining the missed hospitalization peak."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""IMPORTATION_LINK""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_mobility_pressure_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_028,weak_candidate_rejection,weak_candidate_rejection,signal_cold_weather_anomaly_rsv,signal_cold_weather_anomaly_rsv,Cold Weather Anomaly,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,signal_cold_weather_anomaly_rsv,,signal_cold_weather_anomaly_rsv,True,"Cold Weather Anomaly has only a POSSIBLE_DRIVER_OF link to the mechanism in the retrieved graph. It lacks an IMPORTATION_LINK to the mechanism (which would suggest introduction/importation relevance) and a LEADING_INDICATOR_FOR link to the target hospitalization signal (which would connect the candidate directly to the observed missed peak). Other candidates (e.g., Regional RSV Early Signal) include LEADING_INDICATOR_FOR and IMPORTATION_LINK edges, giving them stronger multi-edge support. Because Cold Weather Anomaly is represented by a single POSSIBLE_DRIVER_OF relation, it should be treated as a weak candidate rather than a fully supported hidden driver.","{
+  ""predicted_candidate_id"": ""signal_cold_weather_anomaly_rsv"",
+  ""predicted_candidate_name"": ""Cold Weather Anomaly"",
+  ""explanation"": ""Cold Weather Anomaly has only a POSSIBLE_DRIVER_OF link to the mechanism in the retrieved graph. It lacks an IMPORTATION_LINK to the mechanism (which would suggest introduction/importation relevance) and a LEADING_INDICATOR_FOR link to the target hospitalization signal (which would connect the candidate directly to the observed missed peak). Other candidates (e.g., Regional RSV Early Signal) include LEADING_INDICATOR_FOR and IMPORTATION_LINK edges, giving them stronger multi-edge support. Because Cold Weather Anomaly is represented by a single POSSIBLE_DRIVER_OF relation, it should be treated as a weak candidate rather than a fully supported hidden driver."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_029,partial_evidence_detection,partial_support_not_best_driver,signal_school_reopening_pressure,signal_school_reopening_pressure,School Reopening Contact Pressure,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,,signal_school_reopening_pressure,,"School Reopening Contact Pressure has partial support: it is linked as a POSSIBLE_DRIVER_OF the Southeast pediatric RSV mechanism and as a LEADING_INDICATOR_FOR pediatric hospitalizations, so it could plausibly relate to the missed peak. However, it lacks an IMPORTATION_LINK to the mechanism in the retrieved graph evidence. The absence of IMPORTATION_LINK means it does not explain upstream seeding or regional importation dynamics shown for the top-ranked Regional RSV Early Signal, which reduces its completeness as the best hidden driver for the early/missed peak.","{
+  ""predicted_candidate_id"": ""signal_school_reopening_pressure"",
+  ""predicted_candidate_name"": ""School Reopening Contact Pressure"",
+  ""explanation"": ""School Reopening Contact Pressure has partial support: it is linked as a POSSIBLE_DRIVER_OF the Southeast pediatric RSV mechanism and as a LEADING_INDICATOR_FOR pediatric hospitalizations, so it could plausibly relate to the missed peak. However, it lacks an IMPORTATION_LINK to the mechanism in the retrieved graph evidence. The absence of IMPORTATION_LINK means it does not explain upstream seeding or regional importation dynamics shown for the top-ranked Regional RSV Early Signal, which reduces its completeness as the best hidden driver for the early/missed peak."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_school_reopening_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_030,partial_evidence_detection,mechanism_only_support,signal_mobility_pressure_rsv,signal_mobility_pressure_rsv,RSV Mobility Pressure,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR,LEADING_INDICATOR_FOR,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_mobility_pressure_rsv,signal_mobility_pressure_rsv,,"RSV Mobility Pressure has graph support linking it to the mechanism (POSSIBLE_DRIVER_OF) and to the mechanism as an importation pathway (IMPORTATION_LINK), so it can explain increased introductions or partial pressure on the mechanism. However, it lacks a LEADING_INDICATOR_FOR link to the pediatric hospitalization target signal in the retrieved subgraph. Because it does not directly connect as a leading indicator to the missed target, it is best interpreted as partial mechanism/importation support rather than the complete explanation for the missed pediatric RSV hospitalization peak. The Regional RSV Early Signal (signal_regional_rsv_early) has stronger, more complete support (it includes LEADING_INDICATOR_FOR plus IMPORTATION_LINK and POSSIBLE_DRIVER_OF) and is therefore the stronger candidate overall.","{
+  ""predicted_candidate_id"": ""signal_mobility_pressure_rsv"",
+  ""predicted_candidate_name"": ""RSV Mobility Pressure"",
+  ""explanation"": ""RSV Mobility Pressure has graph support linking it to the mechanism (POSSIBLE_DRIVER_OF) and to the mechanism as an importation pathway (IMPORTATION_LINK), so it can explain increased introductions or partial pressure on the mechanism. However, it lacks a LEADING_INDICATOR_FOR link to the pediatric hospitalization target signal in the retrieved subgraph. Because it does not directly connect as a leading indicator to the missed target, it is best interpreted as partial mechanism/importation support rather than the complete explanation for the missed pediatric RSV hospitalization peak. The Regional RSV Early Signal (signal_regional_rsv_early) has stronger, more complete support (it includes LEADING_INDICATOR_FOR plus IMPORTATION_LINK and POSSIBLE_DRIVER_OF) and is therefore the stronger candidate overall."",
+  ""mentioned_evidence_edges"": [
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_mobility_pressure_rsv""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_mobility_pressure_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_031,weak_candidate_rejection,weak_candidate_not_promoted,signal_cold_weather_anomaly_rsv,signal_cold_weather_anomaly_rsv,Cold Weather Anomaly,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,signal_cold_weather_anomaly_rsv,,signal_cold_weather_anomaly_rsv,True,"The Cold Weather Anomaly candidate has only a POSSIBLE_DRIVER_OF relationship to the mechanism in the retrieved graph. It lacks both LEADING_INDICATOR_FOR and IMPORTATION_LINK edges that are present for higher-ranked surveillance/contact/mobility candidates (e.g., Regional RSV Early Signal has LEADING_INDICATOR_FOR, IMPORTATION_LINK, and POSSIBLE_DRIVER_OF; School Reopening Contact Pressure has LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF; RSV Mobility Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF). Because Cold Weather Anomaly lacks leading-indicator and importation evidence in the support subgraph, it is weaker support for explaining the missed pediatric RSV hospitalization peak and should not be promoted above the surveillance/contact/mobility candidates that have stronger, more complete link types.","{
+  ""predicted_candidate_id"": ""signal_cold_weather_anomaly_rsv"",
+  ""predicted_candidate_name"": ""Cold Weather Anomaly"",
+  ""explanation"": ""The Cold Weather Anomaly candidate has only a POSSIBLE_DRIVER_OF relationship to the mechanism in the retrieved graph. It lacks both LEADING_INDICATOR_FOR and IMPORTATION_LINK edges that are present for higher-ranked surveillance/contact/mobility candidates (e.g., Regional RSV Early Signal has LEADING_INDICATOR_FOR, IMPORTATION_LINK, and POSSIBLE_DRIVER_OF; School Reopening Contact Pressure has LEADING_INDICATOR_FOR and POSSIBLE_DRIVER_OF; RSV Mobility Pressure has IMPORTATION_LINK and POSSIBLE_DRIVER_OF). Because Cold Weather Anomaly lacks leading-indicator and importation evidence in the support subgraph, it is weaker support for explaining the missed pediatric RSV hospitalization peak and should not be promoted above the surveillance/contact/mobility candidates that have stronger, more complete link types."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_032,distractor_noisy_candidate,plausible_but_weak_candidate,signal_cold_weather_anomaly_rsv,signal_cold_weather_anomaly_rsv,Cold Weather Anomaly,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF,1.0,1.0,LEADING_INDICATOR_FOR;IMPORTATION_LINK,LEADING_INDICATOR_FOR;IMPORTATION_LINK,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,signal_cold_weather_anomaly_rsv,,signal_cold_weather_anomaly_rsv,True,"Cold Weather Anomaly is plausible but the retrieved graph evidence for it only shows a POSSIBLE_DRIVER_OF link to the mechanism. It lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR relationship to the pediatric hospitalization signal. By contrast, Regional RSV Early Signal has all three relationship types (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR), giving it stronger, more direct mechanistic and predictive support in the graph. Plausibility alone does not compensate for those missing graph relationships.","{
+  ""predicted_candidate_id"": ""signal_cold_weather_anomaly_rsv"",
+  ""predicted_candidate_name"": ""Cold Weather Anomaly"",
+  ""explanation"": ""Cold Weather Anomaly is plausible but the retrieved graph evidence for it only shows a POSSIBLE_DRIVER_OF link to the mechanism. It lacks both an IMPORTATION_LINK to the mechanism and a LEADING_INDICATOR_FOR relationship to the pediatric hospitalization signal. By contrast, Regional RSV Early Signal has all three relationship types (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR), giving it stronger, more direct mechanistic and predictive support in the graph. Plausibility alone does not compensate for those missing graph relationships."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [],
+  ""weak_candidate_ids"": [
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_033,candidate_contrast,strongest_supported_candidate,signal_regional_rsv_early,signal_regional_rsv_early,Regional RSV Early Signal,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_school_reopening_pressure,signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,,"Regional RSV Early Signal has three supporting relationships in the graph: it is a leading indicator for the pediatric hospitalization target, and it links to the mechanism both as a possible driver and as an importation link. School Reopening Contact Pressure also appears as a possible driver and leading indicator but lacks an IMPORTATION_LINK to the mechanism in the retrieved graph. The presence of IMPORTATION_LINK in the Regional signal adds a distinct pathway connecting regional importation dynamics to the mechanism, making it better supported for explaining the missed peak.","{
+  ""predicted_candidate_id"": ""signal_regional_rsv_early"",
+  ""predicted_candidate_name"": ""Regional RSV Early Signal"",
+  ""explanation"": ""Regional RSV Early Signal has three supporting relationships in the graph: it is a leading indicator for the pediatric hospitalization target, and it links to the mechanism both as a possible driver and as an importation link. School Reopening Contact Pressure also appears as a possible driver and leading indicator but lacks an IMPORTATION_LINK to the mechanism in the retrieved graph. The presence of IMPORTATION_LINK in the Regional signal adds a distinct pathway connecting regional importation dynamics to the mechanism, making it better supported for explaining the missed peak."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_school_reopening_pressure""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_mobility_pressure_rsv"",
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_034,candidate_contrast,strongest_supported_candidate,signal_regional_rsv_early,signal_regional_rsv_early,Regional RSV Early Signal,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_mobility_pressure_rsv,signal_mobility_pressure_rsv;signal_school_reopening_pressure;signal_cold_weather_anomaly_rsv,,"The Regional RSV Early Signal is better supported in the graph because it has a LEADING_INDICATOR_FOR relationship to the pediatric hospitalization target (score +3) in addition to IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships to the mechanism. RSV Mobility Pressure lacks a LEADING_INDICATOR_FOR link to the target in the retrieved evidence, so it is missing the leading-indicator connection that raises the regional signal's explanatory score.","{
+  ""predicted_candidate_id"": ""signal_regional_rsv_early"",
+  ""predicted_candidate_name"": ""Regional RSV Early Signal"",
+  ""explanation"": ""The Regional RSV Early Signal is better supported in the graph because it has a LEADING_INDICATOR_FOR relationship to the pediatric hospitalization target (score +3) in addition to IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships to the mechanism. RSV Mobility Pressure lacks a LEADING_INDICATOR_FOR link to the target in the retrieved evidence, so it is missing the leading-indicator connection that raises the regional signal's explanatory score."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_mobility_pressure_rsv""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_mobility_pressure_rsv"",
+    ""signal_school_reopening_pressure"",
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_035,candidate_contrast,strongest_candidate_contrast_against_partial_candidates,signal_regional_rsv_early,signal_regional_rsv_early,Regional RSV Early Signal,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;IMPORTATION_LINK;LEADING_INDICATOR_FOR,1.0,1.0,,,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_school_reopening_pressure;signal_mobility_pressure_rsv,signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,,"Regional RSV Early Signal is ranked strongest because its support subgraph includes all three relationship types tying it to the failure: it is a POSSIBLE_DRIVER_OF the Southeast pediatric RSV mechanism, it has an IMPORTATION_LINK to that mechanism, and it is a LEADING_INDICATOR_FOR the pediatric hospitalization target signal. Compared to School Reopening Contact Pressure (which lacks an IMPORTATION_LINK) and RSV Mobility Pressure (which lacks a LEADING_INDICATOR_FOR edge to the target), Regional RSV Early Signal has the most complete set of graph relationships supporting it as the primary explanatory driver of the missed peak. No expected relationship types are missing for the Regional RSV Early Signal in the retrieved evidence.","{
+  ""predicted_candidate_id"": ""signal_regional_rsv_early"",
+  ""predicted_candidate_name"": ""Regional RSV Early Signal"",
+  ""explanation"": ""Regional RSV Early Signal is ranked strongest because its support subgraph includes all three relationship types tying it to the failure: it is a POSSIBLE_DRIVER_OF the Southeast pediatric RSV mechanism, it has an IMPORTATION_LINK to that mechanism, and it is a LEADING_INDICATOR_FOR the pediatric hospitalization target signal. Compared to School Reopening Contact Pressure (which lacks an IMPORTATION_LINK) and RSV Mobility Pressure (which lacks a LEADING_INDICATOR_FOR edge to the target), Regional RSV Early Signal has the most complete set of graph relationships supporting it as the primary explanatory driver of the missed peak. No expected relationship types are missing for the Regional RSV Early Signal in the retrieved evidence."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""IMPORTATION_LINK"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_school_reopening_pressure"",
+    ""signal_mobility_pressure_rsv""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_school_reopening_pressure"",
+    ""signal_mobility_pressure_rsv"",
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_036,strongest_candidate_completeness,complete_support_no_overclaim,signal_regional_rsv_early,signal_regional_rsv_early,Regional RSV Early Signal,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,LEADING_INDICATOR_FOR;IMPORTATION_LINK;POSSIBLE_DRIVER_OF,1.0,1.0,,,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv;signal_school_reopening_pressure,,"The graph shows the Regional RSV Early Signal has the most complete set of supportive relationships to the mechanism and the target signal (it is a leading indicator, and has both importation and possible-driver links). However, these relationship types in the graph are not definitive causal proof: POSSIBLE_DRIVER_OF indicates a hypothesized driver, IMPORTATION_LINK indicates a connection or pathway into the modeled mechanism, and LEADING_INDICATOR_FOR denotes temporal precedence or correlation. None of these edges establish definitive real-world causation by themselves, so the answer should avoid claiming this proves the true real-world cause of the hospitalization underprediction.","{
+  ""predicted_candidate_id"": ""signal_regional_rsv_early"",
+  ""predicted_candidate_name"": ""Regional RSV Early Signal"",
+  ""explanation"": ""The graph shows the Regional RSV Early Signal has the most complete set of supportive relationships to the mechanism and the target signal (it is a leading indicator, and has both importation and possible-driver links). However, these relationship types in the graph are not definitive causal proof: POSSIBLE_DRIVER_OF indicates a hypothesized driver, IMPORTATION_LINK indicates a connection or pathway into the modeled mechanism, and LEADING_INDICATOR_FOR denotes temporal precedence or correlation. None of these edges establish definitive real-world causation by themselves, so the answer should avoid claiming this proves the true real-world cause of the hospitalization underprediction."",
+  ""mentioned_evidence_edges"": [
+    ""LEADING_INDICATOR_FOR"",
+    ""IMPORTATION_LINK"",
+    ""POSSIBLE_DRIVER_OF""
+  ],
+  ""identified_missing_edges"": [],
+  ""rejected_candidate_ids"": [
+    ""signal_school_reopening_pressure"",
+    ""signal_mobility_pressure_rsv"",
+    ""signal_cold_weather_anomaly_rsv""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_mobility_pressure_rsv"",
+    ""signal_cold_weather_anomaly_rsv"",
+    ""signal_school_reopening_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
+}"
+hard_case_037,evidence_blurring_trap,candidate_specific_evidence_boundary_with_global_stronger_candidate,signal_school_reopening_pressure,signal_school_reopening_pressure,School Reopening Contact Pressure,True,signal_regional_rsv_early;signal_school_reopening_pressure;signal_mobility_pressure_rsv;signal_cold_weather_anomaly_rsv,LEADING_INDICATOR_FOR;POSSIBLE_DRIVER_OF,POSSIBLE_DRIVER_OF;LEADING_INDICATOR_FOR,1.0,1.0,IMPORTATION_LINK,IMPORTATION_LINK,1.0,0,signal_regional_rsv_early,signal_regional_rsv_early,True,,signal_mobility_pressure_rsv,signal_school_reopening_pressure,,"The School Reopening candidate's support subgraph contains POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the mechanism and target respectively, but it does not include an IMPORTATION_LINK edge. The IMPORTATION_LINK edge is present in the RSV Mobility Pressure candidate's subgraph (signal_mobility_pressure_rsv) and therefore cannot be re-assigned to the school reopening candidate based on the retrieved graph evidence. Regional RSV Early Signal remains the strongest candidate because its subgraph includes all three supporting relationships (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR) and it has the highest score in the rankings.","{
+  ""predicted_candidate_id"": ""signal_school_reopening_pressure"",
+  ""predicted_candidate_name"": ""School Reopening Contact Pressure"",
+  ""explanation"": ""The School Reopening candidate's support subgraph contains POSSIBLE_DRIVER_OF and LEADING_INDICATOR_FOR edges to the mechanism and target respectively, but it does not include an IMPORTATION_LINK edge. The IMPORTATION_LINK edge is present in the RSV Mobility Pressure candidate's subgraph (signal_mobility_pressure_rsv) and therefore cannot be re-assigned to the school reopening candidate based on the retrieved graph evidence. Regional RSV Early Signal remains the strongest candidate because its subgraph includes all three supporting relationships (POSSIBLE_DRIVER_OF, IMPORTATION_LINK, and LEADING_INDICATOR_FOR) and it has the highest score in the rankings."",
+  ""mentioned_evidence_edges"": [
+    ""POSSIBLE_DRIVER_OF"",
+    ""LEADING_INDICATOR_FOR""
+  ],
+  ""identified_missing_edges"": [
+    ""IMPORTATION_LINK""
+  ],
+  ""rejected_candidate_ids"": [
+    ""signal_mobility_pressure_rsv""
+  ],
+  ""weak_candidate_ids"": [
+    ""signal_school_reopening_pressure""
+  ],
+  ""stronger_candidate_id"": ""signal_regional_rsv_early""
 }"

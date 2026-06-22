@@ -186,5 +186,69 @@
     "source_type": "failure_case_summary",
     "related_candidate_id": null,
     "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_rsv_regional_early_signal",
+    "title": "Regional RSV Early Signal",
+    "text": "Regional RSV Early Signal is a prototype candidate hidden driver for the Southeast US pediatric RSV hospitalization underprediction case. The prototype graph treats this signal as a LEADING_INDICATOR_FOR pediatric RSV hospitalizations, an IMPORTATION_LINK to the Southeast US pediatric RSV base mechanism, and a POSSIBLE_DRIVER_OF that mechanism. This makes it the strongest current candidate in the RSV prototype evidence graph.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_regional_rsv_early",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_rsv_school_reopening_pressure",
+    "title": "School Reopening Contact Pressure",
+    "text": "School Reopening Contact Pressure is a prototype contact-pattern candidate for the Southeast US pediatric RSV hospitalization underprediction case. The prototype graph includes LEADING_INDICATOR_FOR evidence for pediatric RSV hospitalizations and POSSIBLE_DRIVER_OF evidence for the Southeast US pediatric RSV base mechanism. It does not include an IMPORTATION_LINK relationship to the RSV mechanism, so it should be treated as partial support rather than a complete candidate.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_school_reopening_pressure",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_rsv_mobility_pressure",
+    "title": "RSV Mobility Pressure",
+    "text": "RSV Mobility Pressure is a prototype mobility and importation candidate for the Southeast US pediatric RSV hospitalization underprediction case. The prototype graph includes IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships to the Southeast US pediatric RSV base mechanism. It does not include a LEADING_INDICATOR_FOR relationship to pediatric RSV hospitalizations, so it should be treated as partial mechanism/importation support rather than full support.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_mobility_pressure_rsv",
+    "edge_types": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_rsv_cold_weather_anomaly",
+    "title": "Cold Weather Anomaly",
+    "text": "Cold Weather Anomaly is a prototype weather-related candidate for the Southeast US pediatric RSV hospitalization underprediction case. In the prototype graph it is connected to the Southeast US pediatric RSV base mechanism only through a POSSIBLE_DRIVER_OF relationship. It lacks LEADING_INDICATOR_FOR evidence for pediatric RSV hospitalizations and lacks IMPORTATION_LINK evidence to the RSV mechanism, so it should be treated as weak or incomplete.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_cold_weather_anomaly_rsv",
+    "edge_types": [
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_rsv_pediatric_hosp_failure_case",
+    "title": "Southeast US Pediatric RSV Hospitalization Failure Case",
+    "text": "The Southeast US pediatric RSV hospitalization failure case describes an RSV mechanism that underpredicted a pediatric hospitalization peak. This is a prototype third scenario used to test whether the hard-pilot evaluation pipeline can handle another disease, region, mechanism, target signal, and candidate set while preserving the same hard-pilot relationship-type metrics.",
+    "source_type": "failure_case_summary",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_rsv_contact_mobility_weather_warning",
+    "title": "RSV Contact Mobility and Weather Warning",
+    "text": "RSV hospitalization underprediction can involve contact-pattern changes, mobility or importation pressure, weather-related forcing, and surveillance lead signals. A candidate should not be treated as fully supported merely because it is biologically plausible. The benchmark requires candidate-specific evidence relationships: leading-indicator evidence, importation-link evidence, and possible-driver evidence should be kept separate.",
+    "source_type": "evaluation_warning",
+    "related_candidate_id": null,
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
   }
 ]
