@@ -38,10 +38,25 @@ RSV_FAILURE_CASE = {
     "summary": "Southeast US pediatric RSV mechanism underpredicted a hospitalization peak.",
 }
 
+
+COVID_FAILURE_CASE = {
+    "id": "failure_case_covid_hosp_rebound_underprediction_001",
+    "mechanism_id": "eq_covid_hosp_base",
+    "region": "Northeast US",
+    "disease": "COVID-19",
+    "failure_type": "underprediction",
+    "failure_pattern": "missed_rebound_peak",
+    "target_signal": "signal_covid_hosp",
+    "error_direction": "actual_above_prediction",
+    "candidate_driver_family": "variant_wastewater_mobility_and_immunity_signals",
+    "summary": "Northeast US COVID hospitalization mechanism underpredicted a rebound peak.",
+}
+
 FAILURE_CASES_BY_ID = {
     FAILURE_CASE["id"]: FAILURE_CASE,
     DENGUE_FAILURE_CASE["id"]: DENGUE_FAILURE_CASE,
     RSV_FAILURE_CASE["id"]: RSV_FAILURE_CASE,
+    COVID_FAILURE_CASE["id"]: COVID_FAILURE_CASE,
 }
 
 FAILURE_CASE_CANDIDATES_BY_ID = {
@@ -97,6 +112,24 @@ FAILURE_CASE_CANDIDATES_BY_ID = {
         {
             "candidate_id": "signal_cold_weather_anomaly_rsv",
             "candidate_name": "Cold Weather Anomaly",
+        },
+    ],
+    COVID_FAILURE_CASE["id"]: [
+        {
+            "candidate_id": "signal_variant_growth_covid",
+            "candidate_name": "COVID Variant Growth Signal",
+        },
+        {
+            "candidate_id": "signal_wastewater_surge_covid",
+            "candidate_name": "Wastewater Viral Load Surge",
+        },
+        {
+            "candidate_id": "signal_mobility_rebound_covid",
+            "candidate_name": "COVID Mobility Rebound Pressure",
+        },
+        {
+            "candidate_id": "signal_immunity_waning_covid",
+            "candidate_name": "Immunity Waning Gap",
         },
     ],
 }

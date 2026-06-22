@@ -250,5 +250,69 @@
       "IMPORTATION_LINK",
       "POSSIBLE_DRIVER_OF"
     ]
+  },
+  {
+    "chunk_id": "chunk_covid_variant_growth_signal",
+    "title": "COVID Variant Growth Signal",
+    "text": "COVID Variant Growth Signal is a prototype candidate hidden driver for the Northeast US COVID hospitalization rebound underprediction case. The prototype graph treats this signal as a LEADING_INDICATOR_FOR COVID hospitalizations, an IMPORTATION_LINK to the Northeast US COVID hospitalization base mechanism, and a POSSIBLE_DRIVER_OF that mechanism. This makes it the strongest current candidate in the COVID prototype evidence graph.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_variant_growth_covid",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_covid_wastewater_surge",
+    "title": "Wastewater Viral Load Surge",
+    "text": "Wastewater Viral Load Surge is a prototype surveillance candidate for the Northeast US COVID hospitalization rebound underprediction case. The prototype graph includes LEADING_INDICATOR_FOR evidence for COVID hospitalizations and POSSIBLE_DRIVER_OF evidence for the Northeast US COVID hospitalization base mechanism. It does not include an IMPORTATION_LINK relationship to the COVID mechanism, so it should be treated as partial support rather than a complete candidate.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_wastewater_surge_covid",
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_covid_mobility_rebound",
+    "title": "COVID Mobility Rebound Pressure",
+    "text": "COVID Mobility Rebound Pressure is a prototype mobility and importation candidate for the Northeast US COVID hospitalization rebound underprediction case. The prototype graph includes IMPORTATION_LINK and POSSIBLE_DRIVER_OF relationships to the Northeast US COVID hospitalization base mechanism. It does not include a LEADING_INDICATOR_FOR relationship to COVID hospitalizations, so it should be treated as partial mechanism/importation support rather than full support.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_mobility_rebound_covid",
+    "edge_types": [
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_covid_immunity_waning_gap",
+    "title": "Immunity Waning Gap",
+    "text": "Immunity Waning Gap is a prototype immunity-related candidate for the Northeast US COVID hospitalization rebound underprediction case. In the prototype graph it is connected to the Northeast US COVID hospitalization base mechanism only through a POSSIBLE_DRIVER_OF relationship. It lacks LEADING_INDICATOR_FOR evidence for COVID hospitalizations and lacks IMPORTATION_LINK evidence to the COVID mechanism, so it should be treated as weak or incomplete.",
+    "source_type": "candidate_summary",
+    "related_candidate_id": "signal_immunity_waning_covid",
+    "edge_types": [
+      "POSSIBLE_DRIVER_OF"
+    ]
+  },
+  {
+    "chunk_id": "chunk_covid_hosp_rebound_failure_case",
+    "title": "Northeast US COVID Hospitalization Rebound Failure Case",
+    "text": "The Northeast US COVID hospitalization rebound failure case describes a COVID hospitalization mechanism that underpredicted a rebound peak. This is a prototype fourth scenario used to test whether the hard-pilot evaluation pipeline can handle another disease, region, mechanism, target signal, and candidate set while preserving the same hard-pilot relationship-type metrics.",
+    "source_type": "failure_case_summary",
+    "related_candidate_id": null,
+    "edge_types": []
+  },
+  {
+    "chunk_id": "chunk_covid_variant_wastewater_mobility_warning",
+    "title": "COVID Variant Wastewater Mobility Warning",
+    "text": "COVID hospitalization rebound underprediction can involve variant growth, wastewater lead signals, mobility or importation pressure, and immunity waning. A candidate should not be treated as fully supported merely because it is biologically or epidemiologically plausible. The benchmark requires candidate-specific evidence relationships: leading-indicator evidence, importation-link evidence, and possible-driver evidence should be kept separate.",
+    "source_type": "evaluation_warning",
+    "related_candidate_id": null,
+    "edge_types": [
+      "LEADING_INDICATOR_FOR",
+      "IMPORTATION_LINK",
+      "POSSIBLE_DRIVER_OF"
+    ]
   }
 ]

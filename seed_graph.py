@@ -86,6 +86,34 @@ GRAPH = {
         {"id": "paper_school_contact", "type": "Paper", "name": "Paper on School Contacts and Respiratory Virus Spread"},
         {"id": "paper_respiratory_mobility", "type": "Paper", "name": "Paper on Mobility and Respiratory Virus Importation"},
         {"id": "paper_rsv_weather", "type": "Paper", "name": "Paper on Weather and RSV Transmission"},
+
+        # Prototype COVID scenario for additional multi-failure-case evaluation.
+        # These edges reuse the same hard-pilot relationship types for metric
+        # compatibility, not as a final scientific claim about COVID causality.
+        {"id": "disease_covid19", "type": "Disease", "name": "COVID-19"},
+        {"id": "region_northeast_us", "type": "Region", "name": "Northeast United States"},
+        {"id": "region_variant_surveillance_network", "type": "Region", "name": "Variant Surveillance Network"},
+        {"id": "eq_covid_hosp_base", "type": "MechanismEquation", "name": "Northeast US COVID Hospitalization Base Mechanism"},
+        {"id": "state_i_covid", "type": "StateVariable", "name": "Infectious COVID Population"},
+        {"id": "param_beta_covid", "type": "Parameter", "name": "COVID Transmission Rate"},
+        {"id": "signal_covid_hosp", "type": "Signal", "name": "COVID Hospitalizations"},
+        {"id": "signal_variant_growth_covid", "type": "Signal", "name": "COVID Variant Growth Signal"},
+        {"id": "signal_wastewater_surge_covid", "type": "Signal", "name": "Wastewater Viral Load Surge"},
+        {"id": "signal_mobility_rebound_covid", "type": "Signal", "name": "COVID Mobility Rebound Pressure"},
+        {"id": "signal_immunity_waning_covid", "type": "Signal", "name": "Immunity Waning Gap"},
+        {"id": "context_variant_growth", "type": "Context", "name": "Variant Growth and Replacement"},
+        {"id": "context_wastewater_surveillance", "type": "Context", "name": "Wastewater Surveillance"},
+        {"id": "context_covid_mobility", "type": "Context", "name": "COVID Mobility Rebound"},
+        {"id": "context_immunity_waning", "type": "Context", "name": "Population Immunity Waning"},
+        {"id": "dataset_covid_hosp", "type": "Dataset", "name": "COVID Hospitalization Dataset"},
+        {"id": "dataset_variant_growth_covid", "type": "Dataset", "name": "COVID Variant Growth Dataset"},
+        {"id": "dataset_wastewater_covid", "type": "Dataset", "name": "COVID Wastewater Viral Load Dataset"},
+        {"id": "dataset_mobility_rebound_covid", "type": "Dataset", "name": "COVID Mobility Rebound Dataset"},
+        {"id": "dataset_immunity_waning_covid", "type": "Dataset", "name": "COVID Immunity Waning Dataset"},
+        {"id": "paper_covid_variant_growth", "type": "Paper", "name": "Paper on Variant Growth and Hospitalization Rebounds"},
+        {"id": "paper_covid_wastewater", "type": "Paper", "name": "Paper on Wastewater Surveillance and COVID Hospitalizations"},
+        {"id": "paper_covid_mobility", "type": "Paper", "name": "Paper on Mobility and COVID Transmission"},
+        {"id": "paper_covid_immunity", "type": "Paper", "name": "Paper on Waning Immunity and COVID Rebounds"},
     ],
     "edges": [
         {"source": "eq_us_flu_base", "type": "MODELS", "target": "disease_influenza"},
@@ -211,6 +239,47 @@ GRAPH = {
         {"source": "signal_cold_weather_anomaly_rsv", "type": "HAS_DATASET", "target": "dataset_cold_weather_rsv"},
         {"source": "signal_cold_weather_anomaly_rsv", "type": "SUPPORTED_BY", "target": "paper_rsv_weather"},
         {"source": "signal_cold_weather_anomaly_rsv", "type": "POSSIBLE_DRIVER_OF", "target": "eq_rsv_pediatric_base"},
+
+        {"source": "eq_covid_hosp_base", "type": "MODELS", "target": "disease_covid19"},
+        {"source": "eq_covid_hosp_base", "type": "APPLIES_TO", "target": "region_northeast_us"},
+        {"source": "eq_covid_hosp_base", "type": "USES_VARIABLE", "target": "state_i_covid"},
+        {"source": "eq_covid_hosp_base", "type": "USES_PARAMETER", "target": "param_beta_covid"},
+
+        {"source": "signal_covid_hosp", "type": "APPLIES_TO", "target": "region_northeast_us"},
+        {"source": "signal_covid_hosp", "type": "MODELS", "target": "disease_covid19"},
+        {"source": "signal_covid_hosp", "type": "HAS_DATASET", "target": "dataset_covid_hosp"},
+
+        {"source": "signal_variant_growth_covid", "type": "APPLIES_TO", "target": "region_variant_surveillance_network"},
+        {"source": "signal_variant_growth_covid", "type": "MODELS", "target": "disease_covid19"},
+        {"source": "signal_variant_growth_covid", "type": "HAS_CONTEXT", "target": "context_variant_growth"},
+        {"source": "signal_variant_growth_covid", "type": "HAS_DATASET", "target": "dataset_variant_growth_covid"},
+        {"source": "signal_variant_growth_covid", "type": "SUPPORTED_BY", "target": "paper_covid_variant_growth"},
+        {"source": "signal_variant_growth_covid", "type": "LEADING_INDICATOR_FOR", "target": "signal_covid_hosp"},
+        {"source": "signal_variant_growth_covid", "type": "IMPORTATION_LINK", "target": "eq_covid_hosp_base"},
+        {"source": "signal_variant_growth_covid", "type": "POSSIBLE_DRIVER_OF", "target": "eq_covid_hosp_base"},
+
+        {"source": "signal_wastewater_surge_covid", "type": "APPLIES_TO", "target": "region_northeast_us"},
+        {"source": "signal_wastewater_surge_covid", "type": "MODELS", "target": "disease_covid19"},
+        {"source": "signal_wastewater_surge_covid", "type": "HAS_CONTEXT", "target": "context_wastewater_surveillance"},
+        {"source": "signal_wastewater_surge_covid", "type": "HAS_DATASET", "target": "dataset_wastewater_covid"},
+        {"source": "signal_wastewater_surge_covid", "type": "SUPPORTED_BY", "target": "paper_covid_wastewater"},
+        {"source": "signal_wastewater_surge_covid", "type": "LEADING_INDICATOR_FOR", "target": "signal_covid_hosp"},
+        {"source": "signal_wastewater_surge_covid", "type": "POSSIBLE_DRIVER_OF", "target": "eq_covid_hosp_base"},
+
+        {"source": "signal_mobility_rebound_covid", "type": "APPLIES_TO", "target": "region_northeast_us"},
+        {"source": "signal_mobility_rebound_covid", "type": "MODELS", "target": "disease_covid19"},
+        {"source": "signal_mobility_rebound_covid", "type": "HAS_CONTEXT", "target": "context_covid_mobility"},
+        {"source": "signal_mobility_rebound_covid", "type": "HAS_DATASET", "target": "dataset_mobility_rebound_covid"},
+        {"source": "signal_mobility_rebound_covid", "type": "SUPPORTED_BY", "target": "paper_covid_mobility"},
+        {"source": "signal_mobility_rebound_covid", "type": "IMPORTATION_LINK", "target": "eq_covid_hosp_base"},
+        {"source": "signal_mobility_rebound_covid", "type": "POSSIBLE_DRIVER_OF", "target": "eq_covid_hosp_base"},
+
+        {"source": "signal_immunity_waning_covid", "type": "APPLIES_TO", "target": "region_northeast_us"},
+        {"source": "signal_immunity_waning_covid", "type": "MODELS", "target": "disease_covid19"},
+        {"source": "signal_immunity_waning_covid", "type": "HAS_CONTEXT", "target": "context_immunity_waning"},
+        {"source": "signal_immunity_waning_covid", "type": "HAS_DATASET", "target": "dataset_immunity_waning_covid"},
+        {"source": "signal_immunity_waning_covid", "type": "SUPPORTED_BY", "target": "paper_covid_immunity"},
+        {"source": "signal_immunity_waning_covid", "type": "POSSIBLE_DRIVER_OF", "target": "eq_covid_hosp_base"},
     ]
 }
 def build_graph_summary(graph):
