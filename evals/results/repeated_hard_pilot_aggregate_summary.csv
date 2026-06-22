@@ -1,0 +1,7 @@
+,candidate_accuracy,candidate_accuracy,candidate_accuracy,candidate_accuracy,avg_present_edge_precision,avg_present_edge_precision,avg_present_edge_precision,avg_present_edge_precision,avg_present_edge_recall,avg_present_edge_recall,avg_present_edge_recall,avg_present_edge_recall,avg_missing_edge_recall,avg_missing_edge_recall,avg_missing_edge_recall,avg_missing_edge_recall,missing_edge_false_claim_count,missing_edge_false_claim_count,missing_edge_false_claim_count,missing_edge_false_claim_count,stronger_candidate_accuracy,stronger_candidate_accuracy,stronger_candidate_accuracy,stronger_candidate_accuracy,weak_candidate_rejection_accuracy,weak_candidate_rejection_accuracy,weak_candidate_rejection_accuracy,weak_candidate_rejection_accuracy
+,mean,std,min,max,mean,std,min,max,mean,std,min,max,mean,std,min,max,mean,std,min,max,mean,std,min,max,mean,std,min,max
+method_name,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+GraphRAG,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,,,,,,,,,1.0,0.0,1.0,1.0
+KG-only,,,,,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,,,,,,,,,1.0,0.0,1.0,1.0
+LLM-only,0.972,0.018,0.94,0.98,0.968,0.016,0.95,0.99,0.753,0.027,0.73,0.8,0.948,0.027,0.91,0.97,,,,,,,,,1.0,0.0,1.0,1.0
+Text-RAG,0.944,0.017,0.92,0.96,0.851,0.009,0.843,0.86,0.872,0.011,0.86,0.88,0.936,0.005,0.93,0.94,,,,,,,,,1.0,0.0,1.0,1.0
