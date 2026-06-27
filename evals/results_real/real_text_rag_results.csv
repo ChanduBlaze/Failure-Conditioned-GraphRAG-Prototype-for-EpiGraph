@@ -1,0 +1,2 @@
+case_id,method,predicted_candidate_id,candidate_correct,mentioned_evidence_edges,identified_missing_edges,status_correct,present_edge_recall,missing_edge_recall,lag_correct,score_meets_minimum,must_not_include_violations,notes
+real_case_001,text_rag,real_signal_influenza_a_wastewater_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Fixture-based real-data extension case. The evidence is associational and used to validate information parity across real Text-RAG and real GraphRAG representations.
