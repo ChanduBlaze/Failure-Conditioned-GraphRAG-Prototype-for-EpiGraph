@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "real_case_001",
     "task_type": "real_data_evidence_preservation",
@@ -12,11 +12,11 @@
     "expected_missing_edges": [],
     "expected_status": "present",
     "expected_lag_weeks": 2,
-    "minimum_expected_score": 0.60,
-    "must_not_include": [      "proves causality",
+    "minimum_expected_score": 0.6,
+    "must_not_include": [
+      "proves causality",
       "definitively causes"
     ],
     "notes": "Fixture-based real-data extension case. The evidence is associational and used to validate information parity across real Text-RAG and real GraphRAG representations."
   }
 ]
-
