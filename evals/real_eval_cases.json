@@ -1,0 +1,23 @@
+[
+  {
+    "id": "real_case_001",
+    "task_type": "real_data_evidence_preservation",
+    "expected_answer_type": "candidate_with_evidence_edges",
+    "question": "Using the real-data evidence graph, determine whether Influenza A wastewater activity has LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate.",
+    "failure_case_id": "real_us_flu_wastewater_leading_indicator_001",
+    "expected_candidate_id": "real_signal_influenza_a_wastewater_activity",
+    "expected_present_edges": [
+      "LEADING_INDICATOR_FOR"
+    ],
+    "expected_missing_edges": [],
+    "expected_status": "present",
+    "expected_lag_weeks": 2,
+    "minimum_expected_score": 0.60,
+    "must_not_include": [
+      "causal proof",
+      "proves causality",
+      "definitively causes"
+    ],
+    "notes": "Fixture-based real-data extension case. The evidence is associational and used to validate information parity across real Text-RAG and real GraphRAG representations."
+  }
+]
