@@ -1,6 +1,7 @@
 """Tests for the offline real-data LLM-only baseline framework."""
 
 import csv
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -21,6 +22,14 @@ from scripts.real_kg.evaluate_real_llm_only_outputs import (
 FAILURE_CASE_ID = "real_us_flu_wastewater_leading_indicator_001"
 TARGET_NAME = "U.S. influenza hospitalization rate"
 EDGE_TYPE = "LEADING_INDICATOR_FOR"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+EXACT_HUMIDITY_RESPONSE = (
+    "This support is indirect: humidity is not a clinical or surveillance "
+    "measure of influenza burden, and an association with later "
+    "hospitalization patterns does not prove causality or mean humidity "
+    "definitively causes changes in hospitalizations."
+)
 
 CANDIDATES = [
     (
@@ -245,6 +254,18 @@ class RealLlmOnlyBaselineTests(unittest.TestCase):
 
         self.assertEqual(rows[0]["must_not_include_violations"], 0)
 
+    def test_exact_humidity_response_has_no_overclaim_violation(self):
+        outputs = make_outputs()
+        outputs[-1]["response"] = (
+            "Candidate ID: **real_signal_humidity_anomaly**\n\n"
+            "Classification: **Supported**\n\n"
+            f"{EXACT_HUMIDITY_RESPONSE.replace('does not', 'does **not**')}"
+        )
+
+        rows = evaluate_outputs(make_cases(), outputs)
+
+        self.assertEqual(rows[-1]["must_not_include_violations"], 0)
+
     def test_affirmative_proves_causality_counts_as_violation(self):
         outputs = make_outputs()
         outputs[0]["response"] += " This proves causality."
@@ -296,6 +317,27 @@ class RealLlmOnlyBaselineTests(unittest.TestCase):
                     forbidden_phrase_count(response, phrases),
                     0,
                 )
+
+    def test_saved_real_case_004_has_no_overclaim_violation(self):
+        outputs_path = (
+            PROJECT_ROOT
+            / "evals"
+            / "results_real"
+            / "real_llm_only_outputs.json"
+        )
+        cases_path = PROJECT_ROOT / "evals" / "real_eval_cases.json"
+        if not outputs_path.is_file():
+            self.skipTest("Saved real LLM-only outputs are not present.")
+
+        with cases_path.open("r", encoding="utf-8") as cases_file:
+            cases = json.load(cases_file)
+        with outputs_path.open("r", encoding="utf-8") as outputs_file:
+            outputs = json.load(outputs_file)
+
+        rows = evaluate_outputs(cases, outputs)
+        row = next(row for row in rows if row["case_id"] == "real_case_004")
+
+        self.assertEqual(row["must_not_include_violations"], 0)
 
     def test_invented_numeric_score_fails_score_check(self):
         outputs = make_outputs()

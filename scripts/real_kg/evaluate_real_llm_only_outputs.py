@@ -216,13 +216,16 @@ def causal_phrase_is_negated(text: str, phrase_start: int) -> bool:
         )
     )
     clause_start = boundaries[-1].end() if boundaries else 0
-    clause_prefix = prefix[clause_start:][-160:].strip()
+    clause_prefix = prefix[clause_start:][-120:].strip()
 
     if clause_prefix.endswith("not"):
         return True
     negation_patterns = [
         r"\b(?:does|do|did)\s+not\b",
-        r"\b(?:cannot|can't|never)\b",
+        r"\bdoesn't\b",
+        r"\bnot\b",
+        r"\bno\b",
+        r"\b(?:cannot|can't|never|without)\b",
         r"\bwithout\s+(?:claiming|implying|proving)\b",
         r"\bno\s+(?:evidence|proof|reason)\b",
     ]
@@ -232,9 +235,14 @@ def causal_phrase_is_negated(text: str, phrase_start: int) -> bool:
     )
 
 
+def normalize_overclaim_text(text: str) -> str:
+    """Remove lightweight Markdown emphasis that can split negation words."""
+    return re.sub(r"[*_`~]", "", text).lower()
+
+
 def phrase_has_affirmative_occurrence(response: str, phrase: str) -> bool:
-    lowered_response = response.lower()
-    lowered_phrase = phrase.lower()
+    lowered_response = normalize_overclaim_text(response)
+    lowered_phrase = normalize_overclaim_text(phrase)
     for match in re.finditer(re.escape(lowered_phrase), lowered_response):
         if not causal_phrase_is_negated(lowered_response, match.start()):
             return True
