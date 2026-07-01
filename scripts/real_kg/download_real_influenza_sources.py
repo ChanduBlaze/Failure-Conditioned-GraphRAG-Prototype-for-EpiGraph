@@ -12,8 +12,9 @@ import csv
 import json
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -31,6 +32,8 @@ SOCRATA_SOURCES = [
     {
         "source_name": "cdc_hospital_respiratory_admissions",
         "dataset_id": "vdzy-6i9v",
+        "date_column": "weekendingdate",
+        "order": "weekendingdate,jurisdiction",
         "intended_signal_role": (
             "target signal candidate for U.S. influenza hospital "
             "admission/hospitalization burden"
@@ -39,6 +42,8 @@ SOCRATA_SOURCES = [
     {
         "source_name": "cdc_influenza_a_wastewater",
         "dataset_id": "ymmh-divb",
+        "date_column": "sample_collect_date",
+        "order": "sample_collect_date,state_territory,site",
         "intended_signal_role": "candidate leading indicator signal",
     },
 ]
@@ -108,20 +113,48 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Fetch Socrata metadata only; skip all row-data endpoints.",
     )
+    parser.add_argument(
+        "--disable-socrata-date-filter",
+        action="store_true",
+        help=(
+            "Fetch unfiltered Socrata samples using the legacy limit-only "
+            "query."
+        ),
+    )
     return parser.parse_args()
 
 
-def validate_epiweek(value: int, option_name: str) -> None:
+def epiweek_monday(value: int, option_name: str) -> date:
     year, week = divmod(value, 100)
     if year < 2000 or not 1 <= week <= 53:
         raise ValueError(
             f"{option_name} must be a six-digit epiweek YYYYWW; got {value}."
         )
+    try:
+        return date.fromisocalendar(year, week, 1)
+    except ValueError as exc:
+        raise ValueError(
+            f"{option_name} is not a valid ISO epiweek: {value}."
+        ) from exc
+
+
+def epiweek_date_window(
+    start_epiweek: int,
+    end_epiweek: int,
+) -> tuple[date, date]:
+    start_monday = epiweek_monday(
+        start_epiweek,
+        "--start-epiweek",
+    )
+    end_monday = epiweek_monday(end_epiweek, "--end-epiweek")
+    buffered_start = start_monday - timedelta(days=7)
+    buffered_end = end_monday + timedelta(days=13)
+    return buffered_start, buffered_end
 
 
 def validate_args(args: argparse.Namespace) -> None:
-    validate_epiweek(args.start_epiweek, "--start-epiweek")
-    validate_epiweek(args.end_epiweek, "--end-epiweek")
+    epiweek_monday(args.start_epiweek, "--start-epiweek")
+    epiweek_monday(args.end_epiweek, "--end-epiweek")
     if args.start_epiweek > args.end_epiweek:
         raise ValueError("--start-epiweek must not exceed --end-epiweek.")
     if args.socrata_limit < 1:
@@ -197,12 +230,49 @@ def fetch_socrata_sample(
     dataset_id: str,
     source_name: str,
     limit: int,
+    date_column: str | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
+    order: str | None = None,
 ) -> list[dict[str, Any]]:
-    url = (
-        f"https://data.cdc.gov/resource/{dataset_id}.json"
-        f"?$limit={limit}"
+    url = build_socrata_sample_url(
+        dataset_id=dataset_id,
+        limit=limit,
+        date_column=date_column,
+        start_date=start_date,
+        end_date=end_date,
+        order=order,
     )
     return parse_socrata_sample(fetch_json(url, source_name), source_name)
+
+
+def build_socrata_sample_url(
+    dataset_id: str,
+    limit: int,
+    date_column: str | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
+    order: str | None = None,
+) -> str:
+    base_url = f"https://data.cdc.gov/resource/{dataset_id}.json"
+    if date_column is None:
+        return f"{base_url}?$limit={limit}"
+    if start_date is None or end_date is None or not order:
+        raise ValueError(
+            "Filtered Socrata requests require start_date, end_date, and order."
+        )
+    where = (
+        f"{date_column} >= '{start_date.isoformat()}T00:00:00' AND "
+        f"{date_column} <= '{end_date.isoformat()}T23:59:59'"
+    )
+    query = urllib.parse.urlencode(
+        {
+            "$limit": limit,
+            "$where": where,
+            "$order": order,
+        }
+    )
+    return f"{base_url}?{query}"
 
 
 def parse_delphi_response(
@@ -317,6 +387,14 @@ def ingest_sources(args: argparse.Namespace) -> list[dict[str, Any]]:
     validate_args(args)
     accessed_at = datetime.now(timezone.utc).isoformat()
     inventory: list[dict[str, Any]] = []
+    buffered_start, buffered_end = epiweek_date_window(
+        args.start_epiweek,
+        args.end_epiweek,
+    )
+    date_filter_disabled = bool(
+        getattr(args, "disable_socrata_date_filter", False)
+    )
+    requested_range = f"{args.start_epiweek}-{args.end_epiweek}"
 
     for source in SOCRATA_SOURCES:
         source_name = source["source_name"]
@@ -334,16 +412,36 @@ def ingest_sources(args: argparse.Namespace) -> list[dict[str, Any]]:
             columns = metadata_columns
             notes = "Metadata fetched; sample rows skipped by --metadata-only."
         else:
+            date_column = (
+                None if date_filter_disabled else source["date_column"]
+            )
             sample_rows = fetch_socrata_sample(
                 dataset_id,
                 source_name,
                 args.socrata_limit,
+                date_column=date_column,
+                start_date=(
+                    None if date_filter_disabled else buffered_start
+                ),
+                end_date=None if date_filter_disabled else buffered_end,
+                order=None if date_filter_disabled else source["order"],
             )
             sample_path = args.output_dir / f"{source_name}_sample.json"
             write_json(sample_path, sample_rows)
             raw_path = sample_path
             columns = row_column_names(sample_rows) or metadata_columns
             notes = f"Metadata snapshot: {metadata_path.as_posix()}."
+            if date_filter_disabled:
+                notes += (
+                    " Socrata date filter disabled; used limit-only sample "
+                    "query."
+                )
+            else:
+                notes += (
+                    f" Applied date filter on {source['date_column']}: "
+                    f"{buffered_start.isoformat()} through "
+                    f"{buffered_end.isoformat()} (7-day buffers)."
+                )
             if not sample_rows:
                 notes += " Sample response was empty."
 
@@ -356,13 +454,12 @@ def ingest_sources(args: argparse.Namespace) -> list[dict[str, Any]]:
                 raw_output_path=raw_path,
                 rows=sample_rows,
                 columns=columns,
-                time_range_requested="",
+                time_range_requested=requested_range,
                 date_accessed_utc=accessed_at,
                 notes=notes,
             )
         )
 
-    requested_range = f"{args.start_epiweek}-{args.end_epiweek}"
     for source in DELPHI_SOURCES:
         source_name = source["source_name"]
         endpoint = source["endpoint"]
@@ -431,6 +528,10 @@ def main() -> int:
     print(f"Raw output directory: {args.output_dir}")
     print(f"Inventory output: {args.inventory_output}")
     print(f"Metadata-only: {args.metadata_only}")
+    print(
+        "Socrata date filter enabled: "
+        f"{not args.disable_socrata_date_filter}"
+    )
     print("No evidence claims were built.")
     return 0
 

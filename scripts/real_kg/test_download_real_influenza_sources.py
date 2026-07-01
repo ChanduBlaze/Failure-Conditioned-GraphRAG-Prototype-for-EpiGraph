@@ -6,11 +6,15 @@ import json
 import tempfile
 import unittest
 import urllib.error
+import urllib.parse
+from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
 from scripts.real_kg.download_real_influenza_sources import (
     INVENTORY_COLUMNS,
+    build_socrata_sample_url,
+    epiweek_date_window,
     fetch_delphi_source,
     fetch_json,
     fetch_socrata_metadata,
@@ -40,6 +44,12 @@ class FakeResponse:
 
 
 class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
+    def test_epiweek_date_window_includes_seven_day_buffers(self):
+        start_date, end_date = epiweek_date_window(202440, 202520)
+
+        self.assertEqual(start_date, date(2024, 9, 23))
+        self.assertEqual(end_date, date(2025, 5, 25))
+
     def test_socrata_metadata_fetch_parsing(self):
         payload = {
             "id": "vdzy-6i9v",
@@ -84,6 +94,131 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
         self.assertEqual(
             request.full_url,
             "https://data.cdc.gov/resource/ymmh-divb.json?$limit=25",
+        )
+
+    def test_hospital_sample_url_includes_date_filter_and_order(self):
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse([]),
+        ) as urlopen:
+            fetch_socrata_sample(
+                "vdzy-6i9v",
+                "cdc_hospital_respiratory_admissions",
+                5000,
+                date_column="weekendingdate",
+                start_date=date(2024, 9, 23),
+                end_date=date(2025, 5, 25),
+                order="weekendingdate,jurisdiction",
+            )
+
+        request = urlopen.call_args.args[0]
+        query = urllib.parse.parse_qs(
+            urllib.parse.urlparse(request.full_url).query
+        )
+        self.assertEqual(query["$limit"], ["5000"])
+        self.assertEqual(
+            query["$where"],
+            [
+                "weekendingdate >= '2024-09-23T00:00:00' AND "
+                "weekendingdate <= '2025-05-25T23:59:59'"
+            ],
+        )
+        self.assertEqual(
+            query["$order"],
+            ["weekendingdate,jurisdiction"],
+        )
+
+    def test_wastewater_sample_url_includes_date_filter_and_order(self):
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse([]),
+        ) as urlopen:
+            fetch_socrata_sample(
+                "ymmh-divb",
+                "cdc_influenza_a_wastewater",
+                5000,
+                date_column="sample_collect_date",
+                start_date=date(2024, 9, 23),
+                end_date=date(2025, 5, 25),
+                order="sample_collect_date,state_territory,site",
+            )
+
+        request = urlopen.call_args.args[0]
+        query = urllib.parse.parse_qs(
+            urllib.parse.urlparse(request.full_url).query
+        )
+        self.assertEqual(
+            query["$where"],
+            [
+                "sample_collect_date >= '2024-09-23T00:00:00' AND "
+                "sample_collect_date <= '2025-05-25T23:59:59'"
+            ],
+        )
+        self.assertEqual(
+            query["$order"],
+            ["sample_collect_date,state_territory,site"],
+        )
+
+    def test_disable_date_filter_uses_legacy_limit_only_url(self):
+        url = build_socrata_sample_url(
+            dataset_id="vdzy-6i9v",
+            limit=123,
+        )
+        query = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+
+        self.assertEqual(query, {"$limit": ["123"]})
+        self.assertNotIn("$where", query)
+        self.assertNotIn("$order", query)
+
+    def test_disable_date_filter_is_applied_by_ingestion(self):
+        metadata = {"columns": [{"fieldName": "week"}]}
+        delphi = {
+            "result": 1,
+            "message": "success",
+            "epidata": [],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            args = argparse.Namespace(
+                start_epiweek=202440,
+                end_epiweek=202520,
+                socrata_limit=20,
+                output_dir=temp_path / "raw",
+                inventory_output=temp_path / "inventory.csv",
+                metadata_only=False,
+                disable_socrata_date_filter=True,
+            )
+            with patch(
+                "urllib.request.urlopen",
+                side_effect=[
+                    FakeResponse(metadata),
+                    FakeResponse([]),
+                    FakeResponse(metadata),
+                    FakeResponse([]),
+                    FakeResponse(delphi),
+                    FakeResponse(delphi),
+                ],
+            ) as urlopen:
+                inventory = ingest_sources(args)
+
+        sample_urls = [
+            call.args[0].full_url
+            for call in (
+                urlopen.call_args_list[1],
+                urlopen.call_args_list[3],
+            )
+        ]
+        for url in sample_urls:
+            query = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+            self.assertEqual(query, {"$limit": ["20"]})
+            self.assertNotIn("$where", query)
+        socrata_notes = [
+            row["notes"]
+            for row in inventory
+            if row["source_type"] == "socrata"
+        ]
+        self.assertTrue(
+            all("date filter disabled" in note for note in socrata_notes)
         )
 
     def test_delphi_fluview_response_parsing(self):
@@ -176,6 +311,7 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
                 output_dir=temp_path / "raw",
                 inventory_output=temp_path / "inventory.csv",
                 metadata_only=True,
+                disable_socrata_date_filter=False,
             )
             with patch(
                 "urllib.request.urlopen",
@@ -207,6 +343,61 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
                     / "cdc_hospital_respiratory_admissions_sample.json"
                 ).exists()
             )
+
+    def test_inventory_notes_include_applied_date_filter(self):
+        metadata = {
+            "columns": [{"fieldName": "week"}, {"fieldName": "value"}],
+        }
+        delphi = {
+            "result": 1,
+            "message": "success",
+            "epidata": [{"region": "nat", "epiweek": 202440, "value": 1}],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            args = argparse.Namespace(
+                start_epiweek=202440,
+                end_epiweek=202520,
+                socrata_limit=5000,
+                output_dir=temp_path / "raw",
+                inventory_output=temp_path / "inventory.csv",
+                metadata_only=False,
+                disable_socrata_date_filter=False,
+            )
+            with patch(
+                "urllib.request.urlopen",
+                side_effect=[
+                    FakeResponse(metadata),
+                    FakeResponse([{"week": "2025-01-01"}]),
+                    FakeResponse(metadata),
+                    FakeResponse([{"week": "2025-01-01"}]),
+                    FakeResponse(delphi),
+                    FakeResponse(delphi),
+                ],
+            ):
+                inventory = ingest_sources(args)
+
+        hospital = next(
+            row
+            for row in inventory
+            if row["source_name"]
+            == "cdc_hospital_respiratory_admissions"
+        )
+        wastewater = next(
+            row
+            for row in inventory
+            if row["source_name"] == "cdc_influenza_a_wastewater"
+        )
+        self.assertIn(
+            "Applied date filter on weekendingdate: "
+            "2024-09-23 through 2025-05-25",
+            hospital["notes"],
+        )
+        self.assertIn(
+            "Applied date filter on sample_collect_date: "
+            "2024-09-23 through 2025-05-25",
+            wastewater["notes"],
+        )
 
     def test_http_and_json_failures_are_helpful(self):
         http_error = urllib.error.HTTPError(
