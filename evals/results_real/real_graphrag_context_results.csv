@@ -1,2 +1,3 @@
 case_id,method,predicted_candidate_id,candidate_correct,mentioned_evidence_edges,identified_missing_edges,status_correct,present_edge_recall,missing_edge_recall,lag_correct,score_meets_minimum,must_not_include_violations,notes
 real_case_001,graphrag_context,real_signal_influenza_a_wastewater_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Fixture-based real-data extension case. The evidence is associational and used to validate information parity across real Text-RAG and real GraphRAG representations.
+real_case_002,graphrag_context,real_signal_humidity_anomaly,True,,LEADING_INDICATOR_FOR,True,1.0,1.0,True,True,0,"Humidity anomaly remains an auditable EvidenceClaim, but its below-threshold missing evidence should not be promoted to a positive typed edge."
