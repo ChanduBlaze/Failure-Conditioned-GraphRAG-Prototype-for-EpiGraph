@@ -1,0 +1,38 @@
+[
+  {
+    "chunk_id": "empirical_chunk__real_us_flu_empirical_multicandidate_001__real_signal_influenza_a_wastewater_concentration__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR",
+    "title": "Influenza A wastewater concentration - empirical LEADING_INDICATOR_FOR - U.S. influenza hospitalization rate from FluSurv-NET (present)",
+    "text": "Status: present.\nThe empirical evidence threshold was met.\nCase ID: real_us_flu_empirical_multicandidate_001.\nCandidate: Influenza A wastewater concentration (real_signal_influenza_a_wastewater_concentration).\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET (real_signal_us_influenza_hospitalization_rate_flusurv).\nEdge type: LEADING_INDICATOR_FOR.\nScore: 0.947016.\nThreshold: 0.60.\nLag weeks: 1.\nPaired week count: 26.\nMinimum paired weeks: 8.\nMethod: lagged_pearson_correlation_empirical_v1.\nSource dataset: Delphi Epidata FluSurv / CDC FluSurv-NET; CDC Influenza A Wastewater Surveillance.\nRegion: United States / FluSurv-NET catchment.\nTime window: 2024-W39 through 2025-W17.\nEvidence sentence: Influenza A wastewater concentration has empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET: best positive lag = 1 weeks, Pearson correlation = 0.947016, paired weeks = 26, threshold = 0.60.\nLimitation: Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic.",
+    "source_type": "empirical_evidence_claim",
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_influenza_a_wastewater_concentration",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "edge_type": "LEADING_INDICATOR_FOR",
+    "status": "present",
+    "evidence_claim_id": "empirical_claim__real_us_flu_empirical_multicandidate_001__real_signal_influenza_a_wastewater_concentration__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR"
+  },
+  {
+    "chunk_id": "empirical_chunk__real_us_flu_empirical_multicandidate_001__real_signal_outpatient_ili_activity__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR",
+    "title": "Outpatient ILI activity - empirical LEADING_INDICATOR_FOR - U.S. influenza hospitalization rate from FluSurv-NET (present)",
+    "text": "Status: present.\nThe empirical evidence threshold was met.\nCase ID: real_us_flu_empirical_multicandidate_001.\nCandidate: Outpatient ILI activity (real_signal_outpatient_ili_activity).\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET (real_signal_us_influenza_hospitalization_rate_flusurv).\nEdge type: LEADING_INDICATOR_FOR.\nScore: 0.958037.\nThreshold: 0.60.\nLag weeks: 1.\nPaired week count: 29.\nMinimum paired weeks: 8.\nMethod: lagged_pearson_correlation_empirical_v1.\nSource dataset: Delphi Epidata FluSurv / CDC FluSurv-NET; Delphi Epidata FluView ILINet / CDC FluView.\nRegion: United States / FluSurv-NET catchment.\nTime window: 2024-W40 through 2025-W20.\nEvidence sentence: Outpatient ILI activity has empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET: best positive lag = 1 weeks, Pearson correlation = 0.958037, paired weeks = 29, threshold = 0.60.\nLimitation: Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic.",
+    "source_type": "empirical_evidence_claim",
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_outpatient_ili_activity",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "edge_type": "LEADING_INDICATOR_FOR",
+    "status": "present",
+    "evidence_claim_id": "empirical_claim__real_us_flu_empirical_multicandidate_001__real_signal_outpatient_ili_activity__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR"
+  },
+  {
+    "chunk_id": "empirical_chunk__real_us_flu_empirical_multicandidate_001__real_signal_influenza_test_positivity__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR",
+    "title": "Influenza test positivity - empirical LEADING_INDICATOR_FOR - U.S. influenza hospitalization rate from FluSurv-NET (present)",
+    "text": "Status: present.\nThe empirical evidence threshold was met.\nCase ID: real_us_flu_empirical_multicandidate_001.\nCandidate: Influenza test positivity (real_signal_influenza_test_positivity).\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET (real_signal_us_influenza_hospitalization_rate_flusurv).\nEdge type: LEADING_INDICATOR_FOR.\nScore: 0.925810.\nThreshold: 0.60.\nLag weeks: 1.\nPaired week count: 29.\nMinimum paired weeks: 8.\nMethod: lagged_pearson_correlation_empirical_v1.\nSource dataset: Delphi Epidata FluSurv / CDC FluSurv-NET; Delphi Epidata FluView Clinical / CDC FluView.\nRegion: United States / FluSurv-NET catchment.\nTime window: 2024-W40 through 2025-W20.\nEvidence sentence: Influenza test positivity has empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET: best positive lag = 1 weeks, Pearson correlation = 0.925810, paired weeks = 29, threshold = 0.60.\nLimitation: Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic.",
+    "source_type": "empirical_evidence_claim",
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_influenza_test_positivity",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "edge_type": "LEADING_INDICATOR_FOR",
+    "status": "present",
+    "evidence_claim_id": "empirical_claim__real_us_flu_empirical_multicandidate_001__real_signal_influenza_test_positivity__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR"
+  }
+]
