@@ -9,6 +9,16 @@ real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,Unit
 real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,United States,2025-W08,5.0,CDC Influenza A Wastewater synthetic fixture
 real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,United States,2025-W09,3.3,CDC Influenza A Wastewater synthetic fixture
 real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,United States,2025-W10,2.1,CDC Influenza A Wastewater synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W01,-0.5,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W02,0.2,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W03,-0.2,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W04,0.5,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W05,-0.4,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W06,0.3,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W07,-0.1,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W08,0.1,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W09,-0.3,NOAA Humidity Anomaly synthetic fixture
+real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W10,0.4,NOAA Humidity Anomaly synthetic fixture
 real_signal_us_influenza_hospitalization_rate,U.S. influenza hospitalization rate,United States,2025-W01,0.7,CDC FluSurv-NET synthetic fixture
 real_signal_us_influenza_hospitalization_rate,U.S. influenza hospitalization rate,United States,2025-W02,1.0,CDC FluSurv-NET synthetic fixture
 real_signal_us_influenza_hospitalization_rate,U.S. influenza hospitalization rate,United States,2025-W03,1.3,CDC FluSurv-NET synthetic fixture

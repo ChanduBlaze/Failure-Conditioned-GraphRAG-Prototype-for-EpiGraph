@@ -15,6 +15,8 @@ FIXTURE_PATH = REAL_KG_DIR / "fixtures" / "normalized_signals_fixture.csv"
 
 CANDIDATE_ID = "real_signal_influenza_a_wastewater_activity"
 CANDIDATE_NAME = "Influenza A wastewater activity"
+HUMIDITY_CANDIDATE_ID = "real_signal_humidity_anomaly"
+HUMIDITY_CANDIDATE_NAME = "Humidity anomaly"
 TARGET_ID = "real_signal_us_influenza_hospitalization_rate"
 TARGET_NAME = "U.S. influenza hospitalization rate"
 REGION = "United States"
@@ -50,16 +52,24 @@ REQUIRED_OUTPUT_COLUMNS = {
 
 
 class BuildRealEvidenceClaimsTests(unittest.TestCase):
-    def run_builder(self, input_path: Path, output_path: Path):
+    def run_builder(
+        self,
+        input_path: Path,
+        output_path: Path,
+        candidate_ids=None,
+    ):
+        command = [
+            sys.executable,
+            str(BUILDER_PATH),
+            "--input",
+            str(input_path),
+            "--output",
+            str(output_path),
+        ]
+        for candidate_id in candidate_ids or []:
+            command.extend(["--candidate-id", candidate_id])
         return subprocess.run(
-            [
-                sys.executable,
-                str(BUILDER_PATH),
-                "--input",
-                str(input_path),
-                "--output",
-                str(output_path),
-            ],
+            command,
             cwd=PROJECT_ROOT,
             capture_output=True,
             text=True,
@@ -102,27 +112,81 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
             writer.writeheader()
             writer.writerows(rows)
 
-    def read_single_claim(self, path: Path):
+    def read_claims(self, path: Path):
         with path.open("r", newline="", encoding="utf-8") as output_file:
             reader = csv.DictReader(output_file)
             rows = list(reader)
 
-        self.assertEqual(len(rows), 1)
-        return rows[0], set(reader.fieldnames or [])
+        return rows, set(reader.fieldnames or [])
 
-    def test_existing_fixture_produces_present_lag_two_claim(self):
+    def read_single_claim(self, path: Path):
+        rows, columns = self.read_claims(path)
+        self.assertEqual(len(rows), 1)
+        return rows[0], columns
+
+    def test_existing_fixture_produces_present_and_missing_claims(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             output_path = Path(temp_dir) / "claims.csv"
             result = self.run_builder(FIXTURE_PATH, output_path)
 
             self.assertEqual(result.returncode, 0, msg=result.stderr)
-            claim, columns = self.read_single_claim(output_path)
+            claims, columns = self.read_claims(output_path)
 
             self.assertTrue(REQUIRED_OUTPUT_COLUMNS.issubset(columns))
-            self.assertEqual(claim["status"], "present")
-            self.assertEqual(claim["edge_type"], "LEADING_INDICATOR_FOR")
-            self.assertEqual(claim["lag_weeks"], "2")
-            self.assertGreaterEqual(float(claim["score"]), 0.60)
+            self.assertEqual(len(claims), 2)
+            self.assertEqual(
+                [claim["candidate_id"] for claim in claims],
+                [CANDIDATE_ID, HUMIDITY_CANDIDATE_ID],
+            )
+
+            wastewater_claim, humidity_claim = claims
+            self.assertEqual(wastewater_claim["candidate_name"], CANDIDATE_NAME)
+            self.assertEqual(wastewater_claim["status"], "present")
+            self.assertEqual(wastewater_claim["lag_weeks"], "2")
+            self.assertGreaterEqual(
+                float(wastewater_claim["score"]),
+                float(wastewater_claim["threshold"]),
+            )
+
+            self.assertEqual(
+                humidity_claim["candidate_name"],
+                HUMIDITY_CANDIDATE_NAME,
+            )
+            self.assertEqual(humidity_claim["status"], "missing")
+            self.assertLess(
+                float(humidity_claim["score"]),
+                float(humidity_claim["threshold"]),
+            )
+            self.assertIn(
+                "Humidity anomaly does not meet LEADING_INDICATOR_FOR evidence",
+                humidity_claim["evidence_sentence"],
+            )
+            self.assertIn(
+                TARGET_NAME,
+                humidity_claim["evidence_sentence"],
+            )
+            self.assertIn(
+                "under the configured threshold",
+                humidity_claim["evidence_sentence"],
+            )
+            self.assertIn(
+                "Associational screening evidence only",
+                humidity_claim["limitation"],
+            )
+            self.assertIn("not causal proof", humidity_claim["limitation"])
+
+            for claim in claims:
+                self.assertEqual(claim["target_signal_id"], TARGET_ID)
+                self.assertEqual(claim["target_signal_name"], TARGET_NAME)
+                self.assertEqual(
+                    claim["edge_type"],
+                    "LEADING_INDICATOR_FOR",
+                )
+                self.assertTrue(claim["candidate_id"])
+                self.assertTrue(claim["score"])
+                self.assertEqual(claim["threshold"], "0.60")
+                self.assertTrue(claim["evidence_sentence"])
+                self.assertTrue(claim["limitation"])
 
     def test_weak_correlation_produces_missing_claim(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -135,7 +199,11 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
                 candidate_values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                 target_values=[3, 8, 1, 9, 4, 10, 2, 7, 5, 6],
             )
-            result = self.run_builder(input_path, output_path)
+            result = self.run_builder(
+                input_path,
+                output_path,
+                candidate_ids=[CANDIDATE_ID],
+            )
 
             self.assertEqual(result.returncode, 0, msg=result.stderr)
             claim, _columns = self.read_single_claim(output_path)
@@ -155,7 +223,11 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
                 candidate_values=[1.0, 2.0, 3.0, 4.0],
                 target_values=[0.5, 1.0, 2.0, 3.0],
             )
-            result = self.run_builder(input_path, output_path)
+            result = self.run_builder(
+                input_path,
+                output_path,
+                candidate_ids=[CANDIDATE_ID],
+            )
 
             self.assertEqual(result.returncode, 0, msg=result.stderr)
             claim, _columns = self.read_single_claim(output_path)

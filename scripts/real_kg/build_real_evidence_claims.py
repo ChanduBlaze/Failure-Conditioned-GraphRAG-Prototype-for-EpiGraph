@@ -1,8 +1,9 @@
-"""Build one auditable real-data EvidenceClaim from normalized weekly signals.
+"""Build auditable real-data EvidenceClaims from normalized weekly signals.
 
 This first pipeline step deliberately has no Neo4j or LLM dependency. It turns
 normalized observations into a deterministic, provenance-carrying evidence
-claim. The resulting association is evidence to audit, not proof of causality.
+claim table. The resulting associations are evidence to audit, not proof of
+causality.
 """
 
 from __future__ import annotations
@@ -23,6 +24,11 @@ DEFAULT_INPUT = Path(
 )
 DEFAULT_OUTPUT = Path("data/real_processed/real_evidence_claims.csv")
 DEFAULT_CANDIDATE_ID = "real_signal_influenza_a_wastewater_activity"
+DEFAULT_HUMIDITY_CANDIDATE_ID = "real_signal_humidity_anomaly"
+DEFAULT_CANDIDATE_IDS = [
+    DEFAULT_CANDIDATE_ID,
+    DEFAULT_HUMIDITY_CANDIDATE_ID,
+]
 DEFAULT_TARGET_ID = "real_signal_us_influenza_hospitalization_rate"
 DEFAULT_CASE_ID = "real_us_flu_wastewater_leading_indicator_001"
 DEFAULT_REGION = "United States"
@@ -32,6 +38,11 @@ METHOD = "lagged_pearson_correlation_v1"
 LIMITATION = (
     "Associational evidence only; not causal proof. Result depends on selected "
     "time window, lag range, aggregation, and data quality."
+)
+MISSING_LIMITATION = (
+    "Associational screening evidence only; not causal proof. Result depends "
+    "on the selected time window, lag range, aggregation, threshold, and data "
+    "quality."
 )
 
 REQUIRED_INPUT_COLUMNS = [
@@ -75,7 +86,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--candidate-id", default=DEFAULT_CANDIDATE_ID)
+    parser.add_argument(
+        "--candidate-id",
+        action="append",
+        default=None,
+        help=(
+            "Candidate signal ID to evaluate. Repeat for multiple candidates. "
+            "Defaults to wastewater activity followed by humidity anomaly."
+        ),
+    )
     parser.add_argument("--target-id", default=DEFAULT_TARGET_ID)
     parser.add_argument("--case-id", default=DEFAULT_CASE_ID)
     parser.add_argument("--region", default=DEFAULT_REGION)
@@ -92,8 +111,23 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("--min-overlap must be at least 2 for correlation.")
     if not math.isfinite(args.threshold):
         raise ValueError("--threshold must be a finite number.")
-    if args.candidate_id == args.target_id:
+    candidate_ids = resolve_candidate_ids(args)
+    if any(candidate_id == args.target_id for candidate_id in candidate_ids):
         raise ValueError("--candidate-id and --target-id must be different.")
+    if len(candidate_ids) != len(set(candidate_ids)):
+        raise ValueError("--candidate-id values must be unique.")
+
+
+def resolve_candidate_ids(args: argparse.Namespace) -> list[str]:
+    candidate_ids = args.candidate_id
+    if candidate_ids is None:
+        return list(DEFAULT_CANDIDATE_IDS)
+    if isinstance(candidate_ids, str):
+        candidate_ids = [candidate_ids]
+    normalized = [str(candidate_id).strip() for candidate_id in candidate_ids]
+    if not normalized or any(not candidate_id for candidate_id in normalized):
+        raise ValueError("--candidate-id must not be empty.")
+    return normalized
 
 
 def epiweek_to_date(epiweek: object) -> date:
@@ -281,7 +315,12 @@ def build_evidence_sentence(
     if status == "present":
         result_text = f"has {EDGE_TYPE} evidence"
     else:
-        result_text = f"does not meet the threshold for {EDGE_TYPE} evidence"
+        return (
+            f"{candidate_name} does not meet {EDGE_TYPE} evidence for "
+            f"{target_name} in {region} under the configured threshold: "
+            f"best lag = {lag_weeks} weeks, Pearson correlation = "
+            f"{score:.2f}, threshold = {threshold:.2f}."
+        )
 
     return (
         f"{candidate_name} {result_text} for {target_name} in {region}: "
@@ -294,7 +333,10 @@ def build_claim(
     args: argparse.Namespace,
     candidate_rows: pd.DataFrame,
     target_rows: pd.DataFrame,
+    candidate_id: str | None = None,
 ) -> dict[str, object]:
+    if candidate_id is None:
+        candidate_id = resolve_candidate_ids(args)[0]
     candidate_name = get_single_signal_name(candidate_rows, "candidate")
     target_name = get_single_signal_name(target_rows, "target")
 
@@ -353,7 +395,7 @@ def build_claim(
     # typed graph edge but does not establish an epidemiological causal effect.
     return {
         "case_id": args.case_id,
-        "candidate_id": args.candidate_id,
+        "candidate_id": candidate_id,
         "candidate_name": candidate_name,
         "target_signal_id": args.target_id,
         "target_signal_name": target_name,
@@ -368,33 +410,47 @@ def build_claim(
         "score": "" if score is None else f"{score:.6f}",
         "threshold": f"{args.threshold:.2f}",
         "evidence_sentence": evidence_sentence,
-        "limitation": LIMITATION,
+        "limitation": (
+            MISSING_LIMITATION if status == "missing" else LIMITATION
+        ),
     }
 
 
-def write_claim(path: Path, claim: dict[str, object]) -> None:
+def write_claims(
+    path: Path,
+    claims: list[dict[str, object]],
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as output_file:
         writer = csv.DictWriter(output_file, fieldnames=OUTPUT_COLUMNS)
         writer.writeheader()
-        writer.writerow(claim)
+        writer.writerows(claims)
+
+
+def write_claim(path: Path, claim: dict[str, object]) -> None:
+    """Write one claim for compatibility with focused callers."""
+    write_claims(path, [claim])
 
 
 def print_summary(
     args: argparse.Namespace,
-    claim: dict[str, object],
+    claims: list[dict[str, object]],
 ) -> None:
-    selected_lag = claim["lag_weeks"] if claim["lag_weeks"] != "" else "N/A"
-    score = claim["score"] if claim["score"] != "" else "N/A"
-
-    print("Real evidence claim built.")
+    print("Real evidence claims built.")
     print(f"Input: {args.input}")
     print(f"Output: {args.output}")
-    print(f"Candidate ID: {args.candidate_id}")
     print(f"Target ID: {args.target_id}")
-    print(f"Selected lag: {selected_lag}")
-    print(f"Score: {score}")
-    print(f"Status: {claim['status']}")
+    print(f"Claim count: {len(claims)}")
+    for claim in claims:
+        selected_lag = (
+            claim["lag_weeks"] if claim["lag_weeks"] != "" else "N/A"
+        )
+        score = claim["score"] if claim["score"] != "" else "N/A"
+        print(
+            f"Candidate: {claim['candidate_id']} | "
+            f"status: {claim['status']} | lag: {selected_lag} | "
+            f"score: {score}"
+        )
 
 
 def main() -> int:
@@ -403,21 +459,30 @@ def main() -> int:
     try:
         validate_args(args)
         data = load_normalized_signals(args.input)
-        candidate_rows = filter_signal_rows(
-            data,
-            args.candidate_id,
-            args.region,
-            "candidate",
-        )
         target_rows = filter_signal_rows(
             data,
             args.target_id,
             args.region,
             "target",
         )
-        claim = build_claim(args, candidate_rows, target_rows)
-        write_claim(args.output, claim)
-        print_summary(args, claim)
+        claims = []
+        for candidate_id in resolve_candidate_ids(args):
+            candidate_rows = filter_signal_rows(
+                data,
+                candidate_id,
+                args.region,
+                "candidate",
+            )
+            claims.append(
+                build_claim(
+                    args,
+                    candidate_rows,
+                    target_rows,
+                    candidate_id,
+                )
+            )
+        write_claims(args.output, claims)
+        print_summary(args, claims)
     except (FileNotFoundError, OSError, ValueError, pd.errors.ParserError) as exc:
         print(f"Evidence claim build failed: {exc}", file=sys.stderr)
         return 1
