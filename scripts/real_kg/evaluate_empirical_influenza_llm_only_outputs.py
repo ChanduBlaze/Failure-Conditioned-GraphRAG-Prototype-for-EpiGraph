@@ -93,22 +93,131 @@ SUMMARY_COLUMNS = [
     "total_must_not_include_violations",
 ]
 
-INSUFFICIENT_PATTERNS = [
-    re.compile(pattern, re.IGNORECASE)
-    for pattern in (
-        r"\binsufficient\b",
-        r"\bcannot determine\b",
-        r"\bcan't determine\b",
-        r"\bunable to determine\b",
-        r"\bcannot assess\b",
-        r"\bnot enough information\b",
+EXPLICIT_STATUS_RULES = [
+    (
+        status,
+        strength,
+        re.compile(pattern, re.IGNORECASE),
+    )
+    for status, strength, pattern in (
+        (
+            "present",
+            4,
+            r"\b(?:assessment|status)\s*(?:is|:)\s*present\b",
+        ),
+        (
+            "present",
+            4,
+            r"\bconclusion\s*:\s*[^\n]{0,200}\b"
+            r"(?:relationship\s+)?(?:as|is)\s+present\b",
+        ),
+        (
+            "missing",
+            4,
+            r"\b(?:assessment|status)\s*(?:is|:)\s*missing\b",
+        ),
+        (
+            "missing",
+            4,
+            r"\bconclusion\s*:\s*[^\n]{0,200}\b"
+            r"(?:relationship\s+)?(?:as|is)\s+(?:missing|not present)\b",
+        ),
+        (
+            "insufficient",
+            4,
+            r"\b(?:assessment|status)\s*(?:is|:)\s*insufficient\b",
+        ),
+        (
+            "insufficient",
+            4,
+            r"\bconclusion\s*:\s*[^\n]{0,200}\b"
+            r"(?:relationship\s+)?(?:as|is)\s+insufficient\b",
+        ),
+        (
+            "present",
+            2,
+            r"\b(?:mark|consider)\s+the\s+relationship\s+as\s+present\b",
+        ),
+        (
+            "present",
+            2,
+            r"\brelationship\s+should\s+be\s+considered\s+present\b",
+        ),
+        (
+            "present",
+            2,
+            r"\brelationship\s+as\s+present\b",
+        ),
+        (
+            "present",
+            2,
+            r"\bleading_indicator_for\s+is\s+present\b",
+        ),
+        (
+            "present",
+            2,
+            r"\b(?:should\s+be\s+)?treat(?:ed)?\b[^\n.!?]{0,100}"
+            r"\bas\s+(?:a\s+)?(?:plausible\s+|valid\s+)?"
+            r"leading[- _]indicator(?:_for|\s+for)?\b",
+        ),
+        (
+            "present",
+            2,
+            r"\b(?:is|appears\s+to\s+be)\s+(?:a\s+)?"
+            r"(?:plausible\s+|valid\s+|supported\s+)?"
+            r"leading[- _]indicator(?:_for|\s+for)?\b",
+        ),
+        (
+            "missing",
+            2,
+            r"\bmissing\s+relationship\b",
+        ),
+        (
+            "missing",
+            2,
+            r"\btreat(?:ed)?\b[^\n.!?]{0,100}\bas\s+missing\b",
+        ),
+        (
+            "missing",
+            3,
+            r"\b(?:should\s+)?not\s+be\s+treated\s+as\s+(?:a\s+)?"
+            r"leading[- _]indicator(?:_for|\s+for)?\b",
+        ),
+        (
+            "missing",
+            3,
+            r"\b(?:not enough|no)\s+evidence\b[^\n.!?]{0,120}"
+            r"\btreat(?:ed)?\b[^\n.!?]{0,80}\bas\s+(?:a\s+)?"
+            r"leading[- _]indicator(?:_for|\s+for)?\b",
+        ),
+        (
+            "missing",
+            2,
+            r"\bnot\s+present\b",
+        ),
+        (
+            "insufficient",
+            2,
+            r"\b(?:relationship|relationship evidence)\b"
+            r"[^\n.!?]{0,80}\binsufficient\b",
+        ),
+        (
+            "insufficient",
+            3,
+            r"\b(?:cannot|can't|unable to)\s+(?:determine|assess)\b"
+            r"[^\n.!?]{0,120}\b(?:relationship|leading[- _]indicator)\b",
+        ),
+        (
+            "insufficient",
+            3,
+            r"\bnot enough evidence to determine\b",
+        ),
     )
 ]
 
 MISSING_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
     for pattern in (
-        r"\bmissing\b",
         r"\bunsupported\b",
         r"\bnot supported\b",
         r"\bnot enough evidence\b",
@@ -124,11 +233,8 @@ MISSING_PATTERNS = [
 PRESENT_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
     for pattern in (
-        r"\bstatus\s*(?:is|:)?\s*present\b",
         r"\bsupported as (?:a )?leading[- _]indicator\b",
         r"\bvalid leading[- _]indicator\b",
-        r"\bshould be treated as (?:a )?leading[- _]indicator\b",
-        r"\bis (?:a )?leading[- _]indicator\b",
         r"\bpresent leading[- _]indicator\b",
         r"\brelationship (?:is|appears) present\b",
     )
@@ -193,11 +299,22 @@ def read_json(path: Path, expected_type: type, description: str) -> Any:
 
 
 def classify_response(response: str) -> str:
-    if any(pattern.search(response) for pattern in INSUFFICIENT_PATTERNS):
-        return "insufficient"
-    if any(pattern.search(response) for pattern in MISSING_PATTERNS):
+    # Markdown emphasis is ignored, while underscores in the formal edge name
+    # remain intact. Strong assessment/status/conclusion statements override
+    # weaker body caveats; equally strong statements resolve to the last one.
+    cleaned = re.sub(r"[*`~]", "", response)
+    explicit_matches: list[tuple[int, int, str]] = []
+    for status, strength, pattern in EXPLICIT_STATUS_RULES:
+        explicit_matches.extend(
+            (strength, match.start(), status)
+            for match in pattern.finditer(cleaned)
+        )
+    if explicit_matches:
+        return max(explicit_matches, key=lambda item: (item[0], item[1]))[2]
+
+    if any(pattern.search(cleaned) for pattern in MISSING_PATTERNS):
         return "missing"
-    if any(pattern.search(response) for pattern in PRESENT_PATTERNS):
+    if any(pattern.search(cleaned) for pattern in PRESENT_PATTERNS):
         return "present"
     return ""
 

@@ -17,6 +17,7 @@ from scripts.real_kg.evaluate_empirical_influenza_llm_only_outputs import (
     RESULT_COLUMNS,
     SUMMARY_COLUMNS,
     build_summary,
+    classify_response,
     evaluate_outputs,
     read_json,
     write_csv,
@@ -108,6 +109,46 @@ def make_output(claim, response):
 
 
 class EmpiricalInfluenzaLlmOnlyBaselineTests(unittest.TestCase):
+    def test_assessment_present_overrides_body_caveats(self):
+        response = (
+            "Assessment: Present — treat X as a plausible "
+            "LEADING_INDICATOR_FOR Y."
+        )
+
+        self.assertEqual(classify_response(response), "present")
+
+    def test_conclusion_marks_relationship_present(self):
+        response = (
+            "Conclusion: I would mark the relationship as present."
+        )
+
+        self.assertEqual(classify_response(response), "present")
+
+    def test_present_edge_survives_insufficient_by_itself_caveat(self):
+        response = (
+            "LEADING_INDICATOR_FOR is present, with the caveat that X is "
+            "insufficient by itself for reliable hospitalization magnitude "
+            "forecasting."
+        )
+
+        self.assertEqual(classify_response(response), "present")
+
+    def test_explicit_missing_assessment_is_missing(self):
+        response = (
+            "Assessment: Missing relationship. X should not be treated as a "
+            "LEADING_INDICATOR_FOR."
+        )
+
+        self.assertEqual(classify_response(response), "missing")
+
+    def test_not_enough_evidence_to_determine_is_insufficient(self):
+        response = (
+            "There is not enough evidence to determine whether the "
+            "relationship holds."
+        )
+
+        self.assertEqual(classify_response(response), "insufficient")
+
     def test_prompt_builder_creates_one_prompt_per_claim(self):
         claims = make_claims()
         with tempfile.TemporaryDirectory() as temp_dir:
