@@ -1,0 +1,259 @@
+"""Mocked-network tests for real influenza source ingestion."""
+
+import argparse
+import csv
+import json
+import tempfile
+import unittest
+import urllib.error
+from pathlib import Path
+from unittest.mock import patch
+
+from scripts.real_kg.download_real_influenza_sources import (
+    INVENTORY_COLUMNS,
+    fetch_delphi_source,
+    fetch_json,
+    fetch_socrata_metadata,
+    fetch_socrata_sample,
+    ingest_sources,
+    inventory_row,
+    write_inventory,
+)
+
+
+class FakeResponse:
+    def __init__(self, payload=None, raw=None):
+        self.raw = (
+            raw
+            if raw is not None
+            else json.dumps(payload).encode("utf-8")
+        )
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback):
+        return False
+
+    def read(self):
+        return self.raw
+
+
+class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
+    def test_socrata_metadata_fetch_parsing(self):
+        payload = {
+            "id": "vdzy-6i9v",
+            "name": "Hospital admissions",
+            "columns": [{"fieldName": "week"}, {"fieldName": "value"}],
+        }
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(payload),
+        ) as urlopen:
+            metadata = fetch_socrata_metadata(
+                "vdzy-6i9v",
+                "cdc_hospital_respiratory_admissions",
+            )
+
+        self.assertEqual(metadata["id"], "vdzy-6i9v")
+        self.assertEqual(len(metadata["columns"]), 2)
+        request = urlopen.call_args.args[0]
+        self.assertEqual(
+            request.full_url,
+            "https://data.cdc.gov/api/views/vdzy-6i9v",
+        )
+
+    def test_socrata_sample_row_fetch_parsing(self):
+        payload = [
+            {"week": "2025-W01", "value": "1.2"},
+            {"week": "2025-W02", "value": "1.5"},
+        ]
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(payload),
+        ) as urlopen:
+            rows = fetch_socrata_sample(
+                "ymmh-divb",
+                "cdc_influenza_a_wastewater",
+                25,
+            )
+
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0]["week"], "2025-W01")
+        request = urlopen.call_args.args[0]
+        self.assertEqual(
+            request.full_url,
+            "https://data.cdc.gov/resource/ymmh-divb.json?$limit=25",
+        )
+
+    def test_delphi_fluview_response_parsing(self):
+        payload = {
+            "result": 1,
+            "message": "success",
+            "epidata": [{"region": "nat", "epiweek": 202440, "wili": 2.1}],
+        }
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(payload),
+        ) as urlopen:
+            response, rows = fetch_delphi_source(
+                "fluview",
+                "delphi_fluview_ili",
+                202440,
+                202520,
+            )
+
+        self.assertEqual(response["result"], 1)
+        self.assertEqual(rows[0]["wili"], 2.1)
+        request = urlopen.call_args.args[0]
+        self.assertIn("/epidata/fluview/", request.full_url)
+        self.assertIn("regions=nat", request.full_url)
+        self.assertIn("epiweeks=202440-202520", request.full_url)
+
+    def test_delphi_fluview_clinical_response_parsing(self):
+        payload = {
+            "result": 1,
+            "message": "success",
+            "epidata": [
+                {
+                    "region": "nat",
+                    "epiweek": 202440,
+                    "total_specimens": 1000,
+                    "total_positive": 120,
+                }
+            ],
+        }
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(payload),
+        ) as urlopen:
+            _response, rows = fetch_delphi_source(
+                "fluview_clinical",
+                "delphi_fluview_clinical",
+                202440,
+                202520,
+            )
+
+        self.assertEqual(rows[0]["total_positive"], 120)
+        request = urlopen.call_args.args[0]
+        self.assertIn("/epidata/fluview_clinical/", request.full_url)
+
+    def test_inventory_csv_writing(self):
+        row = inventory_row(
+            source_name="test_source",
+            source_type="socrata",
+            dataset_id_or_endpoint="abcd-1234",
+            intended_signal_role="test role",
+            raw_output_path=Path("raw/test.json"),
+            rows=[{"week": 1, "value": 2}],
+            columns=["value", "week"],
+            time_range_requested="",
+            date_accessed_utc="2026-07-01T00:00:00+00:00",
+            notes="Test inventory row.",
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "inventory.csv"
+            write_inventory(path, [row])
+            with path.open("r", newline="", encoding="utf-8") as input_file:
+                reader = csv.DictReader(input_file)
+                rows = list(reader)
+
+        self.assertEqual(reader.fieldnames, INVENTORY_COLUMNS)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["row_count"], "1")
+        self.assertEqual(rows[0]["column_count"], "2")
+
+    def test_metadata_only_skips_all_sample_row_downloads(self):
+        metadata = {
+            "columns": [{"fieldName": "week"}, {"fieldName": "value"}],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            args = argparse.Namespace(
+                start_epiweek=202440,
+                end_epiweek=202520,
+                socrata_limit=5000,
+                output_dir=temp_path / "raw",
+                inventory_output=temp_path / "inventory.csv",
+                metadata_only=True,
+            )
+            with patch(
+                "urllib.request.urlopen",
+                side_effect=[
+                    FakeResponse(metadata),
+                    FakeResponse(metadata),
+                ],
+            ) as urlopen:
+                inventory = ingest_sources(args)
+
+            requested_urls = [
+                call.args[0].full_url for call in urlopen.call_args_list
+            ]
+            self.assertEqual(urlopen.call_count, 2)
+            self.assertTrue(
+                all("/api/views/" in url for url in requested_urls)
+            )
+            self.assertFalse(
+                any("/resource/" in url for url in requested_urls)
+            )
+            self.assertFalse(
+                any("api.delphi" in url for url in requested_urls)
+            )
+            self.assertEqual(len(inventory), 4)
+            self.assertTrue(args.inventory_output.is_file())
+            self.assertFalse(
+                (
+                    args.output_dir
+                    / "cdc_hospital_respiratory_admissions_sample.json"
+                ).exists()
+            )
+
+    def test_http_and_json_failures_are_helpful(self):
+        http_error = urllib.error.HTTPError(
+            url="https://example.test/source",
+            code=503,
+            msg="Unavailable",
+            hdrs=None,
+            fp=None,
+        )
+        with patch("urllib.request.urlopen", side_effect=http_error):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "HTTP 503.*test_source",
+            ):
+                fetch_json("https://example.test/source", "test_source")
+
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(raw=b"not-json"),
+        ):
+            with self.assertRaisesRegex(
+                ValueError,
+                "Invalid JSON.*test_source",
+            ):
+                fetch_json("https://example.test/source", "test_source")
+
+    def test_delphi_result_code_failure_is_helpful(self):
+        payload = {
+            "result": -2,
+            "message": "no results",
+            "epidata": [],
+        }
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(payload),
+        ):
+            with self.assertRaisesRegex(
+                ValueError,
+                "result code -2.*no results",
+            ):
+                fetch_delphi_source(
+                    "fluview",
+                    "delphi_fluview_ili",
+                    202440,
+                    202520,
+                )
+
+
+if __name__ == "__main__":
+    unittest.main()
