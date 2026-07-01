@@ -1,0 +1,30 @@
+[
+  {
+    "case_id": "real_case_001",
+    "method": "llm_only",
+    "failure_case_id": "real_us_flu_wastewater_leading_indicator_001",
+    "expected_candidate_id": "real_signal_influenza_a_wastewater_activity",
+    "prompt": "Failure case: U.S. influenza hospitalization rate forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate\nCandidates under consideration:\n- Humidity anomaly (real_signal_humidity_anomaly)\n- Influenza A wastewater activity (real_signal_influenza_a_wastewater_activity)\n- Influenza test positivity (real_signal_influenza_test_positivity)\n- Outpatient ILI activity (real_signal_outpatient_ili_activity)\n\nCandidate to assess: Influenza A wastewater activity (real_signal_influenza_a_wastewater_activity)\nUsing only general domain knowledge, classify whether this candidate is supported, unsupported, or has missing evidence as a leading indicator for the target signal. State the candidate ID and classification clearly. Do not claim that an association proves causality or that the candidate definitively causes the target."
+  },
+  {
+    "case_id": "real_case_002",
+    "method": "llm_only",
+    "failure_case_id": "real_us_flu_wastewater_leading_indicator_001",
+    "expected_candidate_id": "real_signal_outpatient_ili_activity",
+    "prompt": "Failure case: U.S. influenza hospitalization rate forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate\nCandidates under consideration:\n- Humidity anomaly (real_signal_humidity_anomaly)\n- Influenza A wastewater activity (real_signal_influenza_a_wastewater_activity)\n- Influenza test positivity (real_signal_influenza_test_positivity)\n- Outpatient ILI activity (real_signal_outpatient_ili_activity)\n\nCandidate to assess: Outpatient ILI activity (real_signal_outpatient_ili_activity)\nUsing only general domain knowledge, classify whether this candidate is supported, unsupported, or has missing evidence as a leading indicator for the target signal. State the candidate ID and classification clearly. Do not claim that an association proves causality or that the candidate definitively causes the target."
+  },
+  {
+    "case_id": "real_case_003",
+    "method": "llm_only",
+    "failure_case_id": "real_us_flu_wastewater_leading_indicator_001",
+    "expected_candidate_id": "real_signal_influenza_test_positivity",
+    "prompt": "Failure case: U.S. influenza hospitalization rate forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate\nCandidates under consideration:\n- Humidity anomaly (real_signal_humidity_anomaly)\n- Influenza A wastewater activity (real_signal_influenza_a_wastewater_activity)\n- Influenza test positivity (real_signal_influenza_test_positivity)\n- Outpatient ILI activity (real_signal_outpatient_ili_activity)\n\nCandidate to assess: Influenza test positivity (real_signal_influenza_test_positivity)\nUsing only general domain knowledge, classify whether this candidate is supported, unsupported, or has missing evidence as a leading indicator for the target signal. State the candidate ID and classification clearly. Do not claim that an association proves causality or that the candidate definitively causes the target."
+  },
+  {
+    "case_id": "real_case_004",
+    "method": "llm_only",
+    "failure_case_id": "real_us_flu_wastewater_leading_indicator_001",
+    "expected_candidate_id": "real_signal_humidity_anomaly",
+    "prompt": "Failure case: U.S. influenza hospitalization rate forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate\nCandidates under consideration:\n- Humidity anomaly (real_signal_humidity_anomaly)\n- Influenza A wastewater activity (real_signal_influenza_a_wastewater_activity)\n- Influenza test positivity (real_signal_influenza_test_positivity)\n- Outpatient ILI activity (real_signal_outpatient_ili_activity)\n\nCandidate to assess: Humidity anomaly (real_signal_humidity_anomaly)\nUsing only general domain knowledge, classify whether this candidate is supported, unsupported, or has missing evidence as a leading indicator for the target signal. State the candidate ID and classification clearly. Do not claim that an association proves causality or that the candidate definitively causes the target."
+  }
+]
