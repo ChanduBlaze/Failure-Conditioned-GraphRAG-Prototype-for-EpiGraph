@@ -2,4 +2,4 @@ case_id,method,predicted_candidate_id,candidate_correct,mentioned_evidence_edges
 real_case_001,llm_only,real_signal_influenza_a_wastewater_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,False,True,0,Strongest present leading-indicator candidate. Model: fresh_chat_manual.
 real_case_002,llm_only,real_signal_outpatient_ili_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,False,True,0,Moderate present leading-indicator candidate. Model: fresh_chat_manual.
 real_case_003,llm_only,real_signal_influenza_test_positivity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,False,True,0,Borderline but present leading-indicator candidate. Model: fresh_chat_manual.
-real_case_004,llm_only,real_signal_humidity_anomaly,True,LEADING_INDICATOR_FOR,,False,1.0,0.0,False,False,1,Below-threshold missing evidence that should remain an EvidenceClaim and not become a positive typed edge. Model: fresh_chat_manual.
+real_case_004,llm_only,real_signal_humidity_anomaly,True,LEADING_INDICATOR_FOR,,False,1.0,0.0,False,False,0,Below-threshold missing evidence that should remain an EvidenceClaim and not become a positive typed edge. Model: fresh_chat_manual.
