@@ -25,6 +25,7 @@ DEFAULT_OUTPUT = Path(
 )
 
 HOSPITAL_FILE = "cdc_hospital_respiratory_admissions_sample.json"
+FLUSURV_FILE = "delphi_flusurv_202440_202520.json"
 WASTEWATER_FILE = "cdc_influenza_a_wastewater_sample.json"
 ILI_FILE = "delphi_fluview_ili_nat_202440_202520.json"
 CLINICAL_FILE = "delphi_fluview_clinical_nat_202440_202520.json"
@@ -330,6 +331,73 @@ def extract_wastewater_signal(
     return output
 
 
+def extract_flusurv_signal(
+    rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    preferred = ["rate_overall", "rate_flu_a"]
+    grouped: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        parsed_week = parse_epiweek(row.get("epiweek"))
+        value, column = first_numeric(row, preferred)
+        if parsed_week is None or value is None or column is None:
+            continue
+        week, monday = parsed_week
+        location = str(
+            row.get("location")
+            or row.get("locations")
+            or "unspecified catchment"
+        ).strip()
+        group = grouped.setdefault(
+            week,
+            {
+                "monday": monday,
+                "values": [],
+                "columns": set(),
+                "locations": set(),
+            },
+        )
+        group["values"].append(value)
+        group["columns"].add(column)
+        group["locations"].add(location)
+
+    output = []
+    for week in sorted(grouped):
+        group = grouped[week]
+        used_columns = [
+            column for column in preferred if column in group["columns"]
+        ]
+        selected_locations = ", ".join(sorted(group["locations"]))
+        signal_row = base_signal_row(
+            signal_id=(
+                "real_signal_us_influenza_hospitalization_rate_flusurv"
+            ),
+            signal_name=(
+                "U.S. influenza hospitalization rate from FluSurv-NET"
+            ),
+            signal_role="target",
+            source_name="delphi_flusurv",
+            source_dataset="Delphi Epidata FluSurv / CDC FluSurv-NET",
+            week=week,
+            monday=group["monday"],
+            raw_value=statistics.fmean(group["values"]),
+            units="hospitalizations per 100,000",
+            aggregation_method=(
+                "weekly FluSurv-NET rate from selected location/catchment"
+            ),
+            raw_row_count=len(group["values"]),
+            notes=(
+                f"Selected location(s): {selected_locations}. "
+                "Value preference columns used: "
+                + ", ".join(used_columns)
+                + ". FluSurv-NET is catchment-based, not full U.S. "
+                "population coverage."
+            ),
+        )
+        signal_row["region"] = "United States / FluSurv-NET catchment"
+        output.append(signal_row)
+    return output
+
+
 def extract_delphi_signal(
     rows: list[dict[str, Any]],
     *,
@@ -421,10 +489,21 @@ def normalize_signal_rows(
 
 
 def build_normalized_rows(raw_dir: Path) -> list[dict[str, Any]]:
-    hospital_rows = require_row_list(
-        load_json(raw_dir / HOSPITAL_FILE),
-        "CDC hospital respiratory admissions",
-    )
+    target_rows: list[dict[str, Any]] = []
+    flusurv_path = raw_dir / FLUSURV_FILE
+    if flusurv_path.is_file():
+        flusurv_rows = require_row_list(
+            load_json(flusurv_path),
+            "Delphi FluSurv",
+        )
+        target_rows = extract_flusurv_signal(flusurv_rows)
+    if not target_rows:
+        hospital_rows = require_row_list(
+            load_json(raw_dir / HOSPITAL_FILE),
+            "CDC hospital respiratory admissions",
+        )
+        target_rows = extract_hospital_signal(hospital_rows)
+
     wastewater_rows = require_row_list(
         load_json(raw_dir / WASTEWATER_FILE),
         "CDC Influenza A wastewater",
@@ -439,7 +518,7 @@ def build_normalized_rows(raw_dir: Path) -> list[dict[str, Any]]:
     )
 
     rows = [
-        *extract_hospital_signal(hospital_rows),
+        *target_rows,
         *extract_wastewater_signal(wastewater_rows),
         *extract_delphi_signal(
             ili_rows,

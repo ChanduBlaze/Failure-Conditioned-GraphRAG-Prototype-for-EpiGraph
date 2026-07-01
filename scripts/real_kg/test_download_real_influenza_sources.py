@@ -16,6 +16,7 @@ from scripts.real_kg.download_real_influenza_sources import (
     build_socrata_sample_url,
     epiweek_date_window,
     fetch_delphi_source,
+    fetch_flusurv_source,
     fetch_json,
     fetch_socrata_metadata,
     fetch_socrata_sample,
@@ -175,7 +176,13 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
         delphi = {
             "result": 1,
             "message": "success",
-            "epidata": [],
+            "epidata": [
+                {
+                    "location": "network_all",
+                    "epiweek": 202440,
+                    "rate_overall": 0.5,
+                }
+            ],
         }
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -195,6 +202,7 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
                     FakeResponse([]),
                     FakeResponse(metadata),
                     FakeResponse([]),
+                    FakeResponse(delphi),
                     FakeResponse(delphi),
                     FakeResponse(delphi),
                 ],
@@ -273,6 +281,37 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
         request = urlopen.call_args.args[0]
         self.assertIn("/epidata/fluview_clinical/", request.full_url)
 
+    def test_delphi_flusurv_url_uses_locations_and_epiweek_range(self):
+        payload = {
+            "result": 1,
+            "message": "success",
+            "epidata": [
+                {
+                    "location": "network_all",
+                    "epiweek": 202440,
+                    "rate_overall": 0.5,
+                }
+            ],
+        }
+        with patch(
+            "urllib.request.urlopen",
+            return_value=FakeResponse(payload),
+        ) as urlopen:
+            response, rows = fetch_flusurv_source(
+                "network_all",
+                202440,
+                202520,
+            )
+
+        self.assertEqual(response["result"], 1)
+        self.assertEqual(rows[0]["rate_overall"], 0.5)
+        request = urlopen.call_args.args[0]
+        parsed = urllib.parse.urlparse(request.full_url)
+        query = urllib.parse.parse_qs(parsed.query)
+        self.assertEqual(parsed.path, "/epidata/flusurv/")
+        self.assertEqual(query["locations"], ["network_all"])
+        self.assertEqual(query["epiweeks"], ["202440-202520"])
+
     def test_inventory_csv_writing(self):
         row = inventory_row(
             source_name="test_source",
@@ -335,7 +374,7 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
             self.assertFalse(
                 any("api.delphi" in url for url in requested_urls)
             )
-            self.assertEqual(len(inventory), 4)
+            self.assertEqual(len(inventory), 5)
             self.assertTrue(args.inventory_output.is_file())
             self.assertFalse(
                 (
@@ -373,6 +412,7 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
                     FakeResponse([{"week": "2025-01-01"}]),
                     FakeResponse(delphi),
                     FakeResponse(delphi),
+                    FakeResponse(delphi),
                 ],
             ):
                 inventory = ingest_sources(args)
@@ -397,6 +437,85 @@ class DownloadRealInfluenzaSourcesTests(unittest.TestCase):
             "Applied date filter on sample_collect_date: "
             "2024-09-23 through 2025-05-25",
             wastewater["notes"],
+        )
+        flusurv = next(
+            row
+            for row in inventory
+            if row["source_name"] == "delphi_flusurv"
+        )
+        self.assertEqual(flusurv["row_count"], 1)
+        self.assertIn("Requested locations: network_all", flusurv["notes"])
+        self.assertIn("Fallback used: False", flusurv["notes"])
+
+    def test_empty_network_all_uses_fallback_and_is_inventoried(self):
+        metadata = {"columns": [{"fieldName": "week"}]}
+        delphi = {
+            "result": 1,
+            "message": "success",
+            "epidata": [{"region": "nat", "epiweek": 202440}],
+        }
+        empty_flusurv = {
+            "result": -2,
+            "message": "no results",
+            "epidata": [],
+        }
+        fallback_flusurv = {
+            "result": 1,
+            "message": "success",
+            "epidata": [
+                {
+                    "location": "CA",
+                    "epiweek": 202440,
+                    "rate_overall": 0.7,
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            args = argparse.Namespace(
+                start_epiweek=202440,
+                end_epiweek=202520,
+                socrata_limit=5000,
+                output_dir=temp_path / "raw",
+                inventory_output=temp_path / "inventory.csv",
+                metadata_only=False,
+                disable_socrata_date_filter=False,
+                flusurv_locations="network_all",
+                flusurv_fallback_locations="CA,NY_albany",
+            )
+            with patch(
+                "urllib.request.urlopen",
+                side_effect=[
+                    FakeResponse(metadata),
+                    FakeResponse([]),
+                    FakeResponse(metadata),
+                    FakeResponse([]),
+                    FakeResponse(delphi),
+                    FakeResponse(delphi),
+                    FakeResponse(empty_flusurv),
+                    FakeResponse(fallback_flusurv),
+                ],
+            ):
+                inventory = ingest_sources(args)
+
+            output_path = (
+                args.output_dir / "delphi_flusurv_202440_202520.json"
+            )
+            self.assertTrue(output_path.is_file())
+            saved = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(saved["epidata"][0]["location"], "CA")
+
+        flusurv = next(
+            row
+            for row in inventory
+            if row["source_name"] == "delphi_flusurv"
+        )
+        self.assertEqual(flusurv["row_count"], 1)
+        self.assertIn("Selected locations: CA,NY_albany", flusurv["notes"])
+        self.assertIn("Fallback used: True", flusurv["notes"])
+        self.assertIn(
+            "Primary network_all response was empty",
+            flusurv["notes"],
         )
 
     def test_http_and_json_failures_are_helpful(self):

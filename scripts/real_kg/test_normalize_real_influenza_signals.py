@@ -8,6 +8,7 @@ from pathlib import Path
 
 from scripts.real_kg.normalize_real_influenza_signals import (
     CLINICAL_FILE,
+    FLUSURV_FILE,
     HOSPITAL_FILE,
     ILI_FILE,
     OUTPUT_COLUMNS,
@@ -15,6 +16,7 @@ from scripts.real_kg.normalize_real_influenza_signals import (
     base_signal_row,
     build_normalized_rows,
     extract_delphi_signal,
+    extract_flusurv_signal,
     extract_hospital_signal,
     extract_wastewater_signal,
     normalize_signal_rows,
@@ -110,6 +112,50 @@ class NormalizeRealInfluenzaSignalsTests(unittest.TestCase):
         self.assertEqual(output[0]["raw_value"], 3.0)
         self.assertEqual(output[0]["raw_row_count"], 2)
         self.assertIn("No national row", output[0]["notes"])
+
+    def test_flusurv_target_extracts_rate_overall(self):
+        rows = [
+            {
+                "location": "network_all",
+                "epiweek": 202440,
+                "rate_overall": "1.25",
+                "rate_flu_a": "0.8",
+            }
+        ]
+
+        output = extract_flusurv_signal(rows)
+
+        self.assertEqual(len(output), 1)
+        self.assertEqual(output[0]["raw_value"], 1.25)
+        self.assertEqual(output[0]["week"], "2024-W40")
+        self.assertEqual(output[0]["date"], "2024-09-30")
+        self.assertEqual(output[0]["signal_role"], "target")
+        self.assertEqual(output[0]["source_name"], "delphi_flusurv")
+        self.assertEqual(
+            output[0]["region"],
+            "United States / FluSurv-NET catchment",
+        )
+        self.assertIn("network_all", output[0]["notes"])
+        self.assertIn("catchment-based", output[0]["notes"])
+
+    def test_flusurv_target_falls_back_to_rate_flu_a(self):
+        rows = [
+            {
+                "location": "CA",
+                "epiweek": 202440,
+                "rate_overall": "",
+                "rate_flu_a": "0.65",
+            }
+        ]
+
+        output = extract_flusurv_signal(rows)
+
+        self.assertEqual(output[0]["raw_value"], 0.65)
+        self.assertIn("rate_flu_a", output[0]["notes"])
+        self.assertEqual(
+            output[0]["units"],
+            "hospitalizations per 100,000",
+        )
 
     def test_wastewater_uses_weekly_site_median_and_fallback(self):
         rows = [
@@ -308,6 +354,84 @@ class NormalizeRealInfluenzaSignalsTests(unittest.TestCase):
                     row["signal_id"],
                 ),
             ),
+        )
+
+    def test_full_build_prefers_flusurv_target_over_socrata(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            raw_dir = Path(temp_dir)
+            payloads = {
+                FLUSURV_FILE: {
+                    "result": 1,
+                    "epidata": [
+                        {
+                            "location": "network_all",
+                            "epiweek": 202440,
+                            "rate_overall": 1.2,
+                        },
+                        {
+                            "location": "network_all",
+                            "epiweek": 202441,
+                            "rate_overall": 1.8,
+                        },
+                    ],
+                },
+                HOSPITAL_FILE: [
+                    {
+                        "jurisdiction": "US",
+                        "weekendingdate": "2024-10-05",
+                        "totalconfflunewadmper100k": "99.0",
+                    }
+                ],
+                WASTEWATER_FILE: [
+                    {
+                        "sample_collect_date": "2024-09-30",
+                        "pcr_target_avg_conc_lin": "10",
+                    }
+                ],
+                ILI_FILE: {
+                    "result": 1,
+                    "epidata": [
+                        {"region": "nat", "epiweek": 202440, "wili": 2.0}
+                    ],
+                },
+                CLINICAL_FILE: {
+                    "result": 1,
+                    "epidata": [
+                        {
+                            "region": "nat",
+                            "epiweek": 202440,
+                            "percent_positive": 4.0,
+                        }
+                    ],
+                },
+            }
+            for filename, payload in payloads.items():
+                with (raw_dir / filename).open(
+                    "w",
+                    encoding="utf-8",
+                ) as output_file:
+                    json.dump(payload, output_file)
+
+            rows = build_normalized_rows(raw_dir)
+
+        target_rows = [
+            row for row in rows if row["signal_role"] == "target"
+        ]
+        self.assertEqual(len({row["signal_id"] for row in rows}), 4)
+        self.assertEqual(len(target_rows), 2)
+        self.assertTrue(
+            all(row["source_name"] == "delphi_flusurv" for row in target_rows)
+        )
+        self.assertTrue(
+            all(
+                row["signal_id"]
+                == "real_signal_us_influenza_hospitalization_rate_flusurv"
+                for row in target_rows
+            )
+        )
+        self.assertNotIn(
+            "real_signal_us_influenza_hospital_admission_rate",
+            {row["signal_id"] for row in rows},
         )
 
 

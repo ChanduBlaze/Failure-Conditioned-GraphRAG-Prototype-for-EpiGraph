@@ -26,6 +26,8 @@ DEFAULT_INVENTORY_OUTPUT = Path(
 DEFAULT_START_EPIWEEK = 202440
 DEFAULT_END_EPIWEEK = 202520
 DEFAULT_SOCRATA_LIMIT = 5000
+DEFAULT_FLUSURV_LOCATIONS = "network_all"
+DEFAULT_FLUSURV_FALLBACK_LOCATIONS = "CA,NY_albany,OR,MN,GA"
 HTTP_TIMEOUT_SECONDS = 60
 
 SOCRATA_SOURCES = [
@@ -60,6 +62,14 @@ DELPHI_SOURCES = [
         "intended_signal_role": "influenza test positivity candidate signal",
     },
 ]
+
+FLUSURV_SOURCE = {
+    "source_name": "delphi_flusurv",
+    "endpoint": "flusurv",
+    "intended_signal_role": (
+        "target signal for laboratory-confirmed influenza hospitalization rate"
+    ),
+}
 
 INVENTORY_COLUMNS = [
     "source_name",
@@ -121,6 +131,19 @@ def parse_args() -> argparse.Namespace:
             "query."
         ),
     )
+    parser.add_argument(
+        "--flusurv-locations",
+        default=DEFAULT_FLUSURV_LOCATIONS,
+        help="Primary Delphi FluSurv location or comma-separated locations.",
+    )
+    parser.add_argument(
+        "--flusurv-fallback-locations",
+        default=DEFAULT_FLUSURV_FALLBACK_LOCATIONS,
+        help=(
+            "Comma-separated FluSurv locations requested when the primary "
+            "location response is empty."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -159,6 +182,14 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("--start-epiweek must not exceed --end-epiweek.")
     if args.socrata_limit < 1:
         raise ValueError("--socrata-limit must be at least 1.")
+    if not str(
+        getattr(
+            args,
+            "flusurv_locations",
+            DEFAULT_FLUSURV_LOCATIONS,
+        )
+    ).strip():
+        raise ValueError("--flusurv-locations must not be empty.")
 
 
 def fetch_json(url: str, source_name: str) -> Any:
@@ -278,6 +309,7 @@ def build_socrata_sample_url(
 def parse_delphi_response(
     payload: Any,
     source_name: str,
+    allow_empty_result: bool = False,
 ) -> list[dict[str, Any]]:
     if not isinstance(payload, dict):
         raise ValueError(
@@ -286,6 +318,8 @@ def parse_delphi_response(
     result_code = payload.get("result")
     message = str(payload.get("message", "")).strip()
     if result_code != 1:
+        if allow_empty_result and result_code in {-2, 0}:
+            return []
         raise ValueError(
             f"Delphi source {source_name} returned result code "
             f"{result_code!r}: {message or 'no message'}."
@@ -314,6 +348,30 @@ def fetch_delphi_source(
     )
     payload = fetch_json(url, source_name)
     rows = parse_delphi_response(payload, source_name)
+    return payload, rows
+
+
+def fetch_flusurv_source(
+    locations: str,
+    start_epiweek: int,
+    end_epiweek: int,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    query = urllib.parse.urlencode(
+        {
+            "locations": locations,
+            "epiweeks": f"{start_epiweek}-{end_epiweek}",
+        }
+    )
+    url = (
+        "https://api.delphi.cmu.edu/epidata/flusurv/"
+        f"?{query}"
+    )
+    payload = fetch_json(url, "delphi_flusurv")
+    rows = parse_delphi_response(
+        payload,
+        "delphi_flusurv",
+        allow_empty_result=True,
+    )
     return payload, rows
 
 
@@ -506,6 +564,91 @@ def ingest_sources(args: argparse.Namespace) -> list[dict[str, Any]]:
                 raw_output_path=output_path,
                 rows=delphi_rows,
                 columns=row_column_names(delphi_rows),
+                time_range_requested=requested_range,
+                date_accessed_utc=accessed_at,
+                notes=notes,
+            )
+        )
+
+    flusurv_name = FLUSURV_SOURCE["source_name"]
+    flusurv_endpoint = FLUSURV_SOURCE["endpoint"]
+    primary_locations = str(
+        getattr(
+            args,
+            "flusurv_locations",
+            DEFAULT_FLUSURV_LOCATIONS,
+        )
+    ).strip()
+    fallback_locations = str(
+        getattr(
+            args,
+            "flusurv_fallback_locations",
+            DEFAULT_FLUSURV_FALLBACK_LOCATIONS,
+        )
+    ).strip()
+    if args.metadata_only:
+        inventory.append(
+            inventory_row(
+                source_name=flusurv_name,
+                source_type="delphi_epidata",
+                dataset_id_or_endpoint=flusurv_endpoint,
+                intended_signal_role=(
+                    FLUSURV_SOURCE["intended_signal_role"]
+                ),
+                raw_output_path=None,
+                rows=[],
+                columns=[],
+                time_range_requested=requested_range,
+                date_accessed_utc=accessed_at,
+                notes=(
+                    "Data request skipped by --metadata-only. Requested "
+                    f"locations would be {primary_locations}."
+                ),
+            )
+        )
+    else:
+        flusurv_payload, flusurv_rows = fetch_flusurv_source(
+            primary_locations,
+            args.start_epiweek,
+            args.end_epiweek,
+        )
+        selected_locations = primary_locations
+        fallback_used = False
+        primary_was_empty = not flusurv_rows
+        if primary_was_empty and fallback_locations:
+            flusurv_payload, flusurv_rows = fetch_flusurv_source(
+                fallback_locations,
+                args.start_epiweek,
+                args.end_epiweek,
+            )
+            selected_locations = fallback_locations
+            fallback_used = True
+
+        flusurv_path = (
+            args.output_dir
+            / f"delphi_flusurv_{args.start_epiweek}_{args.end_epiweek}.json"
+        )
+        write_json(flusurv_path, flusurv_payload)
+        notes = (
+            f"Requested locations: {primary_locations}. "
+            f"Selected locations: {selected_locations}. "
+            f"Fallback used: {fallback_used}."
+        )
+        if primary_was_empty:
+            notes += " Primary network_all response was empty."
+        if not flusurv_rows:
+            notes += " Selected location response contained no rows."
+        inventory.append(
+            inventory_row(
+                source_name=flusurv_name,
+                source_type="delphi_epidata",
+                dataset_id_or_endpoint=flusurv_endpoint,
+                intended_signal_role=(
+                    FLUSURV_SOURCE["intended_signal_role"]
+                ),
+                raw_output_path=flusurv_path,
+                rows=flusurv_rows,
+                columns=row_column_names(flusurv_rows),
                 time_range_requested=requested_range,
                 date_accessed_utc=accessed_at,
                 notes=notes,
