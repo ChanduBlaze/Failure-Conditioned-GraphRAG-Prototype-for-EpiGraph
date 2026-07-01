@@ -12,8 +12,12 @@ from scripts.real_kg.build_empirical_influenza_evidence_claims import (
     CASE_ID,
     CLAIM_COLUMNS,
     LAG_SCAN_COLUMNS,
+    NEGATIVE_CONTROL_ID,
+    NEGATIVE_CONTROL_LIMITATION,
     TARGET_SIGNAL_ID,
     build_empirical_outputs,
+    build_negative_control_signal,
+    collect_signals,
     compute_lag_scan,
     parse_args,
     pearson_correlation,
@@ -403,6 +407,135 @@ class BuildEmpiricalInfluenzaEvidenceClaimsTests(unittest.TestCase):
             ],
             CANDIDATE_IDS,
         )
+
+    def test_default_does_not_include_negative_control(self):
+        claims, scan = build_empirical_outputs(
+            normalized_rows(
+                all_candidates(SMOOTH_SEQUENCE),
+                SMOOTH_SEQUENCE,
+            )
+        )
+
+        self.assertEqual(len(claims), 3)
+        self.assertNotIn(
+            NEGATIVE_CONTROL_ID,
+            {claim["candidate_id"] for claim in claims},
+        )
+        self.assertNotIn(
+            NEGATIVE_CONTROL_ID,
+            {row["candidate_id"] for row in scan},
+        )
+
+    def test_include_negative_control_adds_one_claim(self):
+        claims, _scan = build_empirical_outputs(
+            normalized_rows(
+                all_candidates(SMOOTH_SEQUENCE),
+                SMOOTH_SEQUENCE,
+            ),
+            include_negative_control=True,
+        )
+
+        self.assertEqual(len(claims), 4)
+        self.assertEqual(claims[-1]["candidate_id"], NEGATIVE_CONTROL_ID)
+        self.assertEqual(
+            sum(
+                claim["candidate_id"] == NEGATIVE_CONTROL_ID
+                for claim in claims
+            ),
+            1,
+        )
+
+    def test_negative_control_uses_same_lagged_pearson_rule(self):
+        rows = normalized_rows(
+            all_candidates(SMOOTH_SEQUENCE),
+            SMOOTH_SEQUENCE,
+        )
+        signals = collect_signals(rows)
+        target = signals[TARGET_SIGNAL_ID]
+        control = build_negative_control_signal(target)
+        expected_scan = compute_lag_scan(
+            control["values"],
+            target["values"],
+            8,
+            4,
+            1,
+        )
+        expected_best = select_best_lag(expected_scan, 1)
+
+        claims, _scan = build_empirical_outputs(
+            rows,
+            include_negative_control=True,
+        )
+        claim = claims[-1]
+
+        self.assertIsNotNone(expected_best)
+        self.assertEqual(
+            claim["lag_weeks"],
+            expected_best["lag_weeks"],
+        )
+        self.assertAlmostEqual(
+            float(claim["score"]),
+            expected_best["pearson_correlation"],
+            places=6,
+        )
+        self.assertEqual(
+            claim["status"],
+            (
+                "present"
+                if expected_best["pearson_correlation"] >= 0.60
+                else "missing"
+            ),
+        )
+
+    def test_negative_control_is_not_present_and_appears_in_lag_scan(self):
+        claims, scan = build_empirical_outputs(
+            normalized_rows(
+                all_candidates(SMOOTH_SEQUENCE),
+                SMOOTH_SEQUENCE,
+            ),
+            include_negative_control=True,
+        )
+        claim = claims[-1]
+        control_scan = [
+            row for row in scan if row["candidate_id"] == NEGATIVE_CONTROL_ID
+        ]
+
+        self.assertIn(claim["status"], {"missing", "insufficient"})
+        self.assertEqual(
+            [row["lag_weeks"] for row in control_scan],
+            [0, 1, 2, 3, 4],
+        )
+
+    def test_negative_control_limitation_is_explicit(self):
+        claims, _scan = build_empirical_outputs(
+            normalized_rows(
+                all_candidates(SMOOTH_SEQUENCE),
+                SMOOTH_SEQUENCE,
+            ),
+            include_negative_control=True,
+        )
+
+        self.assertIn(NEGATIVE_CONTROL_LIMITATION, claims[-1]["limitation"])
+        self.assertIn(
+            "deterministic permutation",
+            claims[-1]["limitation"],
+        )
+        self.assertIn(
+            "not a real epidemiological driver",
+            claims[-1]["limitation"],
+        )
+
+    def test_cli_accepts_include_negative_control(self):
+        with patch(
+            "sys.argv",
+            [
+                "build_empirical_influenza_evidence_claims.py",
+                "--include-negative-control",
+            ],
+        ):
+            args = parse_args()
+
+        self.assertTrue(args.include_negative_control)
 
 
 if __name__ == "__main__":

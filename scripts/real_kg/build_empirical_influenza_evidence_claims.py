@@ -48,6 +48,22 @@ CANDIDATE_IDS = [
     "real_signal_outpatient_ili_activity",
     "real_signal_influenza_test_positivity",
 ]
+NEGATIVE_CONTROL_ID = (
+    "real_signal_negative_control_permuted_surveillance"
+)
+NEGATIVE_CONTROL_NAME = (
+    "Negative-control permuted surveillance signal"
+)
+NEGATIVE_CONTROL_SOURCE_DATASET = (
+    "Deterministic negative control derived from empirical FluSurv target "
+    "values"
+)
+NEGATIVE_CONTROL_REGION = "United States / FluSurv-NET catchment"
+NEGATIVE_CONTROL_LIMITATION = (
+    "Negative-control signal is a deterministic permutation of observed "
+    "target values and is included only to test thresholding and "
+    "missing-evidence preservation; it is not a real epidemiological driver."
+)
 
 REQUIRED_INPUT_COLUMNS = [
     "case_id",
@@ -138,6 +154,14 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Smallest positive lag eligible for LEADING_INDICATOR_FOR "
             "best-lag selection."
+        ),
+    )
+    parser.add_argument(
+        "--include-negative-control",
+        action="store_true",
+        help=(
+            "Add a deterministic, temporally permuted target-derived "
+            "negative-control candidate."
         ),
     )
     return parser.parse_args()
@@ -302,6 +326,37 @@ def collect_signals(
                 "signal_role 'candidate'."
             )
     return signals
+
+
+def build_negative_control_signal(
+    target: dict[str, Any],
+) -> dict[str, Any]:
+    ordered_weeks = sorted(target["values"])
+    sorted_values = sorted(target["values"].values())
+    permuted_values: list[float] = []
+    low_index = 0
+    high_index = len(sorted_values) - 1
+    take_high = True
+    while low_index <= high_index:
+        if take_high:
+            permuted_values.append(sorted_values[high_index])
+            high_index -= 1
+        else:
+            permuted_values.append(sorted_values[low_index])
+            low_index += 1
+        take_high = not take_high
+
+    # The same target weeks are retained, but sorted values are assigned in a
+    # deterministic high-low sequence that breaks their temporal alignment.
+    return {
+        "signal_id": NEGATIVE_CONTROL_ID,
+        "signal_name": NEGATIVE_CONTROL_NAME,
+        "signal_role": "candidate_negative_control",
+        "source_datasets": [NEGATIVE_CONTROL_SOURCE_DATASET],
+        "regions": [NEGATIVE_CONTROL_REGION],
+        "values": dict(zip(ordered_weeks, permuted_values)),
+        "additional_limitation": NEGATIVE_CONTROL_LIMITATION,
+    }
 
 
 def pearson_correlation(
@@ -493,6 +548,12 @@ def evaluate_candidate(
     target_region = join_unique(target["regions"])
     candidate_name = str(candidate["signal_name"])
     target_name = str(target["signal_name"])
+    limitation = LIMITATION
+    additional_limitation = str(
+        candidate.get("additional_limitation") or ""
+    ).strip()
+    if additional_limitation:
+        limitation = f"{limitation} {additional_limitation}"
 
     claim = {
         "case_id": CASE_ID,
@@ -521,7 +582,7 @@ def evaluate_candidate(
             paired_week_count,
             threshold,
         ),
-        "limitation": LIMITATION,
+        "limitation": limitation,
     }
 
     scan_rows = []
@@ -556,6 +617,7 @@ def build_empirical_outputs(
     minimum_paired_weeks: int = DEFAULT_MINIMUM_PAIRED_WEEKS,
     max_lag_weeks: int = DEFAULT_MAX_LAG_WEEKS,
     minimum_lead_weeks: int = DEFAULT_MINIMUM_LEAD_WEEKS,
+    include_negative_control: bool = False,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     validate_options(
         threshold,
@@ -565,9 +627,13 @@ def build_empirical_outputs(
     )
     signals = collect_signals(rows)
     target = signals[TARGET_SIGNAL_ID]
+    candidate_ids = list(CANDIDATE_IDS)
+    if include_negative_control:
+        signals[NEGATIVE_CONTROL_ID] = build_negative_control_signal(target)
+        candidate_ids.append(NEGATIVE_CONTROL_ID)
     claims: list[dict[str, Any]] = []
     lag_scan: list[dict[str, Any]] = []
-    for candidate_id in CANDIDATE_IDS:
+    for candidate_id in candidate_ids:
         claim, candidate_scan = evaluate_candidate(
             signals[candidate_id],
             target,
@@ -625,6 +691,7 @@ def main() -> int:
             minimum_paired_weeks=args.minimum_paired_weeks,
             max_lag_weeks=args.max_lag_weeks,
             minimum_lead_weeks=args.minimum_lead_weeks,
+            include_negative_control=args.include_negative_control,
         )
         # EvidenceClaim rows preserve the empirical audit trail. They do not
         # create positive typed graph edges or establish causal effects.
