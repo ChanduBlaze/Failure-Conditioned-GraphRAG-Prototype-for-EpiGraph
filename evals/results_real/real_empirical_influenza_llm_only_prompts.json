@@ -1,0 +1,42 @@
+[
+  {
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_influenza_a_wastewater_concentration",
+    "candidate_name": "Influenza A wastewater concentration",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "target_signal_name": "U.S. influenza hospitalization rate from FluSurv-NET",
+    "expected_status": "present",
+    "expected_edge_type": "LEADING_INDICATOR_FOR",
+    "prompt": "Failure case: influenza hospitalization forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET.\nCandidate signal: Influenza A wastewater concentration.\nQuestion: Based only on general epidemiological reasoning, assess whether this candidate should be treated as a LEADING_INDICATOR_FOR the target signal. Explain your reasoning and state whether you would treat the relationship as present, missing, or insufficient."
+  },
+  {
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_outpatient_ili_activity",
+    "candidate_name": "Outpatient ILI activity",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "target_signal_name": "U.S. influenza hospitalization rate from FluSurv-NET",
+    "expected_status": "present",
+    "expected_edge_type": "LEADING_INDICATOR_FOR",
+    "prompt": "Failure case: influenza hospitalization forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET.\nCandidate signal: Outpatient ILI activity.\nQuestion: Based only on general epidemiological reasoning, assess whether this candidate should be treated as a LEADING_INDICATOR_FOR the target signal. Explain your reasoning and state whether you would treat the relationship as present, missing, or insufficient."
+  },
+  {
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_influenza_test_positivity",
+    "candidate_name": "Influenza test positivity",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "target_signal_name": "U.S. influenza hospitalization rate from FluSurv-NET",
+    "expected_status": "present",
+    "expected_edge_type": "LEADING_INDICATOR_FOR",
+    "prompt": "Failure case: influenza hospitalization forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET.\nCandidate signal: Influenza test positivity.\nQuestion: Based only on general epidemiological reasoning, assess whether this candidate should be treated as a LEADING_INDICATOR_FOR the target signal. Explain your reasoning and state whether you would treat the relationship as present, missing, or insufficient."
+  },
+  {
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_negative_control_permuted_surveillance",
+    "candidate_name": "Negative-control permuted surveillance signal",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "target_signal_name": "U.S. influenza hospitalization rate from FluSurv-NET",
+    "expected_status": "missing",
+    "expected_edge_type": "LEADING_INDICATOR_FOR",
+    "prompt": "Failure case: influenza hospitalization forecast underprediction.\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET.\nCandidate signal: Negative-control permuted surveillance signal.\nQuestion: Based only on general epidemiological reasoning, assess whether this candidate should be treated as a LEADING_INDICATOR_FOR the target signal. Explain your reasoning and state whether you would treat the relationship as present, missing, or insufficient."
+  }
+]
