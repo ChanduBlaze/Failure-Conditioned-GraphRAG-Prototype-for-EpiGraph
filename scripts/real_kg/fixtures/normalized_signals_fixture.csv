@@ -9,6 +9,26 @@ real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,Unit
 real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,United States,2025-W08,5.0,CDC Influenza A Wastewater synthetic fixture
 real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,United States,2025-W09,3.3,CDC Influenza A Wastewater synthetic fixture
 real_signal_influenza_a_wastewater_activity,Influenza A wastewater activity,United States,2025-W10,2.1,CDC Influenza A Wastewater synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W01,2.63,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W02,2.55,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W03,0.77,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W04,4.84,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W05,3.76,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W06,5.80,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W07,10.46,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W08,5.90,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W09,5.78,CDC Outpatient ILI synthetic fixture
+real_signal_outpatient_ili_activity,Outpatient ILI activity,United States,2025-W10,5.23,CDC Outpatient ILI synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W01,3.54,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W02,3.21,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W03,3.30,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W04,5.73,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W05,2.92,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W06,5.10,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W07,7.08,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W08,9.91,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W09,7.05,CDC Influenza Test Positivity synthetic fixture
+real_signal_influenza_test_positivity,Influenza test positivity,United States,2025-W10,4.61,CDC Influenza Test Positivity synthetic fixture
 real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W01,-0.5,NOAA Humidity Anomaly synthetic fixture
 real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W02,0.2,NOAA Humidity Anomaly synthetic fixture
 real_signal_humidity_anomaly,Humidity anomaly,United States,2025-W03,-0.2,NOAA Humidity Anomaly synthetic fixture

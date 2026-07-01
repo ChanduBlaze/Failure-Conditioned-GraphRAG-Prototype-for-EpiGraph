@@ -24,9 +24,15 @@ DEFAULT_INPUT = Path(
 )
 DEFAULT_OUTPUT = Path("data/real_processed/real_evidence_claims.csv")
 DEFAULT_CANDIDATE_ID = "real_signal_influenza_a_wastewater_activity"
+DEFAULT_OUTPATIENT_ILI_CANDIDATE_ID = "real_signal_outpatient_ili_activity"
+DEFAULT_TEST_POSITIVITY_CANDIDATE_ID = (
+    "real_signal_influenza_test_positivity"
+)
 DEFAULT_HUMIDITY_CANDIDATE_ID = "real_signal_humidity_anomaly"
 DEFAULT_CANDIDATE_IDS = [
     DEFAULT_CANDIDATE_ID,
+    DEFAULT_OUTPATIENT_ILI_CANDIDATE_ID,
+    DEFAULT_TEST_POSITIVITY_CANDIDATE_ID,
     DEFAULT_HUMIDITY_CANDIDATE_ID,
 ]
 DEFAULT_TARGET_ID = "real_signal_us_influenza_hospitalization_rate"
@@ -36,10 +42,6 @@ DEFAULT_REGION = "United States"
 EDGE_TYPE = "LEADING_INDICATOR_FOR"
 METHOD = "lagged_pearson_correlation_v1"
 LIMITATION = (
-    "Associational evidence only; not causal proof. Result depends on selected "
-    "time window, lag range, aggregation, and data quality."
-)
-MISSING_LIMITATION = (
     "Associational screening evidence only; not causal proof. Result depends "
     "on the selected time window, lag range, aggregation, threshold, and data "
     "quality."
@@ -92,7 +94,8 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help=(
             "Candidate signal ID to evaluate. Repeat for multiple candidates. "
-            "Defaults to wastewater activity followed by humidity anomaly."
+            "Defaults to wastewater, outpatient ILI, test positivity, then "
+            "humidity anomaly."
         ),
     )
     parser.add_argument("--target-id", default=DEFAULT_TARGET_ID)
@@ -410,9 +413,7 @@ def build_claim(
         "score": "" if score is None else f"{score:.6f}",
         "threshold": f"{args.threshold:.2f}",
         "evidence_sentence": evidence_sentence,
-        "limitation": (
-            MISSING_LIMITATION if status == "missing" else LIMITATION
-        ),
+        "limitation": LIMITATION,
     }
 
 

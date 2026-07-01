@@ -15,6 +15,10 @@ FIXTURE_PATH = REAL_KG_DIR / "fixtures" / "normalized_signals_fixture.csv"
 
 CANDIDATE_ID = "real_signal_influenza_a_wastewater_activity"
 CANDIDATE_NAME = "Influenza A wastewater activity"
+OUTPATIENT_ILI_CANDIDATE_ID = "real_signal_outpatient_ili_activity"
+OUTPATIENT_ILI_CANDIDATE_NAME = "Outpatient ILI activity"
+TEST_POSITIVITY_CANDIDATE_ID = "real_signal_influenza_test_positivity"
+TEST_POSITIVITY_CANDIDATE_NAME = "Influenza test positivity"
 HUMIDITY_CANDIDATE_ID = "real_signal_humidity_anomaly"
 HUMIDITY_CANDIDATE_NAME = "Humidity anomaly"
 TARGET_ID = "real_signal_us_influenza_hospitalization_rate"
@@ -124,7 +128,7 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         return rows[0], columns
 
-    def test_existing_fixture_produces_present_and_missing_claims(self):
+    def test_existing_fixture_produces_four_ranked_claims(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             output_path = Path(temp_dir) / "claims.csv"
             result = self.run_builder(FIXTURE_PATH, output_path)
@@ -133,19 +137,71 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
             claims, columns = self.read_claims(output_path)
 
             self.assertTrue(REQUIRED_OUTPUT_COLUMNS.issubset(columns))
-            self.assertEqual(len(claims), 2)
+            self.assertEqual(len(claims), 4)
             self.assertEqual(
                 [claim["candidate_id"] for claim in claims],
-                [CANDIDATE_ID, HUMIDITY_CANDIDATE_ID],
+                [
+                    CANDIDATE_ID,
+                    OUTPATIENT_ILI_CANDIDATE_ID,
+                    TEST_POSITIVITY_CANDIDATE_ID,
+                    HUMIDITY_CANDIDATE_ID,
+                ],
             )
 
-            wastewater_claim, humidity_claim = claims
-            self.assertEqual(wastewater_claim["candidate_name"], CANDIDATE_NAME)
+            (
+                wastewater_claim,
+                outpatient_ili_claim,
+                test_positivity_claim,
+                humidity_claim,
+            ) = claims
+            self.assertEqual(
+                wastewater_claim["candidate_name"],
+                CANDIDATE_NAME,
+            )
             self.assertEqual(wastewater_claim["status"], "present")
             self.assertEqual(wastewater_claim["lag_weeks"], "2")
-            self.assertGreaterEqual(
-                float(wastewater_claim["score"]),
-                float(wastewater_claim["threshold"]),
+            wastewater_score = float(wastewater_claim["score"])
+            self.assertGreater(wastewater_score, 0.90)
+            self.assertEqual(
+                wastewater_claim["source_dataset"],
+                (
+                    "CDC FluSurv-NET synthetic fixture; "
+                    "CDC Influenza A Wastewater synthetic fixture"
+                ),
+            )
+
+            self.assertEqual(
+                outpatient_ili_claim["candidate_name"],
+                OUTPATIENT_ILI_CANDIDATE_NAME,
+            )
+            self.assertEqual(outpatient_ili_claim["status"], "present")
+            self.assertEqual(outpatient_ili_claim["lag_weeks"], "1")
+            outpatient_ili_score = float(outpatient_ili_claim["score"])
+            self.assertGreater(outpatient_ili_score, 0.70)
+            self.assertLess(outpatient_ili_score, wastewater_score)
+            self.assertEqual(
+                outpatient_ili_claim["source_dataset"],
+                (
+                    "CDC FluSurv-NET synthetic fixture; "
+                    "CDC Outpatient ILI synthetic fixture"
+                ),
+            )
+
+            self.assertEqual(
+                test_positivity_claim["candidate_name"],
+                TEST_POSITIVITY_CANDIDATE_NAME,
+            )
+            self.assertEqual(test_positivity_claim["status"], "present")
+            self.assertEqual(test_positivity_claim["lag_weeks"], "1")
+            test_positivity_score = float(test_positivity_claim["score"])
+            self.assertGreater(test_positivity_score, 0.60)
+            self.assertLess(test_positivity_score, outpatient_ili_score)
+            self.assertEqual(
+                test_positivity_claim["source_dataset"],
+                (
+                    "CDC FluSurv-NET synthetic fixture; "
+                    "CDC Influenza Test Positivity synthetic fixture"
+                ),
             )
 
             self.assertEqual(
@@ -153,9 +209,17 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
                 HUMIDITY_CANDIDATE_NAME,
             )
             self.assertEqual(humidity_claim["status"], "missing")
+            self.assertEqual(humidity_claim["lag_weeks"], "4")
             self.assertLess(
                 float(humidity_claim["score"]),
                 float(humidity_claim["threshold"]),
+            )
+            self.assertEqual(
+                humidity_claim["source_dataset"],
+                (
+                    "CDC FluSurv-NET synthetic fixture; "
+                    "NOAA Humidity Anomaly synthetic fixture"
+                ),
             )
             self.assertIn(
                 "Humidity anomaly does not meet LEADING_INDICATOR_FOR evidence",
@@ -169,24 +233,32 @@ class BuildRealEvidenceClaimsTests(unittest.TestCase):
                 "under the configured threshold",
                 humidity_claim["evidence_sentence"],
             )
-            self.assertIn(
-                "Associational screening evidence only",
-                humidity_claim["limitation"],
-            )
-            self.assertIn("not causal proof", humidity_claim["limitation"])
 
             for claim in claims:
+                self.assertTrue(claim["candidate_id"])
+                self.assertTrue(claim["candidate_name"])
                 self.assertEqual(claim["target_signal_id"], TARGET_ID)
                 self.assertEqual(claim["target_signal_name"], TARGET_NAME)
                 self.assertEqual(
                     claim["edge_type"],
                     "LEADING_INDICATOR_FOR",
                 )
-                self.assertTrue(claim["candidate_id"])
+                self.assertIn(claim["status"], {"present", "missing"})
+                self.assertTrue(claim["lag_weeks"])
                 self.assertTrue(claim["score"])
                 self.assertEqual(claim["threshold"], "0.60")
+                self.assertTrue(claim["source_dataset"])
                 self.assertTrue(claim["evidence_sentence"])
-                self.assertTrue(claim["limitation"])
+                if claim["status"] == "present":
+                    self.assertIn(
+                        "has LEADING_INDICATOR_FOR evidence",
+                        claim["evidence_sentence"],
+                    )
+                self.assertIn(
+                    "Associational screening evidence only",
+                    claim["limitation"],
+                )
+                self.assertIn("not causal proof", claim["limitation"])
 
     def test_weak_correlation_produces_missing_claim(self):
         with tempfile.TemporaryDirectory() as temp_dir:
