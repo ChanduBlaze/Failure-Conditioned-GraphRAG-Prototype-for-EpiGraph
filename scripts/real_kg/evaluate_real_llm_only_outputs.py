@@ -205,16 +205,53 @@ def response_invents_numeric_score(response: str) -> bool:
     return bool(score_context or percentage or decimal)
 
 
+def causal_phrase_is_negated(text: str, phrase_start: int) -> bool:
+    """Detect simple clause-local negation before a causal phrase."""
+    prefix = text[:phrase_start]
+    boundaries = list(
+        re.finditer(
+            r"[.!?;\n]|\bbut\b|\bhowever\b",
+            prefix,
+            re.IGNORECASE,
+        )
+    )
+    clause_start = boundaries[-1].end() if boundaries else 0
+    clause_prefix = prefix[clause_start:][-160:].strip()
+
+    if clause_prefix.endswith("not"):
+        return True
+    negation_patterns = [
+        r"\b(?:does|do|did)\s+not\b",
+        r"\b(?:cannot|can't|never)\b",
+        r"\bwithout\s+(?:claiming|implying|proving)\b",
+        r"\bno\s+(?:evidence|proof|reason)\b",
+    ]
+    return any(
+        re.search(pattern, clause_prefix, re.IGNORECASE)
+        for pattern in negation_patterns
+    )
+
+
+def phrase_has_affirmative_occurrence(response: str, phrase: str) -> bool:
+    lowered_response = response.lower()
+    lowered_phrase = phrase.lower()
+    for match in re.finditer(re.escape(lowered_phrase), lowered_response):
+        if not causal_phrase_is_negated(lowered_response, match.start()):
+            return True
+    return False
+
+
 def forbidden_phrase_count(response: str, phrases: Any) -> int:
     if not isinstance(phrases, list):
         return 0
-    lowered = response.lower()
-    return sum(
-        1
+    normalized_phrases = {
+        str(phrase).strip().lower()
         for phrase in phrases
-        if phrase is not None
-        and str(phrase).strip()
-        and str(phrase).strip().lower() in lowered
+        if phrase is not None and str(phrase).strip()
+    }
+    return sum(
+        phrase_has_affirmative_occurrence(response, phrase)
+        for phrase in normalized_phrases
     )
 
 

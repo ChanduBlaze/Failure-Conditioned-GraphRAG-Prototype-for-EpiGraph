@@ -13,6 +13,7 @@ from scripts.real_kg.build_real_llm_only_prompts import (
 from scripts.real_kg.evaluate_real_llm_only_outputs import (
     RESULT_COLUMNS,
     evaluate_outputs,
+    forbidden_phrase_count,
     write_results,
 )
 
@@ -222,13 +223,79 @@ class RealLlmOnlyBaselineTests(unittest.TestCase):
         self.assertFalse(row["lag_correct"])
         self.assertTrue(row["score_meets_minimum"])
 
-    def test_causal_overclaim_phrase_is_counted(self):
+    def test_affirmative_definitively_causes_counts_as_violation(self):
+        outputs = make_outputs()
+        outputs[0]["response"] += (
+            " Influenza A wastewater activity definitively causes "
+            "hospitalizations."
+        )
+
+        rows = evaluate_outputs(make_cases(), outputs)
+
+        self.assertEqual(rows[0]["must_not_include_violations"], 1)
+
+    def test_negated_definitively_causes_is_not_a_violation(self):
+        outputs = make_outputs()
+        outputs[0]["response"] += (
+            " This does not mean Influenza A wastewater activity "
+            "definitively causes hospitalizations."
+        )
+
+        rows = evaluate_outputs(make_cases(), outputs)
+
+        self.assertEqual(rows[0]["must_not_include_violations"], 0)
+
+    def test_affirmative_proves_causality_counts_as_violation(self):
         outputs = make_outputs()
         outputs[0]["response"] += " This proves causality."
 
         rows = evaluate_outputs(make_cases(), outputs)
 
         self.assertEqual(rows[0]["must_not_include_violations"], 1)
+
+    def test_does_not_prove_causality_is_not_a_violation(self):
+        outputs = make_outputs()
+        outputs[0]["response"] += " This does not prove causality."
+
+        rows = evaluate_outputs(make_cases(), outputs)
+
+        self.assertEqual(rows[0]["must_not_include_violations"], 0)
+
+    def test_all_negated_causal_caveats_produce_zero_violations(self):
+        outputs = make_outputs()
+        for output, (_id, candidate_name, _status, _lag) in zip(
+            outputs,
+            CANDIDATES,
+        ):
+            output["response"] += (
+                " This does not prove causality and does not mean "
+                f"{candidate_name} definitively causes changes."
+            )
+
+        rows = evaluate_outputs(make_cases(), outputs)
+
+        self.assertTrue(
+            all(row["must_not_include_violations"] == 0 for row in rows)
+        )
+
+    def test_other_documented_negated_caveats_are_not_violations(self):
+        examples = [
+            (
+                "Do not claim that humidity definitively causes changes.",
+                ["definitively causes"],
+            ),
+            ("This is not causal proof.", ["causal proof"]),
+            (
+                "The association does not imply causality.",
+                ["imply causality"],
+            ),
+        ]
+        for response, phrases in examples:
+            with self.subTest(response=response):
+                self.assertEqual(
+                    forbidden_phrase_count(response, phrases),
+                    0,
+                )
 
     def test_invented_numeric_score_fails_score_check(self):
         outputs = make_outputs()
