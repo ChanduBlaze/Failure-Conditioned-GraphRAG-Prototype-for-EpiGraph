@@ -165,6 +165,28 @@ def extract_scores(text: str) -> list[float]:
     return scores
 
 
+def score_threshold_correct(
+    case: dict[str, Any],
+    scores: list[float],
+) -> bool:
+    """Check either a present-case minimum or missing-case maximum threshold."""
+    if not scores:
+        return False
+
+    if case.get("maximum_expected_score") is not None:
+        try:
+            maximum_score = float(case["maximum_expected_score"])
+        except (TypeError, ValueError):
+            return False
+        return all(score < maximum_score for score in scores)
+
+    try:
+        minimum_score = float(case.get("minimum_expected_score"))
+    except (TypeError, ValueError):
+        return False
+    return max(scores) >= minimum_score
+
+
 def text_contains_expected_lag(text: str, expected_lag: Any) -> bool:
     try:
         expected = int(expected_lag)
@@ -272,15 +294,39 @@ def evaluate_text_case(
             "No matching Text-RAG chunks found.",
         )
 
-    top_chunk = matching_chunks[0]
-    predicted_candidate_id = str(top_chunk.get("candidate_id", ""))
-    candidate_chunks = [
-        chunk
-        for chunk in matching_chunks
-        if str(chunk.get("candidate_id", "")) == predicted_candidate_id
-    ]
-    if not candidate_chunks:
-        candidate_chunks = [top_chunk]
+    expected_candidate_id = str(case.get("expected_candidate_id", ""))
+    if expected_candidate_id:
+        candidate_chunks = [
+            chunk
+            for chunk in matching_chunks
+            if str(chunk.get("candidate_id", "")) == expected_candidate_id
+        ]
+        if not candidate_chunks:
+            return base_result(
+                case,
+                "text_rag",
+                "",
+                set(),
+                set(),
+                False,
+                False,
+                False,
+                0,
+                (
+                    "No matching Text-RAG chunks found for expected candidate "
+                    f"{expected_candidate_id}."
+                ),
+            )
+        predicted_candidate_id = expected_candidate_id
+    else:
+        top_chunk = matching_chunks[0]
+        predicted_candidate_id = str(top_chunk.get("candidate_id", ""))
+        candidate_chunks = [
+            chunk
+            for chunk in matching_chunks
+            if str(chunk.get("candidate_id", ""))
+            == predicted_candidate_id
+        ]
 
     mentioned_edges = {
         str(chunk.get("edge_type"))
@@ -308,15 +354,9 @@ def evaluate_text_case(
         case.get("expected_lag_weeks"),
     )
     scores = extract_scores(combined_text)
-    try:
-        minimum_score = float(case.get("minimum_expected_score"))
-    except (TypeError, ValueError):
-        minimum_score = None
-    score_meets_minimum = (
-        minimum_score is not None
-        and bool(scores)
-        and max(scores) >= minimum_score
-    )
+    # Retain the existing CSV column name for compatibility. For a case with
+    # maximum_expected_score, this value means "all scores are below maximum."
+    score_meets_minimum = score_threshold_correct(case, scores)
     violations = forbidden_phrase_count(
         combined_text,
         case.get("must_not_include", []),
@@ -391,11 +431,43 @@ def evaluate_graph_case(
             "No candidates found in GraphRAG context.",
         )
 
-    top_candidate = candidates[0]
-    predicted_candidate_id = str(top_candidate.get("candidate_id", ""))
+    expected_candidate_id = str(case.get("expected_candidate_id", ""))
+    if expected_candidate_id:
+        selected_candidate = next(
+            (
+                candidate
+                for candidate in candidates
+                if str(candidate.get("candidate_id", ""))
+                == expected_candidate_id
+            ),
+            None,
+        )
+        if selected_candidate is None:
+            return base_result(
+                case,
+                "graphrag_context",
+                "",
+                set(),
+                set(),
+                False,
+                False,
+                False,
+                0,
+                (
+                    "Expected candidate not found in GraphRAG context: "
+                    f"{expected_candidate_id}."
+                ),
+            )
+        predicted_candidate_id = expected_candidate_id
+    else:
+        selected_candidate = candidates[0]
+        predicted_candidate_id = str(
+            selected_candidate.get("candidate_id", "")
+        )
+
     evidence_edges = [
         edge
-        for edge in top_candidate.get("evidence_edges", [])
+        for edge in selected_candidate.get("evidence_edges", [])
         if isinstance(edge, dict)
     ]
     evidence_edges.sort(
@@ -434,22 +506,16 @@ def evaluate_graph_case(
         expected_lag is not None and expected_lag in observed_lags
     )
 
-    try:
-        minimum_score = float(case.get("minimum_expected_score"))
-    except (TypeError, ValueError):
-        minimum_score = None
     evidence_scores = [
         numeric_score(edge.get("score"))
         for edge in evidence_edges
         if edge.get("score") is not None
     ]
-    if not evidence_scores and top_candidate.get("score") is not None:
-        evidence_scores.append(numeric_score(top_candidate.get("score")))
-    score_meets_minimum = (
-        minimum_score is not None
-        and bool(evidence_scores)
-        and max(evidence_scores) >= minimum_score
-    )
+    if not evidence_scores and selected_candidate.get("score") is not None:
+        evidence_scores.append(
+            numeric_score(selected_candidate.get("score"))
+        )
+    score_meets_minimum = score_threshold_correct(case, evidence_scores)
 
     evidence_text = "\n".join(
         part
