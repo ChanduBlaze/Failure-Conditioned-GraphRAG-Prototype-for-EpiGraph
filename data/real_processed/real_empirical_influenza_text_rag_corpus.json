@@ -34,5 +34,17 @@
     "edge_type": "LEADING_INDICATOR_FOR",
     "status": "present",
     "evidence_claim_id": "empirical_claim__real_us_flu_empirical_multicandidate_001__real_signal_influenza_test_positivity__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR"
+  },
+  {
+    "chunk_id": "empirical_chunk__real_us_flu_empirical_multicandidate_001__real_signal_negative_control_permuted_surveillance__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR",
+    "title": "Negative-control permuted surveillance signal - empirical LEADING_INDICATOR_FOR - U.S. influenza hospitalization rate from FluSurv-NET (missing)",
+    "text": "Status: missing.\nThe empirical evidence threshold was not met; this is not a positive evidence claim.\nCase ID: real_us_flu_empirical_multicandidate_001.\nCandidate: Negative-control permuted surveillance signal (real_signal_negative_control_permuted_surveillance).\nTarget signal: U.S. influenza hospitalization rate from FluSurv-NET (real_signal_us_influenza_hospitalization_rate_flusurv).\nEdge type: LEADING_INDICATOR_FOR.\nScore: -0.048027.\nThreshold: 0.60.\nLag weeks: 4.\nPaired week count: 26.\nMinimum paired weeks: 8.\nMethod: lagged_pearson_correlation_empirical_v1.\nSource dataset: Delphi Epidata FluSurv / CDC FluSurv-NET; Deterministic negative control derived from empirical FluSurv target values.\nRegion: United States / FluSurv-NET catchment.\nTime window: 2024-W40 through 2025-W17.\nEvidence sentence: Negative-control permuted surveillance signal does not meet empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET under the configured threshold: best positive lag = 4 weeks, Pearson correlation = -0.048027, paired weeks = 26, threshold = 0.60.\nLimitation: Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic. Negative-control signal is a deterministic permutation of observed target values and is included only to test thresholding and missing-evidence preservation; it is not a real epidemiological driver.",
+    "source_type": "empirical_evidence_claim",
+    "case_id": "real_us_flu_empirical_multicandidate_001",
+    "candidate_id": "real_signal_negative_control_permuted_surveillance",
+    "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+    "edge_type": "LEADING_INDICATOR_FOR",
+    "status": "missing",
+    "evidence_claim_id": "empirical_claim__real_us_flu_empirical_multicandidate_001__real_signal_negative_control_permuted_surveillance__real_signal_us_influenza_hospitalization_rate_flusurv__LEADING_INDICATOR_FOR"
   }
 ]

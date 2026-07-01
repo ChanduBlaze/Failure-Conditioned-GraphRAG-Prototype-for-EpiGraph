@@ -57,6 +57,24 @@
       "time_window_end": "2025-W20",
       "evidence_sentence": "Influenza test positivity has empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET: best positive lag = 1 weeks, Pearson correlation = 0.925810, paired weeks = 29, threshold = 0.60.",
       "limitation": "Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic."
+    },
+    {
+      "candidate_id": "real_signal_negative_control_permuted_surveillance",
+      "candidate_name": "Negative-control permuted surveillance signal",
+      "status": "missing",
+      "edge_type": "LEADING_INDICATOR_FOR",
+      "score": -0.048027,
+      "threshold": 0.6,
+      "lag_weeks": 4,
+      "paired_week_count": 26,
+      "minimum_paired_weeks": 8,
+      "method": "lagged_pearson_correlation_empirical_v1",
+      "source_dataset": "Delphi Epidata FluSurv / CDC FluSurv-NET; Deterministic negative control derived from empirical FluSurv target values",
+      "region": "United States / FluSurv-NET catchment",
+      "time_window_start": "2024-W40",
+      "time_window_end": "2025-W17",
+      "evidence_sentence": "Negative-control permuted surveillance signal does not meet empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET under the configured threshold: best positive lag = 4 weeks, Pearson correlation = -0.048027, paired weeks = 26, threshold = 0.60.",
+      "limitation": "Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic. Negative-control signal is a deterministic permutation of observed target values and is included only to test thresholding and missing-evidence preservation; it is not a real epidemiological driver."
     }
   ],
   "evidence_edges": [
@@ -119,6 +137,26 @@
       "time_window_end": "2025-W20",
       "evidence_sentence": "Influenza test positivity has empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET: best positive lag = 1 weeks, Pearson correlation = 0.925810, paired weeks = 29, threshold = 0.60.",
       "limitation": "Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic."
+    },
+    {
+      "candidate_id": "real_signal_negative_control_permuted_surveillance",
+      "candidate_name": "Negative-control permuted surveillance signal",
+      "target_signal_id": "real_signal_us_influenza_hospitalization_rate_flusurv",
+      "target_signal_name": "U.S. influenza hospitalization rate from FluSurv-NET",
+      "status": "missing",
+      "edge_type": "LEADING_INDICATOR_FOR",
+      "score": -0.048027,
+      "threshold": 0.6,
+      "lag_weeks": 4,
+      "paired_week_count": 26,
+      "minimum_paired_weeks": 8,
+      "method": "lagged_pearson_correlation_empirical_v1",
+      "source_dataset": "Delphi Epidata FluSurv / CDC FluSurv-NET; Deterministic negative control derived from empirical FluSurv target values",
+      "region": "United States / FluSurv-NET catchment",
+      "time_window_start": "2024-W40",
+      "time_window_end": "2025-W17",
+      "evidence_sentence": "Negative-control permuted surveillance signal does not meet empirical LEADING_INDICATOR_FOR evidence for U.S. influenza hospitalization rate from FluSurv-NET under the configured threshold: best positive lag = 4 weeks, Pearson correlation = -0.048027, paired weeks = 26, threshold = 0.60.",
+      "limitation": "Empirical screening evidence only; not causal proof. Result depends on source coverage, reporting lag, normalization, aggregation, lag window, threshold, and data quality. Lag 0 was retained only as a concurrent-association diagnostic. Negative-control signal is a deterministic permutation of observed target values and is included only to test thresholding and missing-evidence preservation; it is not a real epidemiological driver."
     }
   ]
 }

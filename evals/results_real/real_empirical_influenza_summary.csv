@@ -1,3 +1,3 @@
 method,case_count,status_accuracy,avg_present_edge_recall,avg_missing_edge_recall,lag_accuracy,score_accuracy,threshold_accuracy,paired_week_count_accuracy,total_must_not_include_violations
-empirical_text_rag,3,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0
-empirical_graphrag_context,3,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0
+empirical_text_rag,4,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0
+empirical_graphrag_context,4,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0
