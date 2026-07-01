@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "real_case_001",
+    "method": "llm_only",
+    "model": "fresh_chat_manual",
+    "response": "Candidate ID: **real_signal_influenza_a_wastewater_activity**\n\nClassification: **Supported**\n\nInfluenza A wastewater activity is supported as a **leading indicator** for U.S. influenza hospitalization rate under general domain knowledge. Wastewater surveillance can detect viral shedding from infected people before many cases appear in clinical testing or hospitalization data, so rising Influenza A wastewater activity can plausibly precede increases in influenza-related hospitalizations.\n\nThis does **not** imply causality. The signal should be interpreted as an early population-level marker of infection activity, with caveats around geographic coverage, sampling variability, normalization methods, and the fact that it captures Influenza A specifically rather than all influenza burden."
+  },
+  {
+    "case_id": "real_case_002",
+    "method": "llm_only",
+    "model": "fresh_chat_manual",
+    "response": "Candidate ID: **real_signal_outpatient_ili_activity**\n\nClassification: **Supported**\n\nOutpatient influenza-like illness activity is generally supported as a leading indicator for U.S. influenza hospitalization rates. In typical influenza seasons, increases in outpatient ILI visits often appear before increases in severe outcomes such as hospitalizations, because symptomatic infections first show up in outpatient or ambulatory care before a smaller subset progresses to hospitalization.\n\nThis support is associative, not causal. Outpatient ILI activity does **not** definitively cause hospitalization changes, and it is an imperfect signal because ILI is nonspecific and can reflect other respiratory viruses, care-seeking behavior, testing practices, and reporting delays."
+  },
+  {
+    "case_id": "real_case_003",
+    "method": "llm_only",
+    "model": "fresh_chat_manual",
+    "response": "Candidate ID: **real_signal_influenza_test_positivity**\n\nClassification: **Supported**\n\nInfluenza test positivity is supported as a leading or near-leading indicator for U.S. influenza hospitalization rates. In general epidemiological patterns, increases in influenza infections and diagnostic positivity tend to occur before or around the early rise in severe outcomes, including hospitalizations, because hospitalization usually follows infection after a short delay.\n\nThis does **not** imply causality. Test positivity reflects observed influenza activity and can be affected by testing behavior, healthcare-seeking patterns, and surveillance coverage, but it is generally relevant evidence for anticipating changes in influenza hospitalization rates."
+  },
+  {
+    "case_id": "real_case_004",
+    "method": "llm_only",
+    "model": "fresh_chat_manual",
+    "response": "Candidate ID: **real_signal_humidity_anomaly**\n\nClassification: **Supported**\n\nHumidity anomaly is **supported as a plausible leading indicator** for U.S. influenza hospitalization rate because humidity conditions, especially unusually low absolute humidity, are generally understood to be associated with influenza seasonality, viral survival, and transmission conditions. Since hospitalizations typically lag infections, humidity anomalies could provide early contextual signal before changes appear in hospitalization rates.\n\nThis support is **indirect**: humidity is not a clinical or surveillance measure of influenza burden, and an association with later hospitalization patterns does **not** prove causality or mean humidity definitively causes changes in hospitalizations."
+  }
+]
