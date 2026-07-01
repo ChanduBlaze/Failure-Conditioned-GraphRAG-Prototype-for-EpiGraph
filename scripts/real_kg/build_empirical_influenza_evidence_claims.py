@@ -28,6 +28,7 @@ DEFAULT_LAG_SCAN_OUTPUT = Path(
 DEFAULT_THRESHOLD = 0.60
 DEFAULT_MINIMUM_PAIRED_WEEKS = 8
 DEFAULT_MAX_LAG_WEEKS = 4
+DEFAULT_MINIMUM_LEAD_WEEKS = 1
 
 CASE_ID = "real_us_flu_empirical_multicandidate_001"
 TARGET_SIGNAL_ID = (
@@ -38,7 +39,8 @@ METHOD = "lagged_pearson_correlation_empirical_v1"
 LIMITATION = (
     "Empirical screening evidence only; not causal proof. Result depends on "
     "source coverage, reporting lag, normalization, aggregation, lag window, "
-    "threshold, and data quality."
+    "threshold, and data quality. Lag 0 was retained only as a "
+    "concurrent-association diagnostic."
 )
 
 CANDIDATE_IDS = [
@@ -129,6 +131,15 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=DEFAULT_MAX_LAG_WEEKS,
     )
+    parser.add_argument(
+        "--minimum-lead-weeks",
+        type=int,
+        default=DEFAULT_MINIMUM_LEAD_WEEKS,
+        help=(
+            "Smallest positive lag eligible for LEADING_INDICATOR_FOR "
+            "best-lag selection."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -136,6 +147,7 @@ def validate_options(
     threshold: float,
     minimum_paired_weeks: int,
     max_lag_weeks: int,
+    minimum_lead_weeks: int = DEFAULT_MINIMUM_LEAD_WEEKS,
 ) -> None:
     if not math.isfinite(threshold):
         raise ValueError("--threshold must be a finite number.")
@@ -143,6 +155,8 @@ def validate_options(
         raise ValueError("--minimum-paired-weeks must be at least 2.")
     if max_lag_weeks < 0:
         raise ValueError("--max-lag-weeks must be zero or greater.")
+    if minimum_lead_weeks < 1:
+        raise ValueError("--minimum-lead-weeks must be at least 1.")
 
 
 def parse_week(value: str) -> tuple[str, date]:
@@ -322,6 +336,7 @@ def compute_lag_scan(
     target_values: dict[date, float],
     minimum_paired_weeks: int,
     max_lag_weeks: int,
+    minimum_lead_weeks: int = DEFAULT_MINIMUM_LEAD_WEEKS,
 ) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     for lag_weeks in range(max_lag_weeks + 1):
@@ -350,8 +365,14 @@ def compute_lag_scan(
                 "Pearson correlation is undefined because at least one "
                 "paired series has no variance."
             )
+        elif lag_weeks < minimum_lead_weeks:
+            notes = (
+                "Eligible diagnostic lag but excluded from "
+                "LEADING_INDICATOR_FOR best-lag selection because "
+                f"minimum_lead_weeks = {minimum_lead_weeks}."
+            )
         else:
-            notes = "Eligible for best-lag selection."
+            notes = "Eligible for leading-indicator best-lag selection."
         results.append(
             {
                 "lag_weeks": lag_weeks,
@@ -366,8 +387,14 @@ def compute_lag_scan(
 
 def select_best_lag(
     lag_results: list[dict[str, Any]],
+    minimum_lead_weeks: int = DEFAULT_MINIMUM_LEAD_WEEKS,
 ) -> dict[str, Any] | None:
-    eligible = [result for result in lag_results if result["eligible"]]
+    eligible = [
+        result
+        for result in lag_results
+        if result["eligible"]
+        and int(result["lag_weeks"]) >= minimum_lead_weeks
+    ]
     if not eligible:
         return None
     return max(
@@ -409,13 +436,13 @@ def build_evidence_sentence(
     if status == "present":
         return (
             f"{candidate_name} has empirical {EDGE_TYPE} evidence for "
-            f"{target_name}: best lag = {lag_weeks} weeks, Pearson "
+            f"{target_name}: best positive lag = {lag_weeks} weeks, Pearson "
             f"correlation = {score_text}, paired weeks = "
             f"{paired_week_count}, threshold = {threshold_text}."
         )
     return (
         f"{candidate_name} does not meet empirical {EDGE_TYPE} evidence for "
-        f"{target_name} under the configured threshold: best lag = "
+        f"{target_name} under the configured threshold: best positive lag = "
         f"{lag_weeks} weeks, Pearson correlation = {score_text}, paired "
         f"weeks = {paired_week_count}, threshold = {threshold_text}."
     )
@@ -427,20 +454,31 @@ def evaluate_candidate(
     threshold: float,
     minimum_paired_weeks: int,
     max_lag_weeks: int,
+    minimum_lead_weeks: int = DEFAULT_MINIMUM_LEAD_WEEKS,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     lag_results = compute_lag_scan(
         candidate["values"],
         target["values"],
         minimum_paired_weeks,
         max_lag_weeks,
+        minimum_lead_weeks,
     )
-    best = select_best_lag(lag_results)
+    best = select_best_lag(lag_results, minimum_lead_weeks)
     if best is None:
         status = "insufficient"
         lag_weeks = None
         score = None
+        positive_lag_results = [
+            result
+            for result in lag_results
+            if int(result["lag_weeks"]) >= minimum_lead_weeks
+        ]
         paired_week_count = max(
-            int(result["paired_week_count"]) for result in lag_results
+            (
+                int(result["paired_week_count"])
+                for result in positive_lag_results
+            ),
+            default=0,
         )
     else:
         lag_weeks = int(best["lag_weeks"])
@@ -517,11 +555,13 @@ def build_empirical_outputs(
     threshold: float = DEFAULT_THRESHOLD,
     minimum_paired_weeks: int = DEFAULT_MINIMUM_PAIRED_WEEKS,
     max_lag_weeks: int = DEFAULT_MAX_LAG_WEEKS,
+    minimum_lead_weeks: int = DEFAULT_MINIMUM_LEAD_WEEKS,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     validate_options(
         threshold,
         minimum_paired_weeks,
         max_lag_weeks,
+        minimum_lead_weeks,
     )
     signals = collect_signals(rows)
     target = signals[TARGET_SIGNAL_ID]
@@ -534,6 +574,7 @@ def build_empirical_outputs(
             threshold,
             minimum_paired_weeks,
             max_lag_weeks,
+            minimum_lead_weeks,
         )
         claims.append(claim)
         lag_scan.extend(candidate_scan)
@@ -583,6 +624,7 @@ def main() -> int:
             threshold=args.threshold,
             minimum_paired_weeks=args.minimum_paired_weeks,
             max_lag_weeks=args.max_lag_weeks,
+            minimum_lead_weeks=args.minimum_lead_weeks,
         )
         # EvidenceClaim rows preserve the empirical audit trail. They do not
         # create positive typed graph edges or establish causal effects.

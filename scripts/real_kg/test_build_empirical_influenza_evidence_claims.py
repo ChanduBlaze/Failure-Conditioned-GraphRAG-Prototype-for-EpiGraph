@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from datetime import date, timedelta
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.real_kg.build_empirical_influenza_evidence_claims import (
     CANDIDATE_IDS,
@@ -14,6 +15,7 @@ from scripts.real_kg.build_empirical_influenza_evidence_claims import (
     TARGET_SIGNAL_ID,
     build_empirical_outputs,
     compute_lag_scan,
+    parse_args,
     pearson_correlation,
     select_best_lag,
     write_csv,
@@ -30,6 +32,48 @@ CANDIDATE_NAMES = {
         "Influenza test positivity"
     ),
 }
+
+SMOOTH_SEQUENCE = [
+    0.02,
+    0.05,
+    0.10,
+    0.18,
+    0.30,
+    0.48,
+    0.68,
+    0.88,
+    1.00,
+    0.91,
+    0.74,
+    0.55,
+    0.37,
+    0.23,
+    0.13,
+    0.07,
+]
+
+LOW_AUTOCORRELATION_SEQUENCE = [
+    0.10,
+    0.72,
+    0.21,
+    0.85,
+    0.34,
+    0.93,
+    0.04,
+    0.61,
+    0.42,
+    0.53,
+    0.99,
+    0.16,
+    0.81,
+    0.28,
+    0.65,
+    0.02,
+    0.44,
+    0.76,
+    0.19,
+    0.57,
+]
 
 INPUT_COLUMNS = [
     "case_id",
@@ -170,13 +214,74 @@ class BuildEmpiricalInfluenzaEvidenceClaimsTests(unittest.TestCase):
         self.assertIn("empirical LEADING_INDICATOR_FOR", claims[0][
             "evidence_sentence"
         ])
+        self.assertIn(
+            "best positive lag = 1 weeks",
+            claims[0]["evidence_sentence"],
+        )
+        self.assertIn(
+            "Lag 0 was retained only as a concurrent-association diagnostic.",
+            claims[0]["limitation"],
+        )
+
+    def test_lag_zero_is_excluded_when_it_has_highest_correlation(self):
+        start = date(2024, 9, 30)
+        values = {
+            start + timedelta(weeks=index): value
+            for index, value in enumerate(SMOOTH_SEQUENCE)
+        }
+
+        scan = compute_lag_scan(values, values, 8, 4)
+        best = select_best_lag(scan)
+
+        self.assertAlmostEqual(scan[0]["pearson_correlation"], 1.0)
+        self.assertTrue(scan[0]["eligible"])
+        self.assertEqual(best["lag_weeks"], 1)
+        self.assertLess(
+            best["pearson_correlation"],
+            scan[0]["pearson_correlation"],
+        )
+        self.assertIn(
+            "excluded from LEADING_INDICATOR_FOR best-lag selection",
+            scan[0]["notes"],
+        )
+
+    def test_positive_lag_one_selected_when_lag_zero_is_higher(self):
+        claims, scan = build_empirical_outputs(
+            normalized_rows(
+                all_candidates(SMOOTH_SEQUENCE),
+                SMOOTH_SEQUENCE,
+            )
+        )
+
+        self.assertTrue(all(claim["lag_weeks"] == 1 for claim in claims))
+        self.assertTrue(all(claim["status"] == "present" for claim in claims))
+        lag_zero = [
+            row for row in scan if row["lag_weeks"] == 0
+        ]
+        lag_one = [
+            row for row in scan if row["lag_weeks"] == 1
+        ]
+        self.assertTrue(
+            all(
+                float(zero["pearson_correlation"])
+                > float(one["pearson_correlation"])
+                for zero, one in zip(lag_zero, lag_one)
+            )
+        )
+        self.assertTrue(
+            all(
+                row["notes"]
+                == "Eligible for leading-indicator best-lag selection."
+                for row in lag_one
+            )
+        )
 
     def test_missing_status_when_best_correlation_is_below_threshold(self):
-        candidate = [index / 19 for index in range(20)]
-        target = [float(index % 2) for index in range(20)]
-
         claims, _scan = build_empirical_outputs(
-            normalized_rows(all_candidates(candidate), target)
+            normalized_rows(
+                all_candidates(LOW_AUTOCORRELATION_SEQUENCE),
+                LOW_AUTOCORRELATION_SEQUENCE,
+            )
         )
 
         self.assertTrue(all(claim["status"] == "missing" for claim in claims))
@@ -189,23 +294,41 @@ class BuildEmpiricalInfluenzaEvidenceClaimsTests(unittest.TestCase):
         )
 
     def test_insufficient_status_below_minimum_paired_weeks(self):
-        candidate = [0.1, 0.7, 0.2, 0.8, 0.3, 0.9]
-        target = [0.0, 0.1, 0.7, 0.2, 0.8, 0.3]
+        candidate = [0.1, 0.7, 0.2, 0.8, 0.3, 0.9, 0.4, 0.6]
+        target = list(candidate)
 
-        claims, _scan = build_empirical_outputs(
+        claims, scan = build_empirical_outputs(
             normalized_rows(all_candidates(candidate), target),
             minimum_paired_weeks=8,
         )
 
+        lag_zero = [row for row in scan if row["lag_weeks"] == 0]
+        self.assertTrue(all(row["eligible"] for row in lag_zero))
         self.assertTrue(
             all(claim["status"] == "insufficient" for claim in claims)
         )
         self.assertTrue(all(claim["lag_weeks"] == "" for claim in claims))
         self.assertTrue(all(claim["score"] == "" for claim in claims))
+        self.assertTrue(
+            all(claim["paired_week_count"] == 7 for claim in claims)
+        )
         self.assertIn(
             "insufficient overlapping data",
             claims[0]["evidence_sentence"],
         )
+
+    def test_cli_accepts_minimum_lead_weeks(self):
+        with patch(
+            "sys.argv",
+            [
+                "build_empirical_influenza_evidence_claims.py",
+                "--minimum-lead-weeks",
+                "2",
+            ],
+        ):
+            args = parse_args()
+
+        self.assertEqual(args.minimum_lead_weeks, 2)
 
     def test_lag_scan_contains_every_lag_for_every_candidate(self):
         values = [index / 11 for index in range(12)]
@@ -221,6 +344,16 @@ class BuildEmpiricalInfluenzaEvidenceClaimsTests(unittest.TestCase):
                 if row["candidate_id"] == candidate_id
             ]
             self.assertEqual(candidate_lags, [0, 1, 2, 3, 4])
+        lag_zero_rows = [
+            row for row in scan if row["lag_weeks"] == 0
+        ]
+        self.assertEqual(len(lag_zero_rows), 3)
+        self.assertTrue(
+            all(
+                "minimum_lead_weeks = 1" in row["notes"]
+                for row in lag_zero_rows
+            )
+        )
 
     def test_evidence_claim_csv_has_required_columns(self):
         values = [index / 11 for index in range(12)]
