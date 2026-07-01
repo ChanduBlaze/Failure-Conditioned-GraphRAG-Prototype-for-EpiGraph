@@ -1,0 +1,13 @@
+case_id,method,predicted_candidate_id,candidate_correct,mentioned_evidence_edges,identified_missing_edges,status_correct,present_edge_recall,missing_edge_recall,lag_correct,score_meets_minimum,must_not_include_violations,notes
+real_case_001,llm_only,real_signal_influenza_a_wastewater_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,False,True,0,Strongest present leading-indicator candidate. Model: fresh_chat_manual.
+real_case_002,llm_only,real_signal_outpatient_ili_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,False,True,0,Moderate present leading-indicator candidate. Model: fresh_chat_manual.
+real_case_003,llm_only,real_signal_influenza_test_positivity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,False,True,0,Borderline but present leading-indicator candidate. Model: fresh_chat_manual.
+real_case_004,llm_only,real_signal_humidity_anomaly,True,LEADING_INDICATOR_FOR,,False,1.0,0.0,False,False,0,Below-threshold missing evidence that should remain an EvidenceClaim and not become a positive typed edge. Model: fresh_chat_manual.
+real_case_001,text_rag,real_signal_influenza_a_wastewater_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Strongest present leading-indicator candidate.
+real_case_002,text_rag,real_signal_outpatient_ili_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Moderate present leading-indicator candidate.
+real_case_003,text_rag,real_signal_influenza_test_positivity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Borderline but present leading-indicator candidate.
+real_case_004,text_rag,real_signal_humidity_anomaly,True,,LEADING_INDICATOR_FOR,True,1.0,1.0,True,True,0,Below-threshold missing evidence that should remain an EvidenceClaim and not become a positive typed edge.
+real_case_001,graphrag_context,real_signal_influenza_a_wastewater_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Strongest present leading-indicator candidate.
+real_case_002,graphrag_context,real_signal_outpatient_ili_activity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Moderate present leading-indicator candidate.
+real_case_003,graphrag_context,real_signal_influenza_test_positivity,True,LEADING_INDICATOR_FOR,,True,1.0,1.0,True,True,0,Borderline but present leading-indicator candidate.
+real_case_004,graphrag_context,real_signal_humidity_anomaly,True,,LEADING_INDICATOR_FOR,True,1.0,1.0,True,True,0,Below-threshold missing evidence that should remain an EvidenceClaim and not become a positive typed edge.

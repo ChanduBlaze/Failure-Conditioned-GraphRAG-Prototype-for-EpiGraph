@@ -1,0 +1,4 @@
+method,case_count,candidate_accuracy,avg_present_edge_recall,avg_missing_edge_recall,status_accuracy,lag_accuracy,score_threshold_accuracy,false_positive_edge_claims,total_must_not_include_violations
+llm_only,4,1.0,1.0,0.75,0.75,0.0,0.75,1,0
+text_rag,4,1.0,1.0,1.0,1.0,1.0,1.0,0,0
+graphrag_context,4,1.0,1.0,1.0,1.0,1.0,1.0,0,0
