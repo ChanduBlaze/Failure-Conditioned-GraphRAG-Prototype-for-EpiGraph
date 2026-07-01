@@ -1,0 +1,7 @@
+result_family,result_type,method,case_count,status_accuracy,candidate_accuracy,avg_present_edge_recall,avg_missing_edge_recall,lag_accuracy,score_accuracy,threshold_accuracy,paired_week_count_accuracy,false_positive_edge_claims,score_claims,threshold_claims,total_must_not_include_violations,notes
+fixture_real_kg,controlled_fixture_method_comparison,llm_only,4,0.75,1.0,1.0,0.75,0.0,,,,1,,,0,Controlled fixture real-KG comparison with known evidence status and candidate structure.
+fixture_real_kg,controlled_fixture_method_comparison,text_rag,4,1.0,1.0,1.0,1.0,1.0,,,,0,,,0,Controlled fixture real-KG comparison with known evidence status and candidate structure.
+fixture_real_kg,controlled_fixture_method_comparison,graphrag_context,4,1.0,1.0,1.0,1.0,1.0,,,,0,,,0,Controlled fixture real-KG comparison with known evidence status and candidate structure.
+empirical_influenza,real_data_method_comparison,empirical_llm_only,4,1.0,,1.0,1.0,0.0,,,,0,0,0,0,"LLM-only used general epidemiological reasoning without empirical score, threshold, lag, paired-week, Text-RAG, or graph evidence."
+empirical_influenza,real_data_method_comparison,empirical_text_rag,4,1.0,,1.0,1.0,1.0,1.0,1.0,1.0,,,,0,Text-RAG evaluated artifact preservation from empirical evidence-claim chunks.
+empirical_influenza,real_data_method_comparison,empirical_graphrag_context,4,1.0,,1.0,1.0,1.0,1.0,1.0,1.0,,,,0,GraphRAG evaluated artifact preservation from pipeline-scoped Neo4j graph context.
