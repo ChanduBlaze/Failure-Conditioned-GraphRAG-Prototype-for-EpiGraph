@@ -1,0 +1,2 @@
+method,case_count,status_accuracy,avg_present_edge_recall,avg_missing_edge_recall,lag_accuracy,false_positive_edge_claims,score_claims,threshold_claims,total_must_not_include_violations
+empirical_llm_only,4,1.0,1.0,1.0,0.0,0,0,0,0

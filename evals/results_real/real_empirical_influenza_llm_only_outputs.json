@@ -1,0 +1,26 @@
+[
+    {
+        "case_id":  "real_us_flu_empirical_multicandidate_001",
+        "candidate_id":  "real_signal_influenza_a_wastewater_concentration",
+        "model":  "fresh_chat_manual",
+        "response":  "Assessment: Present — treat Influenza A wastewater concentration as a plausible LEADING_INDICATOR_FOR FluSurv-NET influenza hospitalization rate.\n\nGeneral epidemiological reasoning supports this relationship. Influenza A wastewater concentration reflects community-level viral shedding. Shedding tends to occur around the time people are infected and symptomatic, and it can be detected before many severe outcomes appear in hospitalization data. Hospitalizations are downstream of infection: people are infected first, develop symptoms, some progress to severe disease, then seek care and are admitted. That creates a natural lag from infection prevalence to hospitalization rate.\n\nSo, if Influenza A wastewater concentration rises, it is reasonable to expect influenza hospitalizations to rise after a delay, especially during periods when Influenza A is the dominant circulating strain. In a forecast-underprediction failure case, wastewater could plausibly provide an earlier signal that transmission intensity is increasing faster than hospitalization-based models have captured.\n\nConclusion: I would mark the relationship as present."
+    },
+    {
+        "case_id":  "real_us_flu_empirical_multicandidate_001",
+        "candidate_id":  "real_signal_outpatient_ili_activity",
+        "model":  "fresh_chat_manual",
+        "response":  "Assessment: Present — treat outpatient ILI activity as a LEADING_INDICATOR_FOR influenza hospitalization rate.\n\nGeneral epidemiological reasoning supports a leading relationship. Outpatient ILI activity reflects people developing influenza-like symptoms and seeking ambulatory care. For influenza, hospitalizations usually occur later in the clinical course: infection, symptom onset, outpatient or urgent-care visit, worsening illness in a subset of patients, then hospitalization. That progression creates a plausible lag of several days to roughly one or more weeks between rising outpatient ILI and rising influenza hospitalizations.\n\nConclusion: The relationship should be considered present, but noisy and indirect."
+    },
+    {
+        "case_id":  "real_us_flu_empirical_multicandidate_001",
+        "candidate_id":  "real_signal_influenza_test_positivity",
+        "model":  "fresh_chat_manual",
+        "response":  "Assessment: Present, but imperfect.\n\nBased only on general epidemiological reasoning, influenza test positivity should be treated as a LEADING_INDICATOR_FOR U.S. influenza hospitalization rate.\n\nInfluenza test positivity is upstream of hospitalization in the disease process. A rise in positivity usually reflects increasing influenza transmission among people being tested. Some fraction of those infections, especially among older adults, young children, pregnant people, and people with chronic conditions, will progress to severe illness and hospitalization after a delay.\n\nConclusion: LEADING_INDICATOR_FOR is present, with the caveat that influenza test positivity is directionally useful but insufficient by itself for reliable hospitalization magnitude forecasting."
+    },
+    {
+        "case_id":  "real_us_flu_empirical_multicandidate_001",
+        "candidate_id":  "real_signal_negative_control_permuted_surveillance",
+        "model":  "fresh_chat_manual",
+        "response":  "Assessment: Missing relationship.\n\nA negative-control permuted surveillance signal should not be treated as a LEADING_INDICATOR_FOR the U.S. influenza hospitalization rate from FluSurv-NET.\n\nA true leading indicator for influenza hospitalizations should reflect upstream infection dynamics, such as influenza-like illness, lab positivity, outpatient visits, test orders, absenteeism, or other signals that plausibly rise before severe cases appear in hospitalization data.\n\nA permuted surveillance signal, especially one constructed as a negative control, intentionally disrupts the meaningful timing, geography, or epidemiological ordering of the original signal. That removes the causal or temporal pathway that would make it informative about future hospitalizations.\n\nConclusion: Treat Negative-control permuted surveillance signal to FluSurv-NET influenza hospitalization rate as missing, not present."
+    }
+]
