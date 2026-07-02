@@ -21,3 +21,14 @@ adversarial_text_rag_overloaded,pairwise_score_binding,3,1.000,1.000,1.000,0,0,2
 adversarial_text_rag_overloaded,pipeline_isolation,2,1.000,1.000,1.000,0,0,247.0
 adversarial_text_rag_overloaded,ranking_binding,1,1.000,1.000,1.000,0,0,407.0
 adversarial_text_rag_overloaded,score_binding,3,1.000,1.000,1.000,0,0,195.0
+adversarial_text_rag_retrieval_limited,causal_overclaim_guard,1,1.000,1.000,1.000,0,0,166.0
+adversarial_text_rag_retrieval_limited,claim_vs_edge_count,2,0.000,0.125,1.000,2,0,219.5
+adversarial_text_rag_retrieval_limited,edge_status_binding,1,0.000,0.000,1.000,1,0,210.0
+adversarial_text_rag_retrieval_limited,lag_binding,2,0.000,0.225,1.000,2,0,195.0
+adversarial_text_rag_retrieval_limited,model_revision_guard,2,0.000,0.062,1.000,2,0,273.5
+adversarial_text_rag_retrieval_limited,negative_control_guard,1,0.000,0.250,1.000,1,0,259.0
+adversarial_text_rag_retrieval_limited,paired_week_binding,2,0.000,0.333,1.000,2,0,181.0
+adversarial_text_rag_retrieval_limited,pairwise_score_binding,3,0.000,0.600,1.000,3,0,241.0
+adversarial_text_rag_retrieval_limited,pipeline_isolation,2,0.000,0.375,1.000,2,0,216.5
+adversarial_text_rag_retrieval_limited,ranking_binding,1,0.000,0.000,1.000,1,0,218.0
+adversarial_text_rag_retrieval_limited,score_binding,3,0.000,0.305,1.000,3,0,173.3
