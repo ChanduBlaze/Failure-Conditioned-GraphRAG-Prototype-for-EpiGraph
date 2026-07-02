@@ -1,0 +1,721 @@
+case_id,method,case_type,target_signal,query,prompt,answer
+emp_hard_001,empirical_text_rag_blended,strongest_candidate_selection,FluSurv-NET influenza hospitalization rate,"Among the empirical influenza candidates, which signal has the strongest leading-indicator evidence for the hospitalization target?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_001
+Case type: strongest_candidate_selection
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Among the empirical influenza candidates, which signal has the strongest leading-indicator evidence for the hospitalization target?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_002,empirical_text_rag_blended,strongest_candidate_selection,FluSurv-NET influenza hospitalization rate,"If only one empirical signal should be tested first as a possible model-revision feature, which should it be and why?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_002
+Case type: strongest_candidate_selection
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+If only one empirical signal should be tested first as a possible model-revision feature, which should it be and why?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_003,empirical_text_rag_blended,strongest_candidate_selection,FluSurv-NET influenza hospitalization rate,Rank the empirical influenza candidates by strength of evidence as leading indicators for FluSurv-NET hospitalization rate.,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_003
+Case type: strongest_candidate_selection
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Rank the empirical influenza candidates by strength of evidence as leading indicators for FluSurv-NET hospitalization rate.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_004,empirical_text_rag_blended,candidate_specific_evidence,FluSurv-NET influenza hospitalization rate,What empirical evidence supports Outpatient ILI activity as a leading-indicator candidate for the hospitalization target?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_004
+Case type: candidate_specific_evidence
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+What empirical evidence supports Outpatient ILI activity as a leading-indicator candidate for the hospitalization target?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_005,empirical_text_rag_blended,candidate_specific_evidence,FluSurv-NET influenza hospitalization rate,What empirical evidence supports Influenza A wastewater concentration as a leading-indicator candidate for the hospitalization target?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_005
+Case type: candidate_specific_evidence
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+What empirical evidence supports Influenza A wastewater concentration as a leading-indicator candidate for the hospitalization target?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_006,empirical_text_rag_blended,candidate_specific_evidence,FluSurv-NET influenza hospitalization rate,What empirical evidence supports Influenza test positivity as a leading-indicator candidate for the hospitalization target?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_006
+Case type: candidate_specific_evidence
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+What empirical evidence supports Influenza test positivity as a leading-indicator candidate for the hospitalization target?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_007,empirical_text_rag_blended,pairwise_comparison,FluSurv-NET influenza hospitalization rate,Compare outpatient ILI activity and wastewater concentration. Which has stronger empirical leading-indicator evidence and what are the exact scores?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_007
+Case type: pairwise_comparison
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Compare outpatient ILI activity and wastewater concentration. Which has stronger empirical leading-indicator evidence and what are the exact scores?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_008,empirical_text_rag_blended,pairwise_comparison,FluSurv-NET influenza hospitalization rate,Compare wastewater concentration and test positivity. Which has stronger empirical evidence and what should not be overclaimed?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_008
+Case type: pairwise_comparison
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Compare wastewater concentration and test positivity. Which has stronger empirical evidence and what should not be overclaimed?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_009,empirical_text_rag_blended,pairwise_comparison,FluSurv-NET influenza hospitalization rate,Compare outpatient ILI activity and test positivity as candidates. Which has stronger evidence and what evidence attributes should be preserved?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_009
+Case type: pairwise_comparison
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Compare outpatient ILI activity and test positivity as candidates. Which has stronger evidence and what evidence attributes should be preserved?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_010,empirical_text_rag_blended,negative_control_preservation,FluSurv-NET influenza hospitalization rate,Does the deterministic negative-control permuted signal support a leading-indicator relationship with FluSurv-NET hospitalization rate?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_010
+Case type: negative_control_preservation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Does the deterministic negative-control permuted signal support a leading-indicator relationship with FluSurv-NET hospitalization rate?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_011,empirical_text_rag_blended,negative_control_preservation,FluSurv-NET influenza hospitalization rate,The negative-control signal has a listed best lag. Should it be treated as present evidence? Explain using the score.,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_011
+Case type: negative_control_preservation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+The negative-control signal has a listed best lag. Should it be treated as present evidence? Explain using the score.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_012,empirical_text_rag_blended,negative_control_preservation,FluSurv-NET influenza hospitalization rate,"Which empirical candidate was intentionally used to test missing-evidence preservation, and how did the KG represent it?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_012
+Case type: negative_control_preservation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Which empirical candidate was intentionally used to test missing-evidence preservation, and how did the KG represent it?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_013,empirical_text_rag_blended,negative_control_preservation,FluSurv-NET influenza hospitalization rate,How many positive typed leading-indicator edges should exist after including the negative control?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_013
+Case type: negative_control_preservation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+How many positive typed leading-indicator edges should exist after including the negative control?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_014,empirical_text_rag_blended,evidence_blurring_score_binding,FluSurv-NET influenza hospitalization rate,Summarize the evidence for all three positive empirical candidates without mixing their scores.,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_014
+Case type: evidence_blurring_score_binding
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Summarize the evidence for all three positive empirical candidates without mixing their scores.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_015,empirical_text_rag_blended,evidence_blurring_score_binding,FluSurv-NET influenza hospitalization rate,"A retrieved passage mentions ILI, wastewater, and test positivity together. State which score belongs to each candidate.","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_015
+Case type: evidence_blurring_score_binding
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+A retrieved passage mentions ILI, wastewater, and test positivity together. State which score belongs to each candidate.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_016,empirical_text_rag_blended,evidence_blurring_score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidates had lag 1 present evidence, and which candidate did not have present evidence?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_016
+Case type: evidence_blurring_score_binding
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Which empirical candidates had lag 1 present evidence, and which candidate did not have present evidence?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_017,empirical_text_rag_blended,evidence_blurring_score_binding,FluSurv-NET influenza hospitalization rate,Identify any empirical candidate that should not receive a typed leading-indicator edge and explain why.,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_017
+Case type: evidence_blurring_score_binding
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Identify any empirical candidate that should not receive a typed leading-indicator edge and explain why.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_018,empirical_text_rag_blended,evidence_claim_vs_typed_edge,FluSurv-NET influenza hospitalization rate,Explain the difference between the four empirical EvidenceClaims and the three typed KG edges.,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_018
+Case type: evidence_claim_vs_typed_edge
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Explain the difference between the four empirical EvidenceClaims and the three typed KG edges.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_019,empirical_text_rag_blended,evidence_claim_vs_typed_edge,FluSurv-NET influenza hospitalization rate,"If an answer says there were four empirical leading-indicator KG edges, what is wrong with that answer?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_019
+Case type: evidence_claim_vs_typed_edge
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+If an answer says there were four empirical leading-indicator KG edges, what is wrong with that answer?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_020,empirical_text_rag_blended,causal_overclaim_guard,FluSurv-NET influenza hospitalization rate,"Do the empirical influenza results prove that ILI, wastewater, or test positivity caused the hospitalization target to rise?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_020
+Case type: causal_overclaim_guard
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Do the empirical influenza results prove that ILI, wastewater, or test positivity caused the hospitalization target to rise?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_021,empirical_text_rag_blended,causal_overclaim_guard,FluSurv-NET influenza hospitalization rate,Write a thesis-safe interpretation of the empirical influenza extension in one paragraph.,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_021
+Case type: causal_overclaim_guard
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Write a thesis-safe interpretation of the empirical influenza extension in one paragraph.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_022,empirical_text_rag_blended,pipeline_isolation,FluSurv-NET influenza hospitalization rate,"In the empirical_influenza pipeline, which candidates should be considered for the hospitalization target?","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_022
+Case type: pipeline_isolation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+In the empirical_influenza pipeline, which candidates should be considered for the hospitalization target?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_023,empirical_text_rag_blended,pipeline_isolation,FluSurv-NET influenza hospitalization rate,Should controlled fixture candidates such as Chile or Australia influenza activity appear in the empirical influenza KG context answer?,"You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_023
+Case type: pipeline_isolation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Should controlled fixture candidates such as Chile or Australia influenza activity appear in the empirical influenza KG context answer?
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
+emp_hard_024,empirical_text_rag_blended,model_revision_recommendation,FluSurv-NET influenza hospitalization rate,"Based on the empirical claims, propose a cautious next model-revision test and mention the main limitations.","You are evaluating empirical influenza evidence claims for a thesis on Failure-Conditioned GraphRAG.
+
+Use only the supplied context for empirical details.
+Preserve exact candidate names, evidence status, lag, correlation score, paired-week count, and KG edge status when available.
+Do not import controlled fixture candidates such as Chile Influenza Activity, Australia Influenza Activity, Travel Importation Pressure, or Humidity Drop.
+Do not claim causal discovery.
+Do not claim that forecast improvement has already been validated.
+Frame lagged correlations as screening evidence for possible model-revision testing, not causal proof.
+Return a concise answer.
+
+
+Case ID: emp_hard_024
+Case type: model_revision_recommendation
+Pipeline: empirical_influenza
+Target signal: FluSurv-NET influenza hospitalization rate
+
+Question:
+Based on the empirical claims, propose a cautious next model-revision test and mention the main limitations.
+
+Supplied context:
+[blended_all_candidates]
+Empirical influenza evidence summary for pipeline empirical_influenza. The target is FluSurv-NET influenza hospitalization rate. Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity all showed present one-week leading-indicator evidence. Outpatient ILI activity had lag 1 week, r=0.958037, and 29 paired weeks. Influenza A wastewater concentration had lag 1 week, r=0.947016, and 26 paired weeks. Influenza test positivity had lag 1 week, r=0.925810, and 29 paired weeks. The Negative-control permuted surveillance signal had a best positive lag of 4 weeks, r=-0.048027, and 26 paired weeks; it was missing evidence and was not promoted into a typed LEADING_INDICATOR_FOR edge. Overall, there are 4 EvidenceClaims and 3 positive typed leading-indicator KG edges. These correlations are screening evidence and do not prove causality.
+
+[blended_edge_count_negative_control]
+The empirical influenza KG stores four EvidenceClaims but only three typed LEADING_INDICATOR_FOR relationships. The three positive typed edges connect outpatient ILI activity, wastewater concentration, and influenza test positivity to the FluSurv-NET hospitalization-rate target. The deterministic negative-control permuted signal remains an EvidenceClaim with missing status and no typed leading-indicator edge. This distinction is used to evaluate missing-evidence preservation and false positive edge claims.
+
+[blended_interpretation_guardrail]
+The empirical influenza extension uses real surveillance-derived signals, weekly normalization, coverage/overlap audits, and lagged Pearson correlation scans to create EvidenceClaims. The interpretation is evidence preservation and screening-level association. It is not automatic causal discovery, expert-certified epidemiology, or validated forecast-error improvement.
+
+Answer:",
