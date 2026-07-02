@@ -1,0 +1,10 @@
+method,case_type,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count,forbidden_violation_count
+empirical_llm_only,candidate_specific_evidence,3,0.000,0.143,1.000,3,0
+empirical_llm_only,causal_overclaim_guard,2,0.000,0.534,1.000,2,0
+empirical_llm_only,evidence_blurring_score_binding,4,0.000,0.000,1.000,4,0
+empirical_llm_only,evidence_claim_vs_typed_edge,2,0.000,0.000,1.000,2,0
+empirical_llm_only,model_revision_recommendation,1,0.000,0.000,1.000,1,0
+empirical_llm_only,negative_control_preservation,4,0.000,0.050,1.000,4,0
+empirical_llm_only,pairwise_comparison,3,0.000,0.000,1.000,3,0
+empirical_llm_only,pipeline_isolation,2,0.500,0.600,1.000,1,0
+empirical_llm_only,strongest_candidate_selection,3,0.000,0.000,1.000,3,0
