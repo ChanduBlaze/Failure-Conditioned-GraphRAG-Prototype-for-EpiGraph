@@ -1,0 +1,97 @@
+case_id,case_type,method,top_k,coverage,all_required_terms_present,missing_terms_json,retrieved_chunk_ids,retrieved_chunk_titles,retrieval_scores
+resp_exp_001,promoted_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[84.146]
+resp_exp_002,promoted_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[86.244]
+resp_exp_003,promoted_exact_binding,resp_exp_text_rag_top1,1,0.571,False,"[""r=0.883280"", ""evidence_status=present"", ""edge_type=CONCURRENT_INDICATOR_FOR""]","[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[88.753]
+resp_exp_004,promoted_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[83.919]
+resp_exp_005,promoted_exact_binding,resp_exp_text_rag_top1,1,0.571,False,"[""r=0.769103"", ""paired_weeks=194"", ""edge_type=CONCURRENT_INDICATOR_FOR""]","[""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 3""]",[85.495]
+resp_exp_006,promoted_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 3""]",[83.396]
+resp_exp_007,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[89.027]
+resp_exp_008,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[90.899]
+resp_exp_009,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[89.611]
+resp_exp_010,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[90.304]
+resp_exp_011,missing_exact_binding,resp_exp_text_rag_top1,1,0.571,False,"[""lag=2"", ""r=0.022977"", ""paired_weeks=328""]","[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[89.25]
+resp_exp_012,missing_exact_binding,resp_exp_text_rag_top1,1,0.857,False,"[""r=-0.028546""]","[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[91.139]
+resp_exp_013,missing_exact_binding,resp_exp_text_rag_top1,1,0.857,False,"[""r=-0.026794""]","[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[89.446]
+resp_exp_014,missing_exact_binding,resp_exp_text_rag_top1,1,0.571,False,"[""lag=4"", ""r=0.008404"", ""paired_weeks=352""]","[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[90.075]
+resp_exp_015,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[92.056]
+resp_exp_016,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[92.749]
+resp_exp_017,missing_exact_binding,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[88.264]
+resp_exp_018,strongest_promoted_by_target,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[57.824]
+resp_exp_019,strongest_promoted_by_target,resp_exp_text_rag_top1,1,0.571,False,"[""Wastewater SARS-CoV-2 viral activity"", ""r=0.883280"", ""edge_type=CONCURRENT_INDICATOR_FOR""]","[""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 3""]",[55.162]
+resp_exp_020,strongest_promoted_by_target,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 3""]",[57.772]
+resp_exp_021,leading_indicator_by_target,resp_exp_text_rag_top1,1,0.571,False,"[""RSV test positivity"", ""r=0.611619"", ""paired_weeks=148""]","[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[33.229]
+resp_exp_022,leading_indicator_by_target,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[30.842]
+resp_exp_023,leading_indicator_by_target,resp_exp_text_rag_top1,1,0.429,False,"[""RSV test positivity"", ""lag=2"", ""r=0.963308"", ""paired_weeks=192""]","[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[32.536]
+resp_exp_024,concurrent_indicator_discrimination,resp_exp_text_rag_top1,1,0.857,False,"[""r=0.926193""]","[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[61.091]
+resp_exp_025,concurrent_indicator_discrimination,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[65.323]
+resp_exp_026,concurrent_indicator_discrimination,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[62.379]
+resp_exp_027,negative_control_guard,resp_exp_text_rag_top1,1,1.000,True,[],"[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[56.319]
+resp_exp_028,negative_control_guard,resp_exp_text_rag_top1,1,0.571,False,"[""lag=2"", ""r=0.022977"", ""paired_weeks=328""]","[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[56.542]
+resp_exp_029,negative_control_guard,resp_exp_text_rag_top1,1,0.571,False,"[""lag=4"", ""r=0.008404"", ""paired_weeks=352""]","[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[57.618]
+resp_exp_030,model_revision_guard,resp_exp_text_rag_top1,1,0.800,False,"[""screening evidence only"", ""COVID-19 test positivity""]","[""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 1""]",[48.765]
+resp_exp_031,model_revision_guard,resp_exp_text_rag_top1,1,0.800,False,"[""screening evidence only"", ""Wastewater Influenza A viral activity""]","[""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 2""]",[46.018]
+resp_exp_032,model_revision_guard,resp_exp_text_rag_top1,1,0.400,False,"[""RSV test positivity"", ""r=0.963308"", ""paired_weeks=192"", ""evidence_status=present"", ""edge_type=LEADING_INDICATOR_FOR"", ""screening evidence only""]","[""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 4""]",[48.651]
+resp_exp_001,promoted_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 2""]","[84.146, 83.696]"
+resp_exp_002,promoted_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 2""]","[86.244, 73.389]"
+resp_exp_003,promoted_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 2""]","[88.753, 87.928]"
+resp_exp_004,promoted_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 4""]","[83.919, 81.083]"
+resp_exp_005,promoted_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_004_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 3"", ""Mixed respiratory evidence memo fragment 2""]","[85.495, 84.984]"
+resp_exp_006,promoted_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_004_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 3"", ""Mixed respiratory evidence memo fragment 4""]","[83.396, 70.693]"
+resp_exp_007,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 4""]","[89.027, 74.367]"
+resp_exp_008,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 2""]","[90.899, 89.398]"
+resp_exp_009,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 4""]","[89.611, 75.348]"
+resp_exp_010,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 2""]","[90.304, 75.705]"
+resp_exp_011,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 4""]","[89.25, 88.465]"
+resp_exp_012,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 3""]","[91.139, 90.831]"
+resp_exp_013,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 3""]","[89.446, 88.733]"
+resp_exp_014,missing_exact_binding,resp_exp_text_rag_top2,2,0.714,False,"[""r=0.008404"", ""paired_weeks=352""]","[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 2""]","[90.075, 87.928]"
+resp_exp_015,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 2""]","[92.056, 88.3]"
+resp_exp_016,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 3""]","[92.749, 89.915]"
+resp_exp_017,missing_exact_binding,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 3""]","[88.264, 85.207]"
+resp_exp_018,strongest_promoted_by_target,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 3""]","[57.824, 57.261]"
+resp_exp_019,strongest_promoted_by_target,resp_exp_text_rag_top2,2,0.857,False,"[""r=0.883280""]","[""resp_exp_text_chunk_004_memo"", ""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 3"", ""Mixed respiratory evidence memo fragment 1""]","[55.162, 54.744]"
+resp_exp_020,strongest_promoted_by_target,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_004_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 3"", ""Mixed respiratory evidence memo fragment 4""]","[57.772, 57.47]"
+resp_exp_021,leading_indicator_by_target,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 1""]","[33.229, 32.532]"
+resp_exp_022,leading_indicator_by_target,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 1""]","[30.842, 29.453]"
+resp_exp_023,leading_indicator_by_target,resp_exp_text_rag_top2,2,0.571,False,"[""lag=2"", ""r=0.963308"", ""paired_weeks=192""]","[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 1""]","[32.536, 31.551]"
+resp_exp_024,concurrent_indicator_discrimination,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 1""]","[61.091, 60.953]"
+resp_exp_025,concurrent_indicator_discrimination,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 4""]","[65.323, 61.819]"
+resp_exp_026,concurrent_indicator_discrimination,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 3""]","[62.379, 59.875]"
+resp_exp_027,negative_control_guard,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_002_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 1""]","[56.319, 52.536]"
+resp_exp_028,negative_control_guard,resp_exp_text_rag_top2,2,1.000,True,[],"[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 4""]","[56.542, 56.009]"
+resp_exp_029,negative_control_guard,resp_exp_text_rag_top2,2,0.714,False,"[""r=0.008404"", ""paired_weeks=352""]","[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 2""]","[57.618, 55.22]"
+resp_exp_030,model_revision_guard,resp_exp_text_rag_top2,2,0.900,False,"[""screening evidence only""]","[""resp_exp_text_chunk_002_memo"", ""resp_exp_text_chunk_003_memo""]","[""Mixed respiratory evidence memo fragment 1"", ""Mixed respiratory evidence memo fragment 2""]","[48.765, 48.404]"
+resp_exp_031,model_revision_guard,resp_exp_text_rag_top2,2,0.900,False,"[""screening evidence only""]","[""resp_exp_text_chunk_003_memo"", ""resp_exp_text_chunk_005_memo""]","[""Mixed respiratory evidence memo fragment 2"", ""Mixed respiratory evidence memo fragment 4""]","[46.018, 45.859]"
+resp_exp_032,model_revision_guard,resp_exp_text_rag_top2,2,0.900,False,"[""screening evidence only""]","[""resp_exp_text_chunk_005_memo"", ""resp_exp_text_chunk_004_memo""]","[""Mixed respiratory evidence memo fragment 4"", ""Mixed respiratory evidence memo fragment 3""]","[48.651, 48.146]"
+resp_exp_001,promoted_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_002,promoted_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_003,promoted_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_004,promoted_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_005,promoted_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_006,promoted_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_007,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_008,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_009,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_010,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_011,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_012,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_013,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_014,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_015,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_016,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_017,missing_exact_binding,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_018,strongest_promoted_by_target,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_019,strongest_promoted_by_target,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_020,strongest_promoted_by_target,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_021,leading_indicator_by_target,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_022,leading_indicator_by_target,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_023,leading_indicator_by_target,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_024,concurrent_indicator_discrimination,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_025,concurrent_indicator_discrimination,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_026,concurrent_indicator_discrimination,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_027,negative_control_guard,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_028,negative_control_guard,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_029,negative_control_guard,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_030,model_revision_guard,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_031,model_revision_guard,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,
+resp_exp_032,model_revision_guard,resp_exp_graphrag_target_neighborhood,,1.000,True,[],,,

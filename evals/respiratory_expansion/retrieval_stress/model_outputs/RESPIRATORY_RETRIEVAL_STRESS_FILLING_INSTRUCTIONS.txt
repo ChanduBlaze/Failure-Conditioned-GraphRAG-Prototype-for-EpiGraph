@@ -1,0 +1,22 @@
+Fill the retrieval-stress model outputs.
+
+Input:
+evals/respiratory_expansion/retrieval_stress/model_outputs/respiratory_retrieval_stress_prompts_for_filling.jsonl
+
+Output CSV:
+evals/respiratory_expansion/retrieval_stress/model_outputs/respiratory_retrieval_stress_model_outputs.csv
+
+Required CSV columns:
+case_id,method,answer
+
+Rules:
+1. Produce exactly one answer for every input prompt row.
+2. Preserve the method exactly as given.
+3. Use only the context inside each prompt.
+4. If the retrieved Text-RAG context lacks an exact binding, do not invent missing values.
+5. For GraphRAG target-neighborhood prompts, use the structured claims shown in the prompt.
+6. Avoid causal overclaims. Do not claim causal proof, causal discovery, or validated forecast improvement.
+7. Keep answers concise but include exact binding fields when available:
+   candidate -> target: lag=..., r=..., paired_weeks=..., evidence_status=..., edge_type=...
+8. Save as UTF-8 CSV with header:
+   case_id,method,answer

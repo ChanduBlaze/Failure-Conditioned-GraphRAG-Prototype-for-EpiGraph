@@ -1,0 +1,4 @@
+method,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count,avg_retrieval_coverage,retrieval_full_coverage_rate
+resp_exp_graphrag_target_neighborhood,32,0.906,0.975,1.000,3,1.000,1.000
+resp_exp_text_rag_top1,32,0.531,0.659,1.000,15,0.830,0.531
+resp_exp_text_rag_top2,32,0.781,0.865,1.000,7,0.955,0.781

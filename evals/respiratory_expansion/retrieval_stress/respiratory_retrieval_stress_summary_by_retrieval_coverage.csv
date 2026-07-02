@@ -1,0 +1,9 @@
+method,retrieval_coverage_bucket,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count,avg_retrieval_coverage,retrieval_full_coverage_rate
+resp_exp_graphrag_target_neighborhood,retrieval_full_coverage,32,0.906,0.975,1.000,3,1.000,1.000
+resp_exp_text_rag_top1,retrieval_full_coverage,17,1.000,1.000,1.000,0,1.000,1.000
+resp_exp_text_rag_top1,retrieval_partial_0.75_to_0.89,5,0.000,0.452,1.000,5,0.834,0.000
+resp_exp_text_rag_top1,retrieval_partial_lt_0.75,10,0.000,0.182,1.000,10,0.540,0.000
+resp_exp_text_rag_top2,retrieval_full_coverage,25,1.000,1.000,1.000,0,1.000,1.000
+resp_exp_text_rag_top2,retrieval_partial_0.75_to_0.89,1,0.000,0.000,1.000,1,0.857,0.000
+resp_exp_text_rag_top2,retrieval_partial_ge_0.90,3,0.000,0.700,1.000,3,0.900,0.000
+resp_exp_text_rag_top2,retrieval_partial_lt_0.75,3,0.000,0.191,1.000,3,0.666,0.000
