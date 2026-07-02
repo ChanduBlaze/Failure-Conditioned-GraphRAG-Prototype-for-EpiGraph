@@ -2,6 +2,11 @@
 
 This deterministic renderer uses only the Python standard library. It does
 not call an LLM, query Neo4j, download data, or modify its input CSV.
+
+It includes three result layers:
+1. Controlled fixture real-KG comparison.
+2. Empirical influenza real-data extension.
+3. Empirical hard-pilot stress evaluation.
 """
 
 from __future__ import annotations
@@ -14,6 +19,9 @@ from pathlib import Path
 
 DEFAULT_INPUT = Path("evals/results_real/real_results_index.csv")
 DEFAULT_OUTPUT = Path("evals/results_real/real_results_report.md")
+DEFAULT_HARD_PILOT_SUMMARY = Path(
+    "evals/empirical_hard_pilot/empirical_hard_pilot_summary_by_method.csv"
+)
 
 TABLE_COLUMNS = [
     "method",
@@ -31,6 +39,17 @@ TABLE_COLUMNS = [
     "notes",
 ]
 
+HARD_PILOT_COLUMNS = [
+    "method",
+    "case_count",
+    "overall_pass_rate",
+    "avg_include_score",
+    "forbidden_ok_rate",
+    "failed_case_count",
+    "forbidden_violation_count",
+    "avg_answer_length_chars",
+]
+
 REQUIRED_INPUT_COLUMNS = [
     "result_family",
     "method",
@@ -44,6 +63,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--hard-pilot-summary",
+        type=Path,
+        default=DEFAULT_HARD_PILOT_SUMMARY,
+    )
     return parser.parse_args()
 
 
@@ -73,6 +97,22 @@ def read_results_index(path: Path) -> list[dict[str, str]]:
         ]
 
 
+def read_optional_csv(path: Path) -> list[dict[str, str]]:
+    if not path.is_file():
+        return []
+
+    with path.open("r", newline="", encoding="utf-8-sig") as input_file:
+        reader = csv.DictReader(input_file)
+        fieldnames = reader.fieldnames or []
+        return [
+            {
+                column: (row.get(column) or "").strip()
+                for column in fieldnames
+            }
+            for row in reader
+        ]
+
+
 def partition_rows(
     rows: list[dict[str, str]],
 ) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -82,6 +122,7 @@ def partition_rows(
     empirical_rows = [
         row for row in rows if row["result_family"] == "empirical_influenza"
     ]
+
     unexpected = sorted(
         {
             row["result_family"]
@@ -90,6 +131,7 @@ def partition_rows(
             not in {"fixture_real_kg", "empirical_influenza"}
         }
     )
+
     if unexpected:
         raise ValueError(
             "Real results index contains unexpected result families: "
@@ -99,6 +141,7 @@ def partition_rows(
         raise ValueError("Real results index contains no fixture rows.")
     if not empirical_rows:
         raise ValueError("Real results index contains no empirical rows.")
+
     return fixture_rows, empirical_rows
 
 
@@ -108,18 +151,29 @@ def markdown_cell(value: str) -> str:
     ).replace("\n", " ")
 
 
-def markdown_table(rows: list[dict[str, str]]) -> str:
-    header = "| " + " | ".join(TABLE_COLUMNS) + " |"
-    separator = "| " + " | ".join("---" for _ in TABLE_COLUMNS) + " |"
+def markdown_table_for_columns(
+    rows: list[dict[str, str]],
+    columns: list[str],
+) -> str:
+    header = "| " + " | ".join(columns) + " |"
+    separator = "| " + " | ".join("---" for _ in columns) + " |"
     body = [
         "| "
         + " | ".join(
-            markdown_cell(row.get(column, "")) for column in TABLE_COLUMNS
+            markdown_cell(row.get(column, "")) for column in columns
         )
         + " |"
         for row in rows
     ]
     return "\n".join([header, separator, *body])
+
+
+def markdown_table(rows: list[dict[str, str]]) -> str:
+    return markdown_table_for_columns(rows, TABLE_COLUMNS)
+
+
+def hard_pilot_markdown_table(rows: list[dict[str, str]]) -> str:
+    return markdown_table_for_columns(rows, HARD_PILOT_COLUMNS)
 
 
 def methods_text(rows: list[dict[str, str]]) -> str:
@@ -130,6 +184,7 @@ def case_count_text(rows: list[dict[str, str]], subject: str) -> str:
     counts = list(dict.fromkeys(row["case_count"] for row in rows))
     if len(counts) == 1:
         return f"Each method reports {counts[0]} {subject}."
+
     details = "; ".join(
         f"{row['method']}: {row['case_count']}" for row in rows
     )
@@ -146,6 +201,7 @@ def metric_text(rows: list[dict[str, str]], column: str) -> str:
 def render_report(
     fixture_rows: list[dict[str, str]],
     empirical_rows: list[dict[str, str]],
+    hard_pilot_rows: list[dict[str, str]],
 ) -> str:
     fixture_summary = (
         f"Methods included: {methods_text(fixture_rows)}. "
@@ -157,6 +213,7 @@ def render_report(
         "missing-edge recall was "
         f"{metric_text(fixture_rows, 'avg_missing_edge_recall')}."
     )
+
     empirical_summary = (
         f"Methods included: {methods_text(empirical_rows)}. "
         f"{case_count_text(empirical_rows, 'empirical claims')} "
@@ -164,6 +221,55 @@ def render_report(
         "Text-RAG and GraphRAG preserved empirical evidence artifacts supplied "
         "through their retrieval contexts."
     )
+
+    hard_pilot_section: list[str] = []
+
+    if hard_pilot_rows:
+        hard_pilot_summary = (
+            f"Methods included: {methods_text(hard_pilot_rows)}. "
+            f"{case_count_text(hard_pilot_rows, 'empirical hard-pilot stress cases')} "
+            "Overall pass rate was "
+            f"{metric_text(hard_pilot_rows, 'overall_pass_rate')}. "
+            "Average include score was "
+            f"{metric_text(hard_pilot_rows, 'avg_include_score')}. "
+            "Forbidden-content compliance was "
+            f"{metric_text(hard_pilot_rows, 'forbidden_ok_rate')}."
+        )
+
+        hard_pilot_section = [
+            "## 3. Empirical Hard-Pilot Stress Evaluation",
+            "",
+            (
+                "To make the empirical extension more comparable to the "
+                "controlled hard-pilot benchmark, I built 24 empirical "
+                "evidence-preservation stress cases from the four real "
+                "influenza KG evidence claims. These are not 24 independent "
+                "outbreaks. They are stress cases over real surveillance-derived "
+                "evidence claims."
+            ),
+            "",
+            hard_pilot_summary,
+            "",
+            (
+                "The main observation is that LLM-only avoided forbidden "
+                "overclaims but failed most exact-evidence preservation cases "
+                "because empirical lag, score, paired-week count, threshold, "
+                "and KG edge evidence were intentionally withheld. Clean "
+                "Text-RAG, blended Text-RAG, and GraphRAG context all preserved "
+                "the supplied empirical evidence in this 24-case stress set."
+            ),
+            "",
+            hard_pilot_markdown_table(hard_pilot_rows),
+            "",
+        ]
+
+        interpretation_header = "## 4. Interpretation"
+        limitations_header = "## 5. Limitations"
+        takeaway_header = "## 6. Thesis-Ready Takeaway"
+    else:
+        interpretation_header = "## 3. Interpretation"
+        limitations_header = "## 4. Limitations"
+        takeaway_header = "## 5. Thesis-Ready Takeaway"
 
     lines = [
         "# Real-KG and Empirical Influenza Results Report",
@@ -192,7 +298,8 @@ def render_report(
         "",
         markdown_table(empirical_rows),
         "",
-        "## 3. Interpretation",
+        *hard_pilot_section,
+        interpretation_header,
         "",
         (
             "The controlled fixture result shows why evidence-status "
@@ -211,20 +318,37 @@ def render_report(
             "all disease systems."
         ),
         "",
-        "## 4. Limitations",
+        (
+            "The empirical hard-pilot stress evaluation adds a harder "
+            "evidence-preservation layer over the same real influenza claims. "
+            "It shows that exact evidence facts are not recoverable from "
+            "LLM-only context when they are withheld, but can be preserved when "
+            "they are supplied through Text-RAG or GraphRAG context. In this "
+            "small empirical stress set, Text-RAG and GraphRAG show preservation "
+            "parity; the stronger GraphRAG-over-Text-RAG separation remains in "
+            "the controlled 50-case benchmark."
+        ),
+        "",
+        limitations_header,
         "",
         "- The empirical extension is small.",
         "- It covers one influenza target case.",
         "- The negative control is deterministic and synthetic.",
         (
-            "- The LLM-only manual baseline is based on one fresh-chat sample."
+            "- The empirical hard-pilot stress cases are generated from four "
+            "real evidence claims; they are not independent outbreaks."
+        ),
+        (
+            "- The LLM-only and filled-output baselines are single-sample "
+            "outputs rather than repeated stochastic runs."
         ),
         (
             "- Empirical evidence depends on source coverage, normalization, "
             "the lag window, the threshold, and reporting artifacts."
         ),
+        "- Lagged correlation is screening evidence, not causal proof.",
         "",
-        "## 5. Thesis-Ready Takeaway",
+        takeaway_header,
         "",
         (
             "The real-data extension supports the thesis by showing that "
@@ -235,7 +359,17 @@ def render_report(
             "facts are supplied."
         ),
         "",
+        (
+            "The empirical hard-pilot comparison further shows that retrieval "
+            "context is necessary for exact empirical evidence preservation: "
+            "LLM-only failed most exact-evidence cases when evidence was "
+            "withheld, while clean Text-RAG, blended Text-RAG, and GraphRAG "
+            "context all preserved the supplied evidence in the 24-case stress "
+            "set."
+        ),
+        "",
     ]
+
     return "\n".join(lines)
 
 
@@ -247,22 +381,27 @@ def write_report(path: Path, report: str) -> None:
 def generate_report(
     input_path: Path,
     output_path: Path,
-) -> tuple[int, int]:
+    hard_pilot_summary_path: Path,
+) -> tuple[int, int, int]:
     rows = read_results_index(input_path)
     fixture_rows, empirical_rows = partition_rows(rows)
+    hard_pilot_rows = read_optional_csv(hard_pilot_summary_path)
+
     write_report(
         output_path,
-        render_report(fixture_rows, empirical_rows),
+        render_report(fixture_rows, empirical_rows, hard_pilot_rows),
     )
-    return len(fixture_rows), len(empirical_rows)
+
+    return len(fixture_rows), len(empirical_rows), len(hard_pilot_rows)
 
 
 def main() -> int:
     args = parse_args()
     try:
-        fixture_count, empirical_count = generate_report(
+        fixture_count, empirical_count, hard_pilot_count = generate_report(
             args.input,
             args.output,
+            args.hard_pilot_summary,
         )
     except (csv.Error, FileNotFoundError, OSError, ValueError) as exc:
         print(f"Real results report failed: {exc}", file=sys.stderr)
@@ -271,6 +410,7 @@ def main() -> int:
     print(f"input path: {args.input}")
     print(f"fixture rows: {fixture_count}")
     print(f"empirical rows: {empirical_count}")
+    print(f"hard-pilot summary rows: {hard_pilot_count}")
     print(f"output path: {args.output}")
     return 0
 
