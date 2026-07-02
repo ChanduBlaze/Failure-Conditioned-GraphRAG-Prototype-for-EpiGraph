@@ -1,0 +1,3 @@
+method,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count,forbidden_violation_count,avg_answer_length_chars
+adversarial_graphrag_context,20,1.000,1.000,1.000,0,0,263.8
+adversarial_text_rag_overloaded,20,1.000,1.000,1.000,0,0,265.1

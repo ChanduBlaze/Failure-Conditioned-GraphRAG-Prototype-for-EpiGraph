@@ -1,0 +1,86 @@
+{
+  "pipeline": "empirical_influenza",
+  "target": "FluSurv-NET influenza hospitalization rate",
+  "claims": [
+    {
+      "candidate": "Outpatient ILI activity",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "evidence_status": "present",
+      "lag": "lag 1 week",
+      "score": "r=0.958037",
+      "paired_weeks": "29 paired weeks",
+      "pipeline": "empirical_influenza"
+    },
+    {
+      "candidate": "Influenza A wastewater concentration",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "evidence_status": "present",
+      "lag": "lag 1 week",
+      "score": "r=0.947016",
+      "paired_weeks": "26 paired weeks",
+      "pipeline": "empirical_influenza"
+    },
+    {
+      "candidate": "Influenza test positivity",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "evidence_status": "present",
+      "lag": "lag 1 week",
+      "score": "r=0.925810",
+      "paired_weeks": "29 paired weeks",
+      "pipeline": "empirical_influenza"
+    },
+    {
+      "candidate": "Negative-control permuted surveillance signal",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "evidence_status": "missing",
+      "lag": "lag 4 weeks",
+      "score": "r=-0.048027",
+      "paired_weeks": "26 paired weeks",
+      "pipeline": "empirical_influenza"
+    }
+  ],
+  "typed_edges": [
+    {
+      "source": "Outpatient ILI activity",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "edge_type": "LEADING_INDICATOR_FOR",
+      "evidence_status": "present",
+      "lag": "lag 1 week",
+      "score": "r=0.958037",
+      "paired_weeks": "29 paired weeks",
+      "pipeline": "empirical_influenza"
+    },
+    {
+      "source": "Influenza A wastewater concentration",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "edge_type": "LEADING_INDICATOR_FOR",
+      "evidence_status": "present",
+      "lag": "lag 1 week",
+      "score": "r=0.947016",
+      "paired_weeks": "26 paired weeks",
+      "pipeline": "empirical_influenza"
+    },
+    {
+      "source": "Influenza test positivity",
+      "target": "FluSurv-NET influenza hospitalization rate",
+      "edge_type": "LEADING_INDICATOR_FOR",
+      "evidence_status": "present",
+      "lag": "lag 1 week",
+      "score": "r=0.925810",
+      "paired_weeks": "29 paired weeks",
+      "pipeline": "empirical_influenza"
+    }
+  ],
+  "controlled_fixture_distractors_to_exclude": [
+    "Chile Influenza Activity",
+    "Australia Influenza Activity",
+    "Travel Importation Pressure",
+    "Humidity Drop"
+  ],
+  "interpretation_constraints": [
+    "Lagged correlation is screening evidence, not causal proof.",
+    "Forecast improvement requires downstream validation.",
+    "EvidenceClaim existence does not imply typed edge promotion.",
+    "The negative control is missing evidence and must not be promoted."
+  ]
+}

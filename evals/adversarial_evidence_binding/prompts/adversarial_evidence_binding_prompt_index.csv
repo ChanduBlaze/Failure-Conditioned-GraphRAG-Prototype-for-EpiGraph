@@ -1,0 +1,41 @@
+case_id,method,case_type,target_signal,query
+adv_bind_001,adversarial_text_rag_overloaded,score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidate has r=0.958037, and what lag and edge status belong to it?"
+adv_bind_002,adversarial_text_rag_overloaded,score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidate has r=0.947016, and what paired-week count belongs to it?"
+adv_bind_003,adversarial_text_rag_overloaded,score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidate has r=0.925810, and what edge status belongs to it?"
+adv_bind_004,adversarial_text_rag_overloaded,negative_control_guard,FluSurv-NET influenza hospitalization rate,"Which candidate has r=-0.048027, and should it be promoted into a typed edge?"
+adv_bind_005,adversarial_text_rag_overloaded,ranking_binding,FluSurv-NET influenza hospitalization rate,Rank the three supported empirical candidates by score without mixing their scores.
+adv_bind_006,adversarial_text_rag_overloaded,claim_vs_edge_count,FluSurv-NET influenza hospitalization rate,"How many EvidenceClaims exist, and how many typed LEADING_INDICATOR_FOR edges exist?"
+adv_bind_007,adversarial_text_rag_overloaded,claim_vs_edge_count,FluSurv-NET influenza hospitalization rate,Why does the number of EvidenceClaims differ from the number of typed edges?
+adv_bind_008,adversarial_text_rag_overloaded,pipeline_isolation,FluSurv-NET influenza hospitalization rate,Should Chile Influenza Activity be included in the empirical_influenza answer?
+adv_bind_009,adversarial_text_rag_overloaded,pipeline_isolation,FluSurv-NET influenza hospitalization rate,List only the empirical_influenza candidates and exclude controlled-fixture distractors.
+adv_bind_010,adversarial_text_rag_overloaded,model_revision_guard,FluSurv-NET influenza hospitalization rate,Recommend one empirical model-revision candidate and explain the evidence without causal overclaiming.
+adv_bind_011,adversarial_text_rag_overloaded,model_revision_guard,FluSurv-NET influenza hospitalization rate,Which candidate should be excluded from a model revision despite having a listed best lag?
+adv_bind_012,adversarial_text_rag_overloaded,edge_status_binding,FluSurv-NET influenza hospitalization rate,Which three candidates received typed LEADING_INDICATOR_FOR edges?
+adv_bind_013,adversarial_text_rag_overloaded,pairwise_score_binding,FluSurv-NET influenza hospitalization rate,Which candidate is stronger by score: Outpatient ILI activity or Influenza A wastewater concentration?
+adv_bind_014,adversarial_text_rag_overloaded,pairwise_score_binding,FluSurv-NET influenza hospitalization rate,Which candidate is stronger by score: Influenza A wastewater concentration or Influenza test positivity?
+adv_bind_015,adversarial_text_rag_overloaded,pairwise_score_binding,FluSurv-NET influenza hospitalization rate,Which candidate is stronger by score: Outpatient ILI activity or Influenza test positivity?
+adv_bind_016,adversarial_text_rag_overloaded,paired_week_binding,FluSurv-NET influenza hospitalization rate,Which candidates have 29 paired weeks?
+adv_bind_017,adversarial_text_rag_overloaded,paired_week_binding,FluSurv-NET influenza hospitalization rate,Which candidates have 26 paired weeks?
+adv_bind_018,adversarial_text_rag_overloaded,lag_binding,FluSurv-NET influenza hospitalization rate,Which supported empirical candidates have lag 1 week?
+adv_bind_019,adversarial_text_rag_overloaded,lag_binding,FluSurv-NET influenza hospitalization rate,"Which candidate has lag 4 weeks, and why is that not enough to support an edge?"
+adv_bind_020,adversarial_text_rag_overloaded,causal_overclaim_guard,FluSurv-NET influenza hospitalization rate,Do these lagged correlations prove that the candidates caused hospitalizations to rise?
+adv_bind_001,adversarial_graphrag_context,score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidate has r=0.958037, and what lag and edge status belong to it?"
+adv_bind_002,adversarial_graphrag_context,score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidate has r=0.947016, and what paired-week count belongs to it?"
+adv_bind_003,adversarial_graphrag_context,score_binding,FluSurv-NET influenza hospitalization rate,"Which empirical candidate has r=0.925810, and what edge status belongs to it?"
+adv_bind_004,adversarial_graphrag_context,negative_control_guard,FluSurv-NET influenza hospitalization rate,"Which candidate has r=-0.048027, and should it be promoted into a typed edge?"
+adv_bind_005,adversarial_graphrag_context,ranking_binding,FluSurv-NET influenza hospitalization rate,Rank the three supported empirical candidates by score without mixing their scores.
+adv_bind_006,adversarial_graphrag_context,claim_vs_edge_count,FluSurv-NET influenza hospitalization rate,"How many EvidenceClaims exist, and how many typed LEADING_INDICATOR_FOR edges exist?"
+adv_bind_007,adversarial_graphrag_context,claim_vs_edge_count,FluSurv-NET influenza hospitalization rate,Why does the number of EvidenceClaims differ from the number of typed edges?
+adv_bind_008,adversarial_graphrag_context,pipeline_isolation,FluSurv-NET influenza hospitalization rate,Should Chile Influenza Activity be included in the empirical_influenza answer?
+adv_bind_009,adversarial_graphrag_context,pipeline_isolation,FluSurv-NET influenza hospitalization rate,List only the empirical_influenza candidates and exclude controlled-fixture distractors.
+adv_bind_010,adversarial_graphrag_context,model_revision_guard,FluSurv-NET influenza hospitalization rate,Recommend one empirical model-revision candidate and explain the evidence without causal overclaiming.
+adv_bind_011,adversarial_graphrag_context,model_revision_guard,FluSurv-NET influenza hospitalization rate,Which candidate should be excluded from a model revision despite having a listed best lag?
+adv_bind_012,adversarial_graphrag_context,edge_status_binding,FluSurv-NET influenza hospitalization rate,Which three candidates received typed LEADING_INDICATOR_FOR edges?
+adv_bind_013,adversarial_graphrag_context,pairwise_score_binding,FluSurv-NET influenza hospitalization rate,Which candidate is stronger by score: Outpatient ILI activity or Influenza A wastewater concentration?
+adv_bind_014,adversarial_graphrag_context,pairwise_score_binding,FluSurv-NET influenza hospitalization rate,Which candidate is stronger by score: Influenza A wastewater concentration or Influenza test positivity?
+adv_bind_015,adversarial_graphrag_context,pairwise_score_binding,FluSurv-NET influenza hospitalization rate,Which candidate is stronger by score: Outpatient ILI activity or Influenza test positivity?
+adv_bind_016,adversarial_graphrag_context,paired_week_binding,FluSurv-NET influenza hospitalization rate,Which candidates have 29 paired weeks?
+adv_bind_017,adversarial_graphrag_context,paired_week_binding,FluSurv-NET influenza hospitalization rate,Which candidates have 26 paired weeks?
+adv_bind_018,adversarial_graphrag_context,lag_binding,FluSurv-NET influenza hospitalization rate,Which supported empirical candidates have lag 1 week?
+adv_bind_019,adversarial_graphrag_context,lag_binding,FluSurv-NET influenza hospitalization rate,"Which candidate has lag 4 weeks, and why is that not enough to support an edge?"
+adv_bind_020,adversarial_graphrag_context,causal_overclaim_guard,FluSurv-NET influenza hospitalization rate,Do these lagged correlations prove that the candidates caused hospitalizations to rise?

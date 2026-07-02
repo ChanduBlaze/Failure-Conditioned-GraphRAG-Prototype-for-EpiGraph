@@ -1,0 +1,202 @@
+[
+  {
+    "case_id": "adv_bind_001",
+    "case_type": "score_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which empirical candidate has r=0.958037, and what lag and edge status belong to it?",
+    "expected_answer": "Outpatient ILI activity has r=0.958037 at lag 1 week and has a typed LEADING_INDICATOR_FOR edge.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"r=0.958037\", \"lag 1 week\", \"typed LEADING_INDICATOR_FOR edge\"]",
+    "must_not_include_terms": "[\"Influenza A wastewater concentration has r=0.958037\", \"Influenza test positivity has r=0.958037\", \"Negative-control permuted surveillance signal has r=0.958037\", \"causal proof\"]",
+    "notes": "Tests exact score-to-candidate binding."
+  },
+  {
+    "case_id": "adv_bind_002",
+    "case_type": "score_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which empirical candidate has r=0.947016, and what paired-week count belongs to it?",
+    "expected_answer": "Influenza A wastewater concentration has r=0.947016 with 26 paired weeks.",
+    "must_include_terms": "[\"Influenza A wastewater concentration\", \"r=0.947016\", \"26 paired weeks\"]",
+    "must_not_include_terms": "[\"Outpatient ILI activity has r=0.947016\", \"Influenza test positivity has r=0.947016\", \"29 paired weeks for wastewater\", \"causal proof\"]",
+    "notes": "Tests score and paired-week binding."
+  },
+  {
+    "case_id": "adv_bind_003",
+    "case_type": "score_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which empirical candidate has r=0.925810, and what edge status belongs to it?",
+    "expected_answer": "Influenza test positivity has r=0.925810 and has a typed LEADING_INDICATOR_FOR edge.",
+    "must_include_terms": "[\"Influenza test positivity\", \"r=0.925810\", \"typed LEADING_INDICATOR_FOR edge\"]",
+    "must_not_include_terms": "[\"Outpatient ILI activity has r=0.925810\", \"Influenza A wastewater concentration has r=0.925810\", \"no typed LEADING_INDICATOR_FOR edge for test positivity\", \"causal proof\"]",
+    "notes": "Tests score-to-edge binding."
+  },
+  {
+    "case_id": "adv_bind_004",
+    "case_type": "negative_control_guard",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidate has r=-0.048027, and should it be promoted into a typed edge?",
+    "expected_answer": "The negative-control permuted surveillance signal has r=-0.048027 and should not be promoted into a typed LEADING_INDICATOR_FOR edge.",
+    "must_include_terms": "[\"Negative-control permuted surveillance signal\", \"r=-0.048027\", \"not promoted\", \"no typed LEADING_INDICATOR_FOR edge\"]",
+    "must_not_include_terms": "[\"typed LEADING_INDICATOR_FOR edge for the negative control\", \"negative control is present\", \"causal proof\"]",
+    "notes": "Tests negative-control preservation."
+  },
+  {
+    "case_id": "adv_bind_005",
+    "case_type": "ranking_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Rank the three supported empirical candidates by score without mixing their scores.",
+    "expected_answer": "Outpatient ILI activity ranks first at r=0.958037, Influenza A wastewater concentration second at r=0.947016, and Influenza test positivity third at r=0.925810.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"r=0.958037\", \"Influenza A wastewater concentration\", \"r=0.947016\", \"Influenza test positivity\", \"r=0.925810\"]",
+    "must_not_include_terms": "[\"Negative-control permuted surveillance signal ranks first\", \"Chile Influenza Activity\", \"Australia Influenza Activity\", \"causal proof\"]",
+    "notes": "Tests multi-candidate score ordering."
+  },
+  {
+    "case_id": "adv_bind_006",
+    "case_type": "claim_vs_edge_count",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "How many EvidenceClaims exist, and how many typed LEADING_INDICATOR_FOR edges exist?",
+    "expected_answer": "There are 4 EvidenceClaims but only 3 typed LEADING_INDICATOR_FOR edges.",
+    "must_include_terms": "[\"4 EvidenceClaims\", \"3 typed LEADING_INDICATOR_FOR edges\"]",
+    "must_not_include_terms": "[\"4 typed LEADING_INDICATOR_FOR edges\", \"3 EvidenceClaims\", \"all EvidenceClaims become typed edges\"]",
+    "notes": "Tests distinction between evidence claims and promoted KG edges."
+  },
+  {
+    "case_id": "adv_bind_007",
+    "case_type": "claim_vs_edge_count",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Why does the number of EvidenceClaims differ from the number of typed edges?",
+    "expected_answer": "The negative-control claim exists as an EvidenceClaim with missing evidence but was not promoted into a typed LEADING_INDICATOR_FOR edge.",
+    "must_include_terms": "[\"Negative-control permuted surveillance signal\", \"EvidenceClaim\", \"missing\", \"not promoted\"]",
+    "must_not_include_terms": "[\"all EvidenceClaims become typed edges\", \"negative control was promoted\", \"causal proof\"]",
+    "notes": "Tests promotion logic."
+  },
+  {
+    "case_id": "adv_bind_008",
+    "case_type": "pipeline_isolation",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Should Chile Influenza Activity be included in the empirical_influenza answer?",
+    "expected_answer": "No. Chile Influenza Activity is a controlled-fixture distractor and should not be included in the empirical_influenza answer.",
+    "must_include_terms": "[\"No\", \"Chile Influenza Activity\", \"controlled-fixture distractor\", \"empirical_influenza\"]",
+    "must_not_include_terms": "[\"Chile Influenza Activity has empirical_influenza evidence\", \"Chile Influenza Activity should be included\", \"r=0.958037 for Chile\"]",
+    "notes": "Tests pipeline isolation."
+  },
+  {
+    "case_id": "adv_bind_009",
+    "case_type": "pipeline_isolation",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "List only the empirical_influenza candidates and exclude controlled-fixture distractors.",
+    "expected_answer": "The empirical candidates are Outpatient ILI activity, Influenza A wastewater concentration, Influenza test positivity, and Negative-control permuted surveillance signal.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"Influenza A wastewater concentration\", \"Influenza test positivity\", \"Negative-control permuted surveillance signal\"]",
+    "must_not_include_terms": "[\"Chile Influenza Activity\", \"Australia Influenza Activity\", \"Travel Importation Pressure\", \"Humidity Drop\"]",
+    "notes": "Tests whether distractor candidates are imported."
+  },
+  {
+    "case_id": "adv_bind_010",
+    "case_type": "model_revision_guard",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Recommend one empirical model-revision candidate and explain the evidence without causal overclaiming.",
+    "expected_answer": "Outpatient ILI activity is the strongest screening candidate, with present evidence, lag 1 week, r=0.958037, 29 paired weeks, and a typed LEADING_INDICATOR_FOR edge; this is not causal proof and needs downstream validation.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"present\", \"lag 1 week\", \"r=0.958037\", \"29 paired weeks\", \"typed LEADING_INDICATOR_FOR edge\", \"not causal proof\", \"downstream validation\"]",
+    "must_not_include_terms": "[\"forecast improvement is validated\", \"causal proof\", \"Negative-control permuted surveillance signal should be added\"]",
+    "notes": "Tests evidence-grounded model-edit recommendation."
+  },
+  {
+    "case_id": "adv_bind_011",
+    "case_type": "model_revision_guard",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidate should be excluded from a model revision despite having a listed best lag?",
+    "expected_answer": "The Negative-control permuted surveillance signal should be excluded because its evidence status is missing, r=-0.048027 at lag 4 weeks, and it has no typed LEADING_INDICATOR_FOR edge.",
+    "must_include_terms": "[\"Negative-control permuted surveillance signal\", \"excluded\", \"missing\", \"r=-0.048027\", \"lag 4 weeks\", \"no typed LEADING_INDICATOR_FOR edge\"]",
+    "must_not_include_terms": "[\"negative control should be added\", \"negative control is present\", \"causal proof\"]",
+    "notes": "Tests lag without support."
+  },
+  {
+    "case_id": "adv_bind_012",
+    "case_type": "edge_status_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which three candidates received typed LEADING_INDICATOR_FOR edges?",
+    "expected_answer": "Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity received typed LEADING_INDICATOR_FOR edges.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"Influenza A wastewater concentration\", \"Influenza test positivity\", \"typed LEADING_INDICATOR_FOR edge\"]",
+    "must_not_include_terms": "[\"Negative-control permuted surveillance signal received a typed LEADING_INDICATOR_FOR edge\", \"Chile Influenza Activity\", \"Australia Influenza Activity\"]",
+    "notes": "Tests promoted edge membership."
+  },
+  {
+    "case_id": "adv_bind_013",
+    "case_type": "pairwise_score_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidate is stronger by score: Outpatient ILI activity or Influenza A wastewater concentration?",
+    "expected_answer": "Outpatient ILI activity is stronger by score. Outpatient ILI activity has r=0.958037; Influenza A wastewater concentration has r=0.947016.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"Outpatient ILI activity\", \"r=0.958037\", \"Influenza A wastewater concentration\", \"r=0.947016\"]",
+    "must_not_include_terms": "[\"causal proof\", \"forecast improvement is validated\"]",
+    "notes": "Tests pairwise score comparison without score swapping."
+  },
+  {
+    "case_id": "adv_bind_014",
+    "case_type": "pairwise_score_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidate is stronger by score: Influenza A wastewater concentration or Influenza test positivity?",
+    "expected_answer": "Influenza A wastewater concentration is stronger by score. Influenza A wastewater concentration has r=0.947016; Influenza test positivity has r=0.925810.",
+    "must_include_terms": "[\"Influenza A wastewater concentration\", \"Influenza A wastewater concentration\", \"r=0.947016\", \"Influenza test positivity\", \"r=0.925810\"]",
+    "must_not_include_terms": "[\"causal proof\", \"forecast improvement is validated\"]",
+    "notes": "Tests pairwise score comparison without score swapping."
+  },
+  {
+    "case_id": "adv_bind_015",
+    "case_type": "pairwise_score_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidate is stronger by score: Outpatient ILI activity or Influenza test positivity?",
+    "expected_answer": "Outpatient ILI activity is stronger by score. Outpatient ILI activity has r=0.958037; Influenza test positivity has r=0.925810.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"Outpatient ILI activity\", \"r=0.958037\", \"Influenza test positivity\", \"r=0.925810\"]",
+    "must_not_include_terms": "[\"causal proof\", \"forecast improvement is validated\"]",
+    "notes": "Tests pairwise score comparison without score swapping."
+  },
+  {
+    "case_id": "adv_bind_016",
+    "case_type": "paired_week_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidates have 29 paired weeks?",
+    "expected_answer": "Outpatient ILI activity and Influenza test positivity have 29 paired weeks.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"Influenza test positivity\", \"29 paired weeks\"]",
+    "must_not_include_terms": "[\"Influenza A wastewater concentration has 29 paired weeks\", \"Negative-control permuted surveillance signal has 29 paired weeks\"]",
+    "notes": "Tests paired-week count binding."
+  },
+  {
+    "case_id": "adv_bind_017",
+    "case_type": "paired_week_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidates have 26 paired weeks?",
+    "expected_answer": "Influenza A wastewater concentration and the Negative-control permuted surveillance signal have 26 paired weeks.",
+    "must_include_terms": "[\"Influenza A wastewater concentration\", \"Negative-control permuted surveillance signal\", \"26 paired weeks\"]",
+    "must_not_include_terms": "[\"Outpatient ILI activity has 26 paired weeks\", \"Influenza test positivity has 26 paired weeks\"]",
+    "notes": "Tests paired-week count binding with one positive and one negative-control claim."
+  },
+  {
+    "case_id": "adv_bind_018",
+    "case_type": "lag_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which supported empirical candidates have lag 1 week?",
+    "expected_answer": "Outpatient ILI activity, Influenza A wastewater concentration, and Influenza test positivity are supported candidates at lag 1 week.",
+    "must_include_terms": "[\"Outpatient ILI activity\", \"Influenza A wastewater concentration\", \"Influenza test positivity\", \"lag 1 week\"]",
+    "must_not_include_terms": "[\"Negative-control permuted surveillance signal is supported at lag 1 week\", \"Chile Influenza Activity\"]",
+    "notes": "Tests lag binding for supported candidates."
+  },
+  {
+    "case_id": "adv_bind_019",
+    "case_type": "lag_binding",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Which candidate has lag 4 weeks, and why is that not enough to support an edge?",
+    "expected_answer": "The Negative-control permuted surveillance signal has lag 4 weeks, but its evidence status is missing and its score is r=-0.048027, so it has no typed LEADING_INDICATOR_FOR edge.",
+    "must_include_terms": "[\"Negative-control permuted surveillance signal\", \"lag 4 weeks\", \"missing\", \"r=-0.048027\", \"no typed LEADING_INDICATOR_FOR edge\"]",
+    "must_not_include_terms": "[\"negative control is supported\", \"negative control has a typed LEADING_INDICATOR_FOR edge\", \"causal proof\"]",
+    "notes": "Tests lag vs support distinction."
+  },
+  {
+    "case_id": "adv_bind_020",
+    "case_type": "causal_overclaim_guard",
+    "target_signal": "FluSurv-NET influenza hospitalization rate",
+    "query": "Do these lagged correlations prove that the candidates caused hospitalizations to rise?",
+    "expected_answer": "No. The lagged correlations are screening evidence for possible model-revision testing, not causal proof.",
+    "must_include_terms": "[\"No\", \"screening evidence\", \"not causal proof\"]",
+    "must_not_include_terms": "[\"prove causality\", \"caused hospitalizations\", \"forecast improvement is validated\"]",
+    "notes": "Tests causal-overclaim guard."
+  }
+]
