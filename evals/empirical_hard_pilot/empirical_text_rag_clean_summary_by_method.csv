@@ -1,0 +1,2 @@
+method,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count,forbidden_violation_count,avg_answer_length_chars
+empirical_text_rag_clean,24,1.000,1.000,1.000,0,0,298.6

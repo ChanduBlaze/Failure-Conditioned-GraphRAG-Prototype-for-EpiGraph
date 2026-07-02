@@ -1,0 +1,10 @@
+method,case_type,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count,forbidden_violation_count
+empirical_text_rag_clean,candidate_specific_evidence,3,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,causal_overclaim_guard,2,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,evidence_blurring_score_binding,4,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,evidence_claim_vs_typed_edge,2,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,model_revision_recommendation,1,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,negative_control_preservation,4,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,pairwise_comparison,3,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,pipeline_isolation,2,1.000,1.000,1.000,0,0
+empirical_text_rag_clean,strongest_candidate_selection,3,1.000,1.000,1.000,0,0
