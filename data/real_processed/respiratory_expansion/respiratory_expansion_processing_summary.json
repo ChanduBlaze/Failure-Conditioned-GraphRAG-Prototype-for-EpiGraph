@@ -1,0 +1,16 @@
+{
+  "target_count": 3,
+  "candidate_count": 7,
+  "claim_count": 21,
+  "promoted_edge_count": 6,
+  "present_claim_count": 6,
+  "missing_claim_count": 15,
+  "threshold": 0.6,
+  "min_paired_weeks": 20,
+  "max_lag_weeks": 4,
+  "outputs": {
+    "weekly_signals": "data\\real_processed\\respiratory_expansion\\respiratory_expansion_weekly_signals.csv",
+    "evidence_claims": "data\\real_processed\\respiratory_expansion\\respiratory_expansion_evidence_claims.csv",
+    "graph_context": "data\\real_processed\\respiratory_expansion\\respiratory_expansion_graph_context.json"
+  }
+}

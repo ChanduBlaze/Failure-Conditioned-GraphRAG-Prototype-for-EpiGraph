@@ -1,0 +1,3 @@
+method,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count
+resp_exp_graphrag_context,32,0.906,0.984,1.000,3
+resp_exp_text_rag_unstructured_full,32,0.906,0.984,1.000,3

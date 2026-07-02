@@ -1,0 +1,13 @@
+{
+  "claim_count": 21,
+  "text_context_full_binding_count": 21,
+  "graph_context_full_binding_count": 21,
+  "information_parity_pass_count": 21,
+  "information_parity_pass_rate": 1.0,
+  "forbidden_answer_hint_phrases_found": [],
+  "outputs": {
+    "text_corpus": "data\\real_processed\\respiratory_expansion\\respiratory_expansion_text_corpus.json",
+    "text_context": "data\\real_processed\\respiratory_expansion\\respiratory_expansion_text_context.txt",
+    "parity_check": "evals\\respiratory_expansion\\respiratory_expansion_information_parity_check.csv"
+  }
+}

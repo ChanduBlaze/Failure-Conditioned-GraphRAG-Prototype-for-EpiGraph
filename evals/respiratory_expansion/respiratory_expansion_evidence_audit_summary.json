@@ -1,0 +1,15 @@
+{
+  "claim_count": 21,
+  "audit_pass_count": 21,
+  "audit_fail_count": 0,
+  "audit_pass_rate": 1.0,
+  "lag_mismatch_count": 0,
+  "pearson_mismatch_count": 0,
+  "paired_week_mismatch_count": 0,
+  "status_mismatch_count": 0,
+  "edge_type_mismatch_count": 0,
+  "threshold": 0.6,
+  "min_paired_weeks": 20,
+  "max_lag_weeks": 4,
+  "output_csv": "evals\\respiratory_expansion\\respiratory_expansion_evidence_audit.csv"
+}

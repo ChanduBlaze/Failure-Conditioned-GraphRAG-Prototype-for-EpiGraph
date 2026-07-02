@@ -1,0 +1,8 @@
+case_type,case_count,overall_pass_rate,avg_include_score,forbidden_ok_rate,failed_case_count
+concurrent_indicator_discrimination,6,1.000,1.000,1.000,0
+leading_indicator_by_target,6,1.000,1.000,1.000,0
+missing_exact_binding,22,1.000,1.000,1.000,0
+model_revision_guard,6,0.000,0.833,1.000,6
+negative_control_guard,6,1.000,1.000,1.000,0
+promoted_exact_binding,12,1.000,1.000,1.000,0
+strongest_promoted_by_target,6,1.000,1.000,1.000,0
