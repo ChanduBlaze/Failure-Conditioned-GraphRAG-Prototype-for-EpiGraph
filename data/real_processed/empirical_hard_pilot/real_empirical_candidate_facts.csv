@@ -1,0 +1,5 @@
+candidate_id,candidate_name,target_signal,status,best_lag_weeks,score,paired_weeks,edge_type_if_promoted,kg_behavior,pipeline
+outpatient_ili,Outpatient ILI activity,FluSurv-NET influenza hospitalization rate,present,1,0.958037,29,LEADING_INDICATOR_FOR,promoted_to_typed_edge,empirical_influenza
+wastewater,Influenza A wastewater concentration,FluSurv-NET influenza hospitalization rate,present,1,0.947016,26,LEADING_INDICATOR_FOR,promoted_to_typed_edge,empirical_influenza
+test_positivity,Influenza test positivity,FluSurv-NET influenza hospitalization rate,present,1,0.92581,29,LEADING_INDICATOR_FOR,promoted_to_typed_edge,empirical_influenza
+negative_control,Negative-control permuted surveillance signal,FluSurv-NET influenza hospitalization rate,missing,4,-0.048027,26,,retained_as_evidence_claim_only_not_promoted,empirical_influenza

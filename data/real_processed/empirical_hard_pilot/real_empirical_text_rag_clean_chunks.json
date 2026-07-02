@@ -1,0 +1,22 @@
+[
+  {
+    "chunk_id": "clean_outpatient_ili",
+    "candidate_id": "outpatient_ili",
+    "text": "Candidate: Outpatient ILI activity. Target: FluSurv-NET influenza hospitalization rate. Pipeline: empirical_influenza. Evidence status: present. Best leading lag: 1 week. Correlation score: r=0.958037. Paired weeks: 29. KG behavior: promoted into a typed LEADING_INDICATOR_FOR edge. Interpretation: screening-level leading-indicator evidence, not causal proof."
+  },
+  {
+    "chunk_id": "clean_wastewater",
+    "candidate_id": "wastewater",
+    "text": "Candidate: Influenza A wastewater concentration. Target: FluSurv-NET influenza hospitalization rate. Pipeline: empirical_influenza. Evidence status: present. Best leading lag: 1 week. Correlation score: r=0.947016. Paired weeks: 26. KG behavior: promoted into a typed LEADING_INDICATOR_FOR edge. Interpretation: screening-level leading-indicator evidence, not causal proof."
+  },
+  {
+    "chunk_id": "clean_test_positivity",
+    "candidate_id": "test_positivity",
+    "text": "Candidate: Influenza test positivity. Target: FluSurv-NET influenza hospitalization rate. Pipeline: empirical_influenza. Evidence status: present. Best leading lag: 1 week. Correlation score: r=0.925810. Paired weeks: 29. KG behavior: promoted into a typed LEADING_INDICATOR_FOR edge. Interpretation: screening-level leading-indicator evidence, not causal proof."
+  },
+  {
+    "chunk_id": "clean_negative_control",
+    "candidate_id": "negative_control",
+    "text": "Candidate: Negative-control permuted surveillance signal. Target: FluSurv-NET influenza hospitalization rate. Pipeline: empirical_influenza. Evidence status: missing. Best positive lag recorded: 4 weeks. Correlation score: r=-0.048027. Paired weeks: 26. This claim was retained as an EvidenceClaim only and was not promoted into a typed LEADING_INDICATOR_FOR KG edge. Interpretation: negative-control/missing evidence, not a supported model-revision signal and not causal proof."
+  }
+]

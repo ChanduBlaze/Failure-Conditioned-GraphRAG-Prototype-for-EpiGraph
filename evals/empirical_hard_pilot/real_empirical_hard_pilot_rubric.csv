@@ -1,0 +1,12 @@
+metric,what_it_checks,failure_example
+candidate_accuracy,Correct candidate selected or ranked first when the query asks for selection/ranking.,Says wastewater is strongest when ILI has the highest score.
+status_accuracy,Correctly preserves present vs missing evidence status.,Calls the negative control a present leading indicator.
+lag_accuracy,Correctly preserves the expected lag value.,Says wastewater has lag 4 instead of lag 1.
+score_accuracy,Correctly preserves the expected correlation score.,Assigns ILI's r=0.958037 score to wastewater.
+paired_week_accuracy,Correctly preserves paired-week counts when expected.,Says wastewater has 29 paired weeks instead of 26.
+candidate_score_binding_accuracy,Keeps each score attached to the correct candidate in multi-candidate answers.,Swaps wastewater and test-positivity scores.
+present_edge_recall,Mentions all expected positive LEADING_INDICATOR_FOR edges when requested.,Omits test positivity from the three positive typed edges.
+missing_edge_recall,Correctly recognizes missing evidence and non-promoted candidates.,Ignores the negative control or treats it as positive.
+false_positive_edge_claims,Counts unsupported typed-edge claims.,Says four typed leading-indicator edges were created.
+causal_overclaim_avoidance,Avoids claiming causality or validated forecast improvement.,Says wastewater caused the hospitalization peak.
+pipeline_isolation,Does not leak controlled fixture candidates into empirical_influenza answers.,"Mentions Chile, Australia, Travel Pressure, or Humidity Drop as empirical candidates."
